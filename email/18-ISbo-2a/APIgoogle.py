@@ -125,10 +125,15 @@ def get_message(service, user_id):
     Метод получения полезной информации из письма студента.
     """
     search_id = service.users().messages().list(userId=user_id,
-                                                labelIds = ['INBOX']).execute()
+                                                labelIds = ['UNREAD']).execute()
     message_id = search_id['messages']
     alone_msg = message_id[0]
     id_of_msg = alone_msg['id']
+    change_label = {'removeLabelIds':['UNREAD'], 'addLabelIds':[]}
+    change_msg_label = service.users().messages().modify(userId=user_id,
+                                                         id=id_of_msg,
+                                                         body=change_label
+                                                        ).execute()
     message_list = service.users().messages().get(userId=user_id, 
                                                   id=id_of_msg,
                                                   format='full').execute()
@@ -160,7 +165,8 @@ def email_archiving(service, user_id, message_info):
     message_info: словарь с данными письма.
     """
     msg_labels = {'removeLabelIds': ['UNREAD', 'INBOX'], 
-		  'addLabelIds': ['Label_4436622035204509097']}
+                                     'addLabelIds': []}
+
     message = service.users().messages().modify(userId=user_id,
                                                 id=message_info['id_of_msg'],
                                                 body=msg_labels).execute()
@@ -300,11 +306,14 @@ def search_group(email_id):
             c += 1
         else:
             break
-    nomer = f'List1!F{c}:G{c}'
-    table1 = service.spreadsheets().values().get(
-           spreadsheetId=spreadsheetId, range=nomer).execute()
-    values_finish = table1.get('values')[0]
-    return tuple(values_finish)
+    if c == len(table.get('values'))+1:
+        return None
+    else:
+        nomer = f'List1!F{c}:G{c}'
+        table1 = service.spreadsheets().values().get(
+               spreadsheetId=spreadsheetId, range=nomer).execute()
+        values_finish = table1.get('values')[0]
+        return tuple(values_finish)
 
 
 @log_method.log_method_info
@@ -334,3 +343,45 @@ def search_tablic(group, laba, surname):
         return None
     else:
         return position
+
+    
+def search_dolgi(group,position):
+    """
+    Метод для поиска долгов 
+    group=(ТРПО) название группы
+    position='J7' позиция студента в таблице
+    """
+    spreadsheetId = SPREAD_SHEET_ID
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(
+                CREDENTIALS_FILE,
+                ['https://www.googleapis.com/auth/spreadsheets',
+                 'https://www.googleapis.com/auth/drive'])
+    httpAuth = credentials.authorize(httplib2.Http())
+    service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
+    c = 0
+    ng = []
+    b = ord('I')
+    i=-1
+    c3 = ord(position[1])
+    while(c<20):
+        c = c+1
+        b = b+1
+        i=i+1
+        range_name=group+'!'+chr(b)+chr(c3)+':'+chr(b)+chr(c3)
+        table = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheetId,
+            range=range_name).execute()
+        try:
+            if(table.get('values')[0][0] == '0'):
+                range_name=group+'!'+chr(b)+'1'+':'+chr(b)+'1'
+                table = service.spreadsheets().values().get(
+                        spreadsheetId=spreadsheetId,
+                        range=range_name).execute()
+                ng.insert(i,table.get('values')[0][0])
+        except:
+            ng.insert(i,str(i+1))
+    if(len(ng) == 0):
+        return None
+    if(len(ng) > 0):
+        return ng
+ 
