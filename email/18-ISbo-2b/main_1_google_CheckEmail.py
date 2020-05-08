@@ -1,18 +1,17 @@
 # coding=utf-8
-from time import sleep
-from datetime import datetime
 from email import *
 from global_Letter import Letter
 from global_User import User
-from base_WorkWithLetters import WorkWithLetters
+from main_2_base_WorkWithLetters import WorkWithLetters
 from google_ValidateRules import ValidationMail as Val
-import config as cfg
+import config_Project as cfg
 import re
 from email.message import EmailMessage
-import config_email
+import config_Mail
 import imaplib
 import email
 import base64
+from google_Sheet import Sheet
 
 
 def CheckEmail():
@@ -20,22 +19,32 @@ def CheckEmail():
     Точка входа в работу модуля.
     Чтение писем, их парсинг и валидация.
     """
+
+    # Получение писем с почты
     imap_obj = imap_login()
     raw_letters = GetLetters(imap_obj)
     quit_email_imap(imap_obj)
+    letters = []
+    for item in raw_letters:
+        letters.append(FormListWithLetters(item))
 
-    cfg.timer.SetTimer()
-
+    # Получение резервных данных (функция пока не реализована)
     cfg.reserve_dates.GetReserveDate()
+
 
     letters = []
     for item in raw_letters:
         letters.append(FormListWithLetters(item))
 
+
+    # Проверка пользователей на существование в системе (функция пока не реализована)
+
     CheckUsers(letters)
 
+    # Валидация писем
     ValidateLetters(letters)
 
+    # Вызов следующей функции
     WorkWithLetters(letters)
 
 
@@ -53,10 +62,13 @@ def GetLetters(mail):
    Участвующие внешние типы переменных
    - None
    """
+    with open(cfg.filename, "a") as file:
+        file.write("\nПолучение писем... ")
 
     count = count_unseen_mess(mail)
+    letters = []
+
     if count > 0:
-        letters = []
         result, data = mail.uid('search', None, "unseen")  # Выполняет поиск и возвращает UID писем.
         print(count)
         for i in range(count):
@@ -64,15 +76,18 @@ def GetLetters(mail):
             result, date = mail.uid('fetch', latest_email_uid, '(RFC822)')
             raw_email = date[0][1]
             letters.append(raw_email)
+
+
         with open(cfg.filename, "a") as file:
-            file.write("\nGetting letters...")
-        letters = ["letter1", "letter2", "letter3"]
-        sleep(1)
-        with open(cfg.filename, "a") as file:
-            file.write("Letters gets!")
-        return letters
+            file.write("Письма получены!")
+
     else:
-        print("Отсутствие новых сообщений.")
+        with open(cfg.filename, "a") as file:
+            file.write("Новых сообщений нет!")
+        # raise Exception("Letters is empty")
+
+    return letters
+
 
 def FormListWithLetters(mails):
     """
@@ -93,8 +108,9 @@ def FormListWithLetters(mails):
     - User (from import)
     - Letter (from import)
     """
-    with open(cfg.filename, "a") as file: file.write("\nForming letters...")
-    sleep(1)
+    with open(cfg.filename, "a") as file:
+        file.write("\nФормировка списка писем... ")
+
     try:
         try:
             email_message = email.message_from_string(mails)
@@ -104,18 +120,22 @@ def FormListWithLetters(mails):
         from_mes = get_from(email_message)
         subject_mes = get_subject(email_message)
         user_email = from_parse(from_mes)
-        name = name_parse(from_mes)
+
         body_str = get_body(email_message)
         body = body_parse(body_str)
         if body == "UNKNOWN":
             error_code = "05"
-        user = User.User(name, None, user_email, None)
-        letter_item = Letter.Letter(user, subject_mes, body, error_code)
-        with open(cfg.filename, "a") as file: file.write("Letters forms!")
+
+        user = User(None, None, user_email, None)
+        letter_item = Letter(user, subject_mes, body, error_code)
+
+        with open(cfg.filename, "a") as file:
+            file.write("Письма сформированы!")
+
         return letter_item
     except:
-        user = User.User("UNKNOWN", None, "UNKNOWN", None)
-        return Letter.Letter(user, "UNKNOWN", "UNKNOWN", "07")
+        user = User(None, None, "UNKNOWN", None)
+        return Letter(user, "UNKNOWN", "UNKNOWN", "07")
 
 
 def CheckUsers(letters):
@@ -131,11 +151,24 @@ def CheckUsers(letters):
     Участвующие внешние типы переменных
     - None
     """
-    with open(cfg.filename, "a") as file: file.write("\nChecking users...")
+    with open(cfg.filename, "a") as file:
+        file.write("\nПроверка пользователей... ")
+
     for i in letters:
-        i.Student.IsRegistered = True
-    sleep(1)
-    with open(cfg.filename, "a") as file: file.write("Users cheks!")
+        if i.CodeStatus == "":
+            result = Sheet.check_email(i.Student.Email)
+
+            if result:
+                i.Student.IsRegistered = True
+                i.Student.NameOfStudent = '{} {} {}'.format(result[0][0], result[0][1], result[0][2])
+                i.Student.GroupOfStudent = '{}'.format(result[0][3])
+
+            else:
+                i.CodeStatus = "00"
+                i.CodeStatusComment = "Пользователь не зарегистрирован"
+
+    with open(cfg.filename, "a") as file:
+        file.write("Пользователи проверены!")
 
 
 def ValidateLetters(letters):
@@ -153,6 +186,8 @@ def ValidateLetters(letters):
     Участвующие внешние типы переменных
     - None
     """
+    with open(cfg.filename, "a") as file:
+        file.write("\nВалидация писем... ")
 
     for let in letters:
         if let.CodeStatus is None:
@@ -174,6 +209,9 @@ def ValidateLetters(letters):
                 let.Body = re.findall(r'http[^ \n]*', let.Body)
                 let.CodeStatusComment = 'Работа отправлена на проверку'
 
+    with open(cfg.filename, "a") as file:
+        file.write("Письма провалидированы!")
+
 
 def imap_login():
     """
@@ -182,7 +220,7 @@ def imap_login():
     :return:
     """
     imap = imaplib.IMAP4_SSL("imap.gmail.com")
-    imap.login(config_email.EMAIL_ADDRESS, config_email.EMAIL_PASSWORD)
+    imap.login(config_Mail.EMAIL_ADDRESS, config_Mail.EMAIL_PASSWORD)
     imap.select('inbox')
     return imap
 
@@ -229,13 +267,13 @@ def from_parse(from_mes):
         return "UNKNOWN"
 
 
+
 def name_parse(from_mes):
     try:
         name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
         return name
     except:
         return "UNKNOWN"
-
 
 def get_body(email_message):
     try:
