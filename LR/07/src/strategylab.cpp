@@ -30,6 +30,7 @@ StrategyLab::StrategyLab(QObject* parent)
  */
 void StrategyLab::checkByConfig(int variant, QList<QString> code)
 {
+    /* Извлекаем часть конфига answerStructure.xml, подходящую для варианта лабораторной */
     QDomElement elem;
     QDomNodeList labsConfig = rootAnswerStructure.elementsByTagName("lab");
     for (QDomNode node = labsConfig.at(0); !node.isNull(); node = node.nextSibling()) {
@@ -37,23 +38,43 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
         if (elem.attribute("number").toInt() == variant) break;
     }
 
-    QDomElement abstract = elem.elementsByTagName("abstract").at(0).toElement();
-    abstractClassName = abstract.attribute("name");
-    abstractMethodName = abstract.elementsByTagName("method").at(0).toElement().attribute("name");
-    heirsAmount = elem.elementsByTagName("heirs").at(0).toElement().attribute("amount").toInt();
+    QDomNode temp;
 
-    foreach (QString strClass, code) {
-        if (!strClass.contains("class")) {
-            classes.insert("main", strClass);
-        } else if (strClass.left(strClass.indexOf("{")).simplified().split(" ").at(1) == abstractClassName) {
-            classes.insert("parent", strClass);
-        } else if (strClass.contains(abstractClassName)) {
-            QString declare = strClass.left(strClass.indexOf("{"));
-            if (declare.mid(declare.indexOf(":")).simplified().split(" ").at(2) == abstractClassName) {
-                children.push_back(strClass);
+    temp = elem.firstChild();
+
+    /* Проверяем имя абстрактного класса */
+    if (temp.toElement().attribute("name") == classes.value("parent")) {
+        QString tempString = classes.value("parent");
+        temp = temp.firstChild();
+
+        /* Проверяем имя метода абстрактного метода */
+        if (!tempString.contains(temp.toElement().attribute("name"))) {
+            throw UnexpectedResultException("Invalid abstract method name");
+        }
+
+        /* Проверяем колличество параметров абстрактного метода */
+        //TODO
+        /* Проверяем возвращаемое занчение метода */
+        //TODO
+
+    } else {
+        throw UnexpectedResultException("Invalid parent class name");
+    }
+
+    /* Проверка количества наследников */
+    temp = elem.lastChild();
+    //TODO: Посчитать количество QMap
+    if (temp.toElement().attribute("amount").toInt() != 1/*array.size()*/) {
+        throw UnexpectedResultException("Incorrect number of heirs");
+    } else {
+
+        /* Проверка имен наследников */
+        temp = temp.firstChild();
+        while (!temp.isNull()) {
+            if (temp.toElement().attribute("name") != classes.value("")) {
+                throw UnexpectedResultException("Invalid heir name");
             }
-        } else {
-            classes.insert("context", strClass);
+            temp = temp.nextSibling();
         }
     }
 }
