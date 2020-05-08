@@ -22,15 +22,10 @@ public:
     explicit TestGateway(QObject *parent = nullptr);
 
 private slots:
-    void initTestCase();
-    void cleanup();
+    void testTrueJson();
+    void badJsons_data();
+    void badJsons();
     void cleanupTestCase();
-
-    void validateSuccessful();
-    void requiredKeyDoesNotExist();
-    void wrongValueTypeByKey() {}
-    void wrongValueByKey() {}
-    void unexpectedKey() {}
 };
 
 #endif // TESTGATEWAY_H
