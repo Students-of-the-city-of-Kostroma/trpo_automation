@@ -1,4 +1,9 @@
 # coding=utf-8
+import inspect
+from Loger import Logs 
+logs = Logs()
+name = None
+
 from time import sleep
 from datetime import datetime
 
@@ -7,6 +12,8 @@ import config_Project as cfg
 from google_Sheet import Sheet
 
 def SetResults(letterResults):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name,letterResults)
     """
     Выставить необходимые оценки в журнал
     """
@@ -17,6 +24,8 @@ def SetResults(letterResults):
     FormAnswers(letterResults)
 
 def SetMarks(letterResults):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name,letterResults)
     """
      Функционал:
     - Выставить необходимые оценки в журнал

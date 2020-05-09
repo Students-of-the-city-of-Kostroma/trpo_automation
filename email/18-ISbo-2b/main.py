@@ -8,8 +8,15 @@ from main_1_google_CheckEmail import CheckEmail
 import config_Project as cfg
 from reserve_Reserve import Reserve
 
+import inspect
+from Loger import Logs
+logs = Logs()
+name = None
+
 
 def Main():
+        name = inspect.currentframe().f_code.co_name
+        logs.Infor(name)
     # try:
         # Создание объекта резервных данных
         cfg.reserve_dates = Reserve()

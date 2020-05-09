@@ -1,4 +1,9 @@
 ﻿# coding=utf-8
+import inspect
+from Loger import Logs 
+logs = Logs()
+name = None
+
 import socket
 import global_LetterResult
 import json
@@ -10,6 +15,8 @@ from main_3_send_SetResults import SetResults
 import config_Project as cfg
 
 def WorkWithLetters(letters):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name,letters)
     """
     Работа с письмами, формирование правильного формата данных,
     отправка их на проверку, принятие результатов и их передача дальше
@@ -28,6 +35,8 @@ def WorkWithLetters(letters):
     SetResults(letterResults)
 
 def LettersConvertToString(letters):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name,letters)
     """
     Функционал:
     - Вытащить сырые данные по ссылкам из поля Body
@@ -56,6 +65,8 @@ def LettersConvertToString(letters):
 
 
 def FormJSONDates(letters):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name,letters)
     """
     Функционал:
     - Сформировать список, хранящий экземпляры json с данными, необходимыми для отправки по каждой лабораторной
@@ -91,6 +102,8 @@ def FormJSONDates(letters):
     return jsons
 
 def SendJSONForCheck(jsonDates, letters):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name, jsonDates, letters)
     """
     Функционал:
     - Отправить письма на проверку в модули проверки писем от ВТ
@@ -134,15 +147,15 @@ def SendJSONForCheck(jsonDates, letters):
     for i in letters:
         letter = global_LetterResult.LetterResult()
 
+        if i.CodeStatus != "20":
+            continue
+
         """Данные для подключения"""
         sock = socket.socket()
         port = dataLab[str(i.NumberOfLab)]
         config = open("config_Server.txt", "r")
         HOST = config.readline()
         HOST = HOST.replace("\n", '')
-
-        if i.CodeStatus != "20":
-            continue
 
         """Подключение и отправка JSON на порт"""
         sock.connect((HOST, port))
@@ -195,6 +208,8 @@ def SendJSONForCheck(jsonDates, letters):
 
 
 def get_html(url):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name, url)
     """Достаю html с введённой ссылки и возвращаю в виде текста"""
     r = requests.get(url)    # Получим метод Response
     r.encoding = 'utf8'
@@ -202,6 +217,8 @@ def get_html(url):
 
 
 def csv_read(data):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name, data)
     """Принятые данные принимает, проверяя: являются ли они строковыми данными
     Если да, записываю их в файл, в конце делаю перенос строки"""
     if isinstance(data, str):
@@ -211,6 +228,8 @@ def csv_read(data):
 
 
 def get_link(html):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name, html)
     """Построчно ищу поля таблицы с id = LC1,LC2 и т.д., затем передаю их на запись в метод csv
     Если больше нет полей таблицы( то есть кода или текстовых данных), тогда метод закончит работу"""
     soup = BeautifulSoup(html, 'lxml')
@@ -231,6 +250,8 @@ def get_link(html):
 
 
 def finding_files(html, name):
+    nameFun = inspect.currentframe().f_code.co_name
+    logs.Infor(nameFun, html,name)
     """Метод отвечает за поиск и открытие файлов или папок в репозитории Git'a;
     если ссылка, которую мы открыли не имеет ссылок на другие объекты(файлы или папки),
     мы предполагаем, что это открытый файл и передаём его на парсинг файла в get_link"""
@@ -251,6 +272,8 @@ def finding_files(html, name):
 
 
 def finding_links(table):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name, table)
     """Ищет ссылки, на которые можно перейти, то есть проверяет есть ли файлы или папки
     на этой странице или же это уже страница самого файла"""
     date = []

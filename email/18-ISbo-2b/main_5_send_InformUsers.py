@@ -8,7 +8,15 @@ import config_Mail
 import smtplib
 import email
 
+import inspect
+from Loger import Logs
+logs = Logs()
+name = None
+
 def InformUsers(answersForUsers):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name,answersForUsers)
+    print("main5")
     """
     Разослать письма пользователям, внести пользователей в список, заархивировать письма, дождаться таймера
     """
@@ -25,6 +33,8 @@ def InformUsers(answersForUsers):
 
 
 def SendLetters(smtp_obj, answersForUsers):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name,smtp_obj, answersForUsers)
     """
      Функционал:
     - Разослать письма пользователям
@@ -51,6 +61,7 @@ def SendLetters(smtp_obj, answersForUsers):
         mes.set_content(i.Body)
         smtp_obj.send_message(mes)
 
+
     with open(cfg.filename, "a") as file:
         file.write("Ответы отправлены!")
 
@@ -75,6 +86,8 @@ def AddUsers():
         file.write("Пользователи добавлены!")
 
 def FormFilename():
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name)
     """
     Формирование имени файла логов
     """
@@ -86,6 +99,8 @@ def FormFilename():
     cfg.filename = cfg.path_to_logs + "log_" + name + "_" + str(next(cfg.gen_num_for_filename)) + ".txt"
 
 def smtp_login():
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name)
     """
     Авторизация в Gmail аккаунте.
     Функция возвращает SMTP объект.
@@ -99,6 +114,8 @@ def smtp_login():
     return smtpObj
 
 def quit_email_smtp(smtpObj):
+    name = inspect.currentframe().f_code.co_name
+    logs.Infor(name, smtpObj)
     """
     Закрытие SMTP объекта.
     Функция должна быть вызвана после завершения рыботы с SMTP объектом.
