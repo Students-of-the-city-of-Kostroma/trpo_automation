@@ -53,17 +53,25 @@ def SendLetters(smtp_obj, answersForUsers):
         file.write("\nОтправление ответов пользователю... ")
 
     for i in answersForUsers:
-
-        mes = EmailMessage()
-        mes['From'] = "ТРПО ИАСТ"
-        mes['To'] = i.Who
-        mes['Subject'] = i.Theme
-        mes.set_content(i.Body)
-        smtp_obj.send_message(mes)
-
+        send_mes(smtp_obj, i)
 
     with open(cfg.filename, "a") as file:
         file.write("Ответы отправлены!")
+
+def send_mes(smtp_obj, message):
+    try:
+        mes = EmailMessage()
+        mes['From'] = "ТРПО ИАСТ"
+        mes['To'] = message.Who
+        mes['Subject'] = message.Theme
+        mes.set_content(message.Body)
+        smtp_obj.send_message(mes)
+
+        with open(cfg.filename, "a") as file:
+            file.write("\nОтвет отправлен!")
+    except:
+        with open(cfg.filename, "a") as file:
+            file.write("\nОшибка при отправке ответа!")
 
 def AddUsers():
     """
