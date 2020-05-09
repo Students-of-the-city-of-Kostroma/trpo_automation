@@ -1,4 +1,9 @@
 # coding=utf-8
+import inspect	
+from Loger import Logs 	
+logs = Logs()	
+name = None	
+
 from time import sleep
 from datetime import datetime
 
@@ -8,6 +13,8 @@ import config_Project as cfg
 import moderate_PatternsOfLetter
 
 def FormAnswers(letterResult):
+    name = inspect.currentframe().f_code.co_name	
+    logs.Infor(name,letterResult)
     """
     Формирование ответов пользователям
     """
@@ -19,6 +26,8 @@ def FormAnswers(letterResult):
 
 
 def MakeAnswersForUsers(letterResult):
+    name = inspect.currentframe().f_code.co_name	
+    logs.Infor(name,letterResult)
     """
     Функционал:
     - Сформировать список экземпляров класса AnswersForUsers, используя уже готовые ответы на письма
@@ -37,6 +46,7 @@ def MakeAnswersForUsers(letterResult):
         file.write("\nФормирование ответов пользователю... ")
 
     answers = []
+    teacher = False
     forteacher = moderate_PatternsOfLetter.ForTeacher()
     for i in letterResult:
         if letterResult[i].CodeStatus == "00":
@@ -61,11 +71,13 @@ def MakeAnswersForUsers(letterResult):
             pattern = moderate_PatternsOfLetter.WorkVerified(letterResult[i].IsOk)
             par = (letterResult[i].Student.NameOfStudent, letterResult[i].NumberOfLab, letterResult[i].VariantOfLab)
             forteacher.add(par)
+            teacher = True
         answer = AnswersForUsers(letterResult[i].Student.email, pattern.return_theme(), answers[i])
         answers.append(answer)
     sleep(1)
-    answer = AnswersForUsers("Teacher email", forteacher.return_theme(), forteacher.return_body())
-    answers.append(answer)
+    if teacher == True:
+        answer = AnswersForUsers(cfg.teacher_email, forteacher.return_theme(), forteacher.return_body())
+        answers.append(answer)
 
     with open(cfg.filename, "a") as file:
         file.write("Ответы для пользователей сформированы!")
