@@ -25,11 +25,17 @@ def WorkWithLetters(letters):
     # Подготовка писем - получение сырых данных
     LettersConvertToString(letters)
 
+    print(letters)
+
     # Формирование JSON
     jsonDates = FormJSONDates(letters)
 
+    print(letters)
+
     # Отправка данных
     letterResults = SendJSONForCheck(jsonDates, letters)
+
+    print(letters)
 
     # SetResults - Передать данные следующему модулю в формате списка экземпляров класса EmailResults
     SetResults(letterResults)

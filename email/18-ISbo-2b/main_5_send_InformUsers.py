@@ -25,6 +25,8 @@ def InformUsers(answersForUsers):
     SendLetters(smtp_obj, answersForUsers)
     quit_email_smtp(smtp_obj)
 
+    print(answersForUsers)
+
     # Добавление пользователей (функция пока не реализована)
     AddUsers()
 

@@ -36,14 +36,22 @@ def CheckEmail():
     for item in raw_letters:
         letters.append(FormListWithLetters(item))
 
+    print(letters)
+
     # Получение резервных данных (функция пока не реализована)
     cfg.reserve_dates.GetReserveDate()
+
+    print(letters)
 
     # Проверка пользователей на существование в системе
     CheckUsers(letters)
 
+    print(letters)
+
     # Валидация писем
     ValidateLetters(letters)
+
+    print(letters)
 
     # Вызов следующей функции
     WorkWithLetters(letters)

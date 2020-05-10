@@ -20,6 +20,8 @@ def SetResults(letterResults):
     # Выставление оценок в журнал (функция пока не реализована)
     SetMarks(letterResults)
 
+    print(letterResults)
+
     # Вызов следующей функции для формирования ответов
     FormAnswers(letterResults)
 

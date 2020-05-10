@@ -21,6 +21,8 @@ def FormAnswers(letterResult):
     # Формирование ответов пользователю
     answers = MakeAnswersForUsers(letterResult)
 
+    print(letterResult)
+
     # Вызов функции информирования пользователей
     InformUsers(answers)
 
