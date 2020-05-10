@@ -51,30 +51,30 @@ def MakeAnswersForUsers(letterResult):
     teacher = False
     forteacher = moderate_PatternsOfLetter.ForTeacher()
     for i in letterResult:
-        if letterResult[i].CodeStatus == "00":
+        if i.CodeStatus == "00":
             pattern = moderate_PatternsOfLetter.UnknownUser()
-        elif letterResult[i].CodeStatus == "01":
+        elif i.CodeStatus == "01":
             pattern = moderate_PatternsOfLetter.UncorrectedTheme()
-        elif letterResult[i].CodeStatus == "02":
+        elif i.CodeStatus == "02":
             pattern = moderate_PatternsOfLetter.UncorrectedStructure()
-        elif letterResult[i].CodeStatus == "03":
+        elif i.CodeStatus == "03":
             pattern = moderate_PatternsOfLetter.UncorrectedVariant()
-        elif letterResult[i].CodeStatus == "04":
+        elif i.CodeStatus == "04":
             pattern = moderate_PatternsOfLetter.LostLinks()
-        elif letterResult[i].CodeStatus == "05":
+        elif i.CodeStatus == "05":
             pattern = moderate_PatternsOfLetter.HaveAttachments()
-        elif letterResult[i].CodeStatus == "06":
+        elif i.CodeStatus == "06":
             pattern = moderate_PatternsOfLetter.SystemFailure()
-        elif letterResult[i].CodeStatus == "07":
+        elif i.CodeStatus == "07":
             pattern = moderate_PatternsOfLetter.SystemFailure()
-        elif letterResult[i].CodeStatus == "10":
+        elif i.CodeStatus == "10":
             pattern = moderate_PatternsOfLetter.WorkCompleted()
-        elif letterResult[i].CodeStatus == "30":
-            pattern = moderate_PatternsOfLetter.WorkVerified(letterResult[i].IsOk)
-            par = (letterResult[i].Student.NameOfStudent, letterResult[i].NumberOfLab, letterResult[i].VariantOfLab)
+        elif i.CodeStatus == "30":
+            pattern = moderate_PatternsOfLetter.WorkVerified(i.IsOk)
+            par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
             forteacher.add(par)
             teacher = True
-        answer = AnswersForUsers(letterResult[i].Student.email, pattern.return_theme(), answers[i])
+        answer = AnswersForUsers(i.Student.email, pattern.return_theme(), answers[i])
         answers.append(answer)
     sleep(1)
     if teacher == True:
