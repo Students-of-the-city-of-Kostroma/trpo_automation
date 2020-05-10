@@ -165,17 +165,17 @@ def CheckUsers(letters):
         file.write("\nПроверка пользователей... ")
 
     for i in letters:
-        if i.CodeStatus == "":
+        if i.CodeStatus == "0":
             result = Sheet.check_email(i.Student.Email)
 
-            if result:
+            if not result:
+                i.CodeStatus = "00"
+                i.CodeStatusComment = "Пользователь не зарегистрирован"
+            else:
                 i.Student.IsRegistered = True
                 i.Student.NameOfStudent = '{} {} {}'.format(result[0][0], result[0][1], result[0][2])
                 i.Student.GroupOfStudent = '{}'.format(result[0][3])
 
-            else:
-                i.CodeStatus = "00"
-                i.CodeStatusComment = "Пользователь не зарегистрирован"
 
     with open(cfg.filename, "a") as file:
         file.write("Пользователи проверены!")

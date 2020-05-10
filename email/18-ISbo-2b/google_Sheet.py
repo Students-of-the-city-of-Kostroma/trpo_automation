@@ -253,9 +253,9 @@ class Sheet:
         if not number_str:
             return bool(0)
         else:
-            #Диапазон выставлен на ФИО студента
+            #Диапазон выставлен на ФИО и группу студента
             start = 'C' + '{}'.format(number_str)
-            end = 'E' + '{}'.format(number_str)
+            end = 'F' + '{}'.format(number_str)
             student = Sheet.read_sheet(Email_sheetId, sheet_name, start, end)
             return student
     
