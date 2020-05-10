@@ -173,7 +173,7 @@ def CheckUsers(letters):
         file.write("\nПроверка пользователей... ")
 
     for i in letters:
-        if i.CodeStatus == "0":
+        if i.CodeStatus == "":
             result = Sheet.check_email(i.Student.Email)
 
             if not result:
@@ -210,7 +210,7 @@ def ValidateLetters(letters):
         file.write("\nВалидация писем... ")
 
     for let in letters:
-        if let.CodeStatus == None or let.CodeStatus == "0":
+        if let.CodeStatus == None or let.CodeStatus == "":
             val = Val(let.ThemeOfLetter, let.Body)
             let.CodeStatus = val.validation(val.subject, val.body)
             if let.CodeStatus == '02':
