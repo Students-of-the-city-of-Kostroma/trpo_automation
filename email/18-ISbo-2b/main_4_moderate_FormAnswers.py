@@ -74,7 +74,7 @@ def MakeAnswersForUsers(letterResult):
             par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
             forteacher.add(par)
             teacher = True
-        answer = AnswersForUsers(i.Student.email, pattern.return_theme(), answers[i])
+        answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
         answers.append(answer)
     sleep(1)
     if teacher == True:
