@@ -204,12 +204,8 @@ def SendJSONForCheck(jsonDates, letters):
             letter.CodeStatusComment = "ERROR. Длительное ожидание ответа от сервера"
 
         """Заполнение полей letterResult"""
-        letter.Student = i.Student
-        letter.ThemeOfLetter = i.ThemeOfLetter
-        letter.IsOK = IsOk
-        letter.VariantOfLab = i.VariantOfLab
-        letter.NumberOfLab = i.NumberOfLab
 
+        letter.IsOK = IsOk
         """Добавление нового письма"""
         new_letters.append(letter)
         sock.close()
