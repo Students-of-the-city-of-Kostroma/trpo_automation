@@ -41,7 +41,7 @@ def CheckEmail():
     # Получение резервных данных (функция пока не реализована)
     cfg.reserve_dates.GetReserveDate()
 
-    print(letters)
+
 
     # Проверка пользователей на существование в системе
     CheckUsers(letters)
@@ -223,10 +223,14 @@ def ValidateLetters(letters):
                     let.CodeStatus = '03'
                     let.CodeStatusComment = 'Номер лабораторной не существует'
                 else:
-                    let.Number = var
-                    let.Variant = num
+                    let.NumberOfLab = int(str(var))
+                    let.VariantOfLab = int(str(num))
             if let.CodeStatus == '20':
-                let.Body = re.findall(r'http[^ \n]*', let.Body)
+                let.Body = re.findall(r'http[^ \n]*', let.Body)[0]
+                body = let.Body[-1:]
+                if body == "\r":
+                    let.Body = let.Body[:-1]
+
                 let.CodeStatusComment = 'Работа отправлена на проверку'
 
     with open(cfg.filename, "a") as file:
@@ -316,7 +320,7 @@ def name_parse(from_mes):
 
 def get_body(email_message):
     name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,email_message)
+    logs.Infor(name, email_message)
     try:
         str_body = ""
         if email_message.is_multipart():

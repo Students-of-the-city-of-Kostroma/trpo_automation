@@ -31,10 +31,13 @@ def Main():
         # Запуск работы
         # while True:
             # Установка таймаута ожидания
-        start_function = Timer(cfg.timeout, CheckEmail)
 
-        # Запуск таймера до начала работы
-        start_function.start()
+        CheckEmail()
+
+        # start_function = Timer(cfg.timeout, CheckEmail)
+        #
+        # # Запуск таймера до начала работы
+        # start_function.start()
 
     # except Exception as err:
     #

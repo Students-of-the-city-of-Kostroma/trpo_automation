@@ -57,6 +57,7 @@ class ValidationMail():
         if (hello in salutation) is False:
             return '02'
         name = strings[len(strings) - 1]  # Это подпись
+        name = name.replace("\r", "")
         res = re.match(r'\w+[ ]?\w+[, ]{2}\d{2}[-]?\w{4}[-]?\d\w', name)
         if res is None:
             return '02'
