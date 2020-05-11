@@ -152,8 +152,16 @@ def SendJSONForCheck(jsonDates, letters):
     count = 0
     for i in letters:
         letter = global_LetterResult.LetterResult()
+        letter.Student = i.Student
+        letter.VariantOfLab = i.VariantOfLab
+        letter.NumberOfLab = i.NumberOfLab
+
 
         if i.CodeStatus != "20":
+            letter.CodeStatus = i.CodeStatus
+            letter.CodeStatusComment = i.CodeStatusComment
+            letter.IsOK = False
+            new_letters.append(letter)
             continue
 
         """Данные для подключения"""

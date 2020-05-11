@@ -16,4 +16,4 @@ def num_for_filename():
 
 gen_num_for_filename = num_for_filename()
 last_date = datetime.strftime(datetime.now(), "%Y.%m.%d")
-path_to_logs = "/home/test/trpo/logs/"
+path_to_logs = "/home/rurec/git/trpo_automation/email/18-ISbo-2b/logs/"

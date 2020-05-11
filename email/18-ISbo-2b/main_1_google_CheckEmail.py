@@ -149,7 +149,7 @@ def FormListWithLetters(mails):
         return letter_item
     except:
         user = User("UNKNOWN", None, "UNKNOWN", None)
-        letter = Letter.Letter(user, "UNKNOWN", "UNKNOWN", None, None)
+        letter = Letter(user, "UNKNOWN", "UNKNOWN", None, None)
         letter.CodeStatus = "07"
         return letter
 
