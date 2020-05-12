@@ -40,32 +40,36 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
 
     QDomNode temp;
     QString child;
+    QString tempString;
 
     temp = elem.firstChild();
+    tempString = classes.value("parent");
 
     /* Проверяем имя абстрактного класса */
-    if (temp.toElement().attribute("name") == classes.value("parent")) {
+    if (!tempString.contains(abstractClassName)) {
         throw UnexpectedResultException("Invalid parent class name");
     }
-        QString tempString = classes.value("parent");
         temp = temp.firstChild();
 
     /* Проверяем имя метода абстрактного метода */
-    if (!tempString.contains(temp.toElement().attribute("name"))) {
+    if (!tempString.contains(abstractMethodName)) {
         throw UnexpectedResultException("Invalid abstract method name");
     }
 
     child = classes.value("children");
 
     /* Проверяем колличество параметров абстрактного метода */
-    if(!child.contains(temp.toElement().attribute("hasParams") + "()") ||
-        !child.contains(temp.toElement().attribute("hasParams") + " ()")) {
+    child = child.simplified();
+    if (!child.contains(temp.toElement().attribute("hasParams") + "()") ||
+            !child.contains(temp.toElement().attribute("hasParams") + " ()") ||
+            !child.contains(temp.toElement().attribute("hasParams") + "( )") ||
+            !child.contains(temp.toElement().attribute("hasParams") + " ( )")) {
         throw UnexpectedResultException("An abstract method must have 0 parameters");
     }
 
     /* Проверяем возвращаемое занчение метода */
-    if (!child.contains("return true") || !child.contains("return 1")) {
-        throw UnexpectedResultException("The abstract method should return true");
+    if (!child.contains("return")) {
+        throw UnexpectedResultException("An abstract method should return a value");
     }
 
     /* Проверка имен наследников */
@@ -80,11 +84,11 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
             throw UnexpectedResultException("Invalid heir name");
         }
         temp = temp.nextSibling();
-        amountChild++;
     }
 
      /* Проверка количества наследников */
-    if (temp.toElement().attribute("amount").toInt() != amountChild) {
+    amountChild = child.count("class");
+    if (heirsAmount != amountChild) {
         throw UnexpectedResultException("Incorrect number of heirs");
     }
 }
