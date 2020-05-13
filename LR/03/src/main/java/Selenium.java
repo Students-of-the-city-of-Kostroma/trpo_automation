@@ -32,11 +32,11 @@ public class Selenium {
     public Selenium (String Repository,String variant){
         this.Repository=Repository;
         this.variant=variant;
-        WebDriverManager.chromedriver().version("80.0.3987.106").setup();
+        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
 
         options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-        options.addArguments("--headless");
+     //   options.addArguments("--headless");
         options.addArguments("start-maximized");
         options.addArguments("enable-automation");
         options.addArguments("--no-sandbox");
