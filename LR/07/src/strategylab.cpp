@@ -30,6 +30,7 @@ StrategyLab::StrategyLab(QObject* parent)
  */
 void StrategyLab::checkByConfig(int variant, QList<QString> code)
 {
+    /* Извлекаем часть конфига answerStructure.xml, подходящую для варианта лабораторной */
     QDomElement elem;
     QDomNodeList labsConfig = rootAnswerStructure.elementsByTagName("lab");
     for (QDomNode node = labsConfig.at(0); !node.isNull(); node = node.nextSibling()) {
@@ -38,23 +39,62 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
     }
 
     QDomElement abstract = elem.elementsByTagName("abstract").at(0).toElement();
-    abstractClassName = abstract.attribute("name");
-    abstractMethodName = abstract.elementsByTagName("method").at(0).toElement().attribute("name");
-    heirsAmount = elem.elementsByTagName("heirs").at(0).toElement().attribute("amount").toInt();
+       abstractClassName = abstract.attribute("name");
+       abstractMethodName = abstract.elementsByTagName("method").at(0).toElement().attribute("name");
+       heirsAmount = elem.elementsByTagName("heirs").at(0).toElement().attribute("amount").toInt();
 
-    foreach (QString strClass, code) {
-        if (!strClass.contains("class")) {
-            classes.insert("main", strClass);
-        } else if (strClass.left(strClass.indexOf("{")).simplified().split(" ").at(1) == abstractClassName) {
-            classes.insert("parent", strClass);
-        } else if (strClass.contains(abstractClassName)) {
-            QString declare = strClass.left(strClass.indexOf("{"));
-            if (declare.mid(declare.indexOf(":")).simplified().split(" ").at(2) == abstractClassName) {
-                children.push_back(strClass);
-            }
-        } else {
-            classes.insert("context", strClass);
+    QDomNode temp;
+    QString child;
+    QString tempString;
+
+    temp = elem.firstChild();
+    tempString = classes.value("parent");
+
+    /* Проверяем имя абстрактного класса */
+    if (!tempString.contains(abstractClassName)) {
+        throw UnexpectedResultException("Invalid parent class name");
+    }
+        temp = temp.firstChild();
+
+    /* Проверяем имя метода абстрактного метода */
+    if (!tempString.contains(abstractMethodName)) {
+        throw UnexpectedResultException("Invalid abstract method name");
+    }
+
+    child = classes.value("children");
+
+    /* Проверяем колличество параметров абстрактного метода */
+    child = child.simplified();
+    if (!child.contains(temp.toElement().attribute("hasParams") + "()") ||
+            !child.contains(temp.toElement().attribute("hasParams") + " ()") ||
+            !child.contains(temp.toElement().attribute("hasParams") + "( )") ||
+            !child.contains(temp.toElement().attribute("hasParams") + " ( )")) {
+        throw UnexpectedResultException("An abstract method must have 0 parameters");
+    }
+
+    /* Проверяем возвращаемое занчение метода */
+    if (!child.contains("return")) {
+        throw UnexpectedResultException("An abstract method should return a value");
+    }
+
+    /* Проверка имен наследников */
+    temp = elem.lastChild();
+    int amountChild = 0;
+
+    temp = temp.firstChild();
+    child = classes.value("children");
+
+    while (!temp.isNull()) {
+        if (!child.contains(temp.toElement().attribute("name"))) {
+            throw UnexpectedResultException("Invalid heir name");
         }
+        temp = temp.nextSibling();
+    }
+
+     /* Проверка количества наследников */
+    amountChild = child.count("class");
+    if (heirsAmount != amountChild) {
+        throw UnexpectedResultException("Incorrect number of heirs");
     }
 }
 
