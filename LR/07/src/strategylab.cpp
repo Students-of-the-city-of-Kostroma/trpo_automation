@@ -38,6 +38,11 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
         if (elem.attribute("number").toInt() == variant) break;
     }
 
+    QDomElement abstract = elem.elementsByTagName("abstract").at(0).toElement();
+       abstractClassName = abstract.attribute("name");
+       abstractMethodName = abstract.elementsByTagName("method").at(0).toElement().attribute("name");
+       heirsAmount = elem.elementsByTagName("heirs").at(0).toElement().attribute("amount").toInt();
+
     QDomNode temp;
     QString child;
     QString tempString;
