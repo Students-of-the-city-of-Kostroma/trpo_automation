@@ -141,17 +141,21 @@ def get_message(service, user_id):
     email_id = ''
     head_of_msg = ''
     body_of_msg = ''
+    date_of_msg = ''
     for head in info_of_msg :
         if head['name'] == 'From' :
             email_id = head['value']
         if head['name'] == 'Subject' :
             head_of_msg = head['value']
+        if head['name'] == 'Date' :
+        	date_of_msg = head['value']
     body_of_msg = message_list['snippet']
 
     message_info = {'id_of_msg':id_of_msg,
                     'email_id':email_id,
                     'head_of_msg':head_of_msg,
-                    'body_of_msg':body_of_msg}
+                    'body_of_msg':body_of_msg,
+                    'date_of_msg': date_of_msg}
     return message_info
 
 
@@ -174,7 +178,8 @@ def email_archiving(service, user_id, message_info):
 
 @log_method.log_method_info
 def send_message(service, user_id, email_of_student, name_of_student,
-                 number_of_templates, validation_dictionary, error_dictionary):
+                 number_of_templates, validation_dictionary, 
+                 error_dictionary, message_info):
     """
     Метод по отправке сообщения студенту.  
     
@@ -206,9 +211,15 @@ def send_message(service, user_id, email_of_student, name_of_student,
     sending_msg['from'] = GMAIL_OF_TRPO
     our_msg = message_templates[number_of_templates]['our_msg']
     title = message_templates[number_of_templates]['title']
+    date_of_msg = message_info['date_of_msg']
+    return_body = message_info['body_of_msg']
+    return_head = message_info['head_of_msg']
 
     sending_msg = MIMEMultipart('alternative')
-    sending_msg = MIMEText(hello_student + our_msg + SIGNATURE)
+    return_text = funcReturnMsg(hello_student, our_msg, SIGNATURE,
+    	                        date_of_msg, return_body, 
+    	                        return_head)
+    sending_msg = MIMEText(return_text)
     sending_msg['To'] = email_of_student
     sending_msg['Subject'] = title
 
