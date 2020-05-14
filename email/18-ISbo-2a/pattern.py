@@ -22,7 +22,7 @@ def funcSt(str_of_val_er, str_of_er):
         {'title':'ТРПО. Авторизация пользователя',
          'our_msg':'Вы не найдены в системе. Пожалуйста, перейдите по' + 
                    ' ссылке и зарегистрируйтесь.\nhttps://forms.gle/' +
-                   'tUrwRYzP52Tx1fFm6'},
+                   'n8rTiBCBkBaiMDvL6'},
         {'title':'Ошибка модуля',
          'our_msg':'В модуле ... обнаружена ошибка. В ближайшее время ' + 
                    'роблема будет исправлена. Просим прощения за неудобства.'}]
@@ -44,8 +44,17 @@ def funcTs(name_of_student, validation_dictionary, str_of_er):
     return pattern
 
 
+SIGNATURE = "\n\nС уважением,\nБот"
+
+def funcReturnMsg(hello_student, our_msg, SIGNATURE, 
+                   date_of_msg, return_body, return_head):
+    date_part = f'\n\n-----\nRe: <{date_of_msg}>\n'
+    return_part = date_part + f'Тема: {return_head}\n{return_body}\n-----'
+    text_of_msg = hello_student + our_msg + return_part + SIGNATURE
+    return text_of_msg
+
 def funcHello(name_of_student):
-    return 'Здравствуйте, '+ name_of_student + '!\n\n'
+    return 'Здравствуйте, '+ f'{name_of_student}' + '!\n\n'
 
 
 GMAIL_OF_TRPO = "trpo.automation@gmail.com"
@@ -61,7 +70,6 @@ MAS_OF_TO = ['yuri.silenok@gmail.com', '0sashasmirnov0@gmail.com',
              'molchok.yurij@gmail.com', 'amr15319@gmail.com']
 
 
-SIGNATURE = "\n\nС уважением,\nБот"
 """
 Валидация
 """
