@@ -1,5 +1,5 @@
 import APIgoogle
-import client
+from client import check_lab
 import Validation
 import log_method
 import config
@@ -33,6 +33,8 @@ while True:
                                     2, None, valid_dict)
             else:
                 #Получение результата из модуля проверки
+                # FIXME переписать обработку полученного ответа с серврера,
+                #   предусмотреть обработку ошибок (logger.error)
                 answer = client.send_a_laboratory_work_for_verification(labNumber = valid_dict['Number'], labLink = valid_dict['URL'])
                 
                 #Получение группы пользователя
