@@ -3,7 +3,7 @@ import pickle
 import os.path
 import httplib2
 import apiclient.discovery
-import re;
+import re
 import email
 import base64
 import log_method
@@ -15,22 +15,24 @@ from googleapiclient.discovery import build
 from email.mime.text import MIMEText
 from datetime import datetime
 from pprint import pprint
-from config import SPREAD_SHEET_ID
-from config import CREDENTIALS_FILE
-from config import SPREAD_SHEET_ID_INIT
-from config import CREDENTIALS_FILE_SERVICE
+from config import (
+    SPREAD_SHEET_ID,
+    CREDENTIALS_FILE,
+    SPREAD_SHEET_ID_INIT,
+    CREDENTIALS_FILE_SERVICE,
+)
 from pattern import *
-
-
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 
           'https://www.googleapis.com/auth/gmail.send',
           'https://www.googleapis.com/auth/gmail.labels',
           'https://www.googleapis.com/auth/gmail.modify']
 
-
 @log_method.log_method_info
 def get_service():
+    """
+    Описание: Подключение к почте.
+    """
     creds = None
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
@@ -49,40 +51,54 @@ def get_service():
     service = build('gmail', 'v1', credentials=creds)
     return service
 
+#Костыль для работы c gmailAPI.
+#service = get_service()
+#user_id = 'me'
 
-service = get_service()
-user_id = 'me'
 
 @log_method.log_method_info
-def add_mark_in_table(table, cell, mark):
+def add_str_in_table(table: str, cell: str, mark: str):
+    """
+    Добавление символа\предложения в таблице.
+
+    :param table: Название таблицы.
+    :param cell: Ячейка.
+    :param mark: Символ\предложение.
+    """
     log_method.logger.debug(f'add_mark_in_table: table - {table}, \
 							  cell - {cell}, mark - {mark}')
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-				  CREDENTIALS_FILE, 
-				  ['https://www.googleapis.com/auth/spreadsheets',
-				  'https://www.googleapis.com/auth/drive'])
+				    CREDENTIALS_FILE, 
+				    [
+                        'https://www.googleapis.com/auth/spreadsheets',
+				        'https://www.googleapis.com/auth/drive'
+                    ]
+                )
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http = httpAuth) 
-    rangeTab = "(ТРПО) " + str(table) + "!" + str(cell)
-    service.spreadsheets().values().batchUpdate(spreadsheetId =
-		SPREAD_SHEET_ID, body = {
-        "valueInputOption": "USER_ENTERED",
-        "data": [
-            {"range": rangeTab,
-                "majorDimension": "ROWS",     
-                "values": [ [mark] ]
-            }
+    rangeTab = f"{table}!{cell}"
+    service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, 
+        body={
+            "valueInputOption": "USER_ENTERED",
+            "data": [
+                {
+                    "range": rangeTab,
+                    "majorDimension": "ROWS",     
+                    "values": [ [mark] ]
+                }
         ]
     }).execute()
 
         
 @log_method.log_method_info
-def cleaning_email(email_id):
+def cleaning_email(email_id: str):
     """
     Метод для выделения почты из передаваемой строки email.
-    email - передаваемая строка с почтой
     Name Surname <1234@gmail.com> ← пример email который мне передают
     1234@gmail.com это будет запоминаться после метода очистки
+
+    :param email: Передаваемая строка с почтой
+    return: email без спец.знаков
     """
     comp = re.compile(r'<(\S*?)>')
     y = comp.search(email_id)
@@ -92,26 +108,37 @@ def cleaning_email(email_id):
 
 
 @log_method.log_method_info
-def name_surname(email_id):
-    """ Метод для выделения и передачи имени и фамилии."""
+def name_surname(email_id: str):
+    """ 
+    Метод для выделения и передачи имени и фамилии.
+    """
     comp = re.compile('(\S*?) '+'(\S*?) ')
     y = comp.search(email_id)
     return y.group(0)
 
 
 @log_method.log_method_info
-def search_email(email_id):
-    """Метод для поиска в таблице."""
+def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
+    """
+    Метод поиска электронной почты в таблице.
+
+    :param email_id: электронная почта
+    :param spreadsheetid: таблица для поиска
+    return: возвращает электронную почту/None
+    """
     mail_str = cleaning_email(email_id)
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
                 CREDENTIALS_FILE,
-                ['https://www.googleapis.com/auth/spreadsheets',
-                 'https://www.googleapis.com/auth/drive'])
+                [
+                    'https://www.googleapis.com/auth/spreadsheets',
+                    'https://www.googleapis.com/auth/drive'
+                ]
+            )
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
     range_name = 'List1!B1:B1000'
     table = service.spreadsheets().values().get(
-          spreadsheetId=SPREAD_SHEET_ID,
+          spreadsheetId=spreadsheetid,
           range=range_name).execute()
     if re.search(mail_str, str(table)):
         return mail_str
@@ -123,9 +150,15 @@ def search_email(email_id):
 def get_message(service, user_id):
     """ 
     Метод получения полезной информации из письма студента.
+
+    :params service: подключенный хук
+    :params user_id: id подключаемого(может быть 'me')
+    :return: { 'id_of_msg', 'email_id', 'head_of_msg', 'body_of_msg', 'date_of_msg' }
     """
-    search_id = service.users().messages().list(userId=user_id,
-                                                labelIds = ['UNREAD']).execute()
+    search_id = service.users().messages().list(
+        userId=user_id,
+        labelIds=['UNREAD']
+    ).execute()
     message_id = search_id['messages']
     alone_msg = message_id[0]
     id_of_msg = alone_msg['id']
@@ -148,7 +181,7 @@ def get_message(service, user_id):
         if head['name'] == 'Subject' :
             head_of_msg = head['value']
         if head['name'] == 'Date' :
-        	date_of_msg = head['value']
+            date_of_msg = head['value']
     body_of_msg = message_list['snippet']
 
     message_info = {'id_of_msg':id_of_msg,
@@ -168,8 +201,9 @@ def email_archiving(service, user_id, message_info):
     user_id: наше мыло или спец слово 'me'.  
     message_info: словарь с данными письма.
     """
-    msg_labels = {'removeLabelIds': ['UNREAD', 'INBOX'], 
-                                     'addLabelIds': []}
+    msg_labels = {'removeLabelIds': ['UNREAD', 'INBOX'],
+                  'addLabelIds': []
+                  }
 
     message = service.users().messages().modify(userId=user_id,
                                                 id=message_info['id_of_msg'],
@@ -197,12 +231,8 @@ def send_message(service, user_id, email_of_student, name_of_student,
     str_of_er = "" 
     if number_of_templates == 1:
         str_of_val_er = error_in_work(validation_dictionary)
-    else:
-        if number_of_templates == 2:
-            str_of_er = error_in_work(error_dictionary)
-        else:
-            str_of_val_er = ""
-            str_of_er = ""    
+    elif number_of_templates == 2:
+        str_of_er = error_in_work(error_dictionary)
 
     message_templates = funcSt(str_of_val_er, str_of_er)
 
@@ -217,8 +247,8 @@ def send_message(service, user_id, email_of_student, name_of_student,
 
     sending_msg = MIMEMultipart('alternative')
     return_text = funcReturnMsg(hello_student, our_msg, SIGNATURE,
-    	                        date_of_msg, return_body, 
-    	                        return_head)
+                                date_of_msg, return_body,
+                                return_head)
     sending_msg = MIMEText(return_text)
     sending_msg['To'] = email_of_student
     sending_msg['Subject'] = title
