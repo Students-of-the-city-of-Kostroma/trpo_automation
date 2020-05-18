@@ -19,6 +19,12 @@ steps:
 
 - script: | 
     pip install coverage
+    pip install httplib2
+    pip install requests
+    pip install --upgrade google-api-python-client
+    pip install --upgrade oauth2client
+    pip install google-auth-oauthlib
+    pip install cryptography
   displayName: 'Install libraries'
 
 - script: | 
@@ -30,6 +36,11 @@ steps:
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
-    testResultsFiles: 'coverage.xml'
+    testResultsFiles: '**/*.xml'
     testRunTitle: 'Publish test results for Python $(python.version)'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.SourcesDirectory)' 
+    artifactName: 'drop' 
+    publishLocation: 'Container'

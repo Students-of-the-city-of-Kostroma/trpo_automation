@@ -3,50 +3,75 @@
 """
 
 
-def funcSt(str_of_val_er, str_of_er):
+def funcSt(str_of_val_er, str_of_er):   
     pattern = [
-        {'title':'Работа успешно принята', 
-         'our_msg':'Поздравляю!\nРабота успешно принята!' + 
-                   '\nОценку можно проверить в журнале:' + 
-                   '\nhttps://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1' + 
-                   'khhC16U1qDwaI-K6ndkp9LFWAHncuWA/edit?usp=sharing'},
-        {'title':'Обнаружены ошибки в работе', 
-         'our_msg':'В Вашей работе обнаружены ошибки:\n\n' + str_of_val_er + 
-                   '\nПросьба исправить их и отправить письмо повторно.'},
-        {'title':'Обнаружены ошибки в заполнении письма',
-         'our_msg':'В структуре письма обнаружены следующие ошибки:\n\n' + 
-                   str_of_er + '\nПросьба исправить их в соответствии с ' +
-                   'документом\n' + 'https://docs.google.com/document/d/' + 
-                   '1DRhgepxVwoscylIS2LCW-po5SFBdqOr-oo92bP_XfHE/edit?' + 
-                   'usp=sharing'},
-        {'title':'Авторизация пользователя',
-         'our_msg':'Вы не найдены в системе. Пожалуйста, перейдите по' + 
-                   ' ссылке и зарегистрируйтесь.\nhttps://docs.google.com' + 
-                   '/forms/d/1nXhfOkE3KnWVFNzZ-jvvATAIb6T3zzwD5Ry8Itc-VmQ/' + 
-                   'edit?usp=sharing'},
-        {'title':'Ошибка модуля',
-         'our_msg':'В модуле ... обнаружена ошибка. В ближайшее время ' + 
-                   'роблема будет исправлена. Просим прощения за неудобства.'}]
+        {
+             'title': 'ТРПО. Работа успешно принята',
+             'our_msg': 'Поздравляю!\nРабота успешно принята!' +
+                        '\nОценку можно проверить в журнале:' +
+                        '\nhttps://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1' +
+                        'khhC16U1qDwaI-K6ndkp9LFWAHncuWA/edit?usp=sharing'
+        },
+        {
+            'title': 'ТРПО. Обнаружены ошибки в работе',
+            'our_msg': 'В Вашей работе обнаружены ошибки:\n\n' + str_of_val_er +
+                       '\nПросьба исправить их и отправить письмо повторно.'
+        },
+        {
+            'title': 'ТРПО. Обнаружены ошибки в заполнении письма',
+            'our_msg': 'В структуре письма обнаружены следующие ошибки:\n\n' +
+                       str_of_er + '\nПросьба исправить их в соответствии с ' +
+                       'документом\n' + 'https://docs.google.com/document/d/' +
+                       '1DRhgepxVwoscylIS2LCW-po5SFBdqOr-oo92bP_XfHE/edit?' +
+                       'usp=sharing'
+        },
+        {
+            'title': 'ТРПО. Авторизация пользователя',
+            'our_msg': 'Вы не найдены в системе. Пожалуйста, перейдите по' +
+                       ' ссылке и зарегистрируйтесь.\n'
+                       'https://forms.gle/pNzAtYKWAiDom6MEA'
+        },
+        {
+            'title': 'Ошибка модуля',
+            'our_msg': 'В модуле ... обнаружена ошибка. В ближайшее время ' +
+                       'проблема будет исправлена. Просим прощения за неудобства.'
+        }
+    ]
     return pattern
 
 
 def funcTs(name_of_student, validation_dictionary, str_of_er):
-    pattern = [{'hello':'Здравствуйте, Юрий Викторович!\n\n',
-                'title':'Ошибка в работе студента', 
-                'our_msg':'Студент ' + name_of_student + 
-                          ' не справился с задачей №' + 
-                          validation_dictionary['Numder'] + 
-                          ' (' + validation_dictionary['URL'] + ')' + 
-                          '\nБыли допущены ошибки в работе:\n\n' +
-                          str_of_er}, 
-               {'hello':'Здравствуйте!', 
-                'title':'Служба дала сбой',
-                'our_msg':'В модуле ... возникла ошибка ...'}]
+    pattern = [
+        {
+            'hello': 'Здравствуйте, Юрий Викторович!\n\n',
+            'title': 'ТРПО. Ошибка в работе студента',
+            'our_msg': 'Студент ' + name_of_student +
+                       ' не справился с задачей №' +
+                       validation_dictionary['Numder'] +
+                       ' (' + validation_dictionary['URL'] + ')' +
+                       '\nБыли допущены ошибки в работе:\n\n' +
+                       str_of_er
+        },
+        {
+            'hello': 'Здравствуйте!',
+            'title': 'ТРПО. Служба дала сбой',
+            'our_msg': 'В модуле ... возникла ошибка ...'
+        }
+    ]
     return pattern
 
 
+SIGNATURE = "\n\nС уважением,\nБот"
+
+def funcReturnMsg(hello_student, our_msg, SIGNATURE, 
+                   date_of_msg, return_body, return_head):
+    date_part = f'\n\n-----\nRe: <{date_of_msg}>\n'
+    return_part = date_part + f'Тема: {return_head}\n{return_body}\n-----'
+    text_of_msg = hello_student + our_msg + return_part + SIGNATURE
+    return text_of_msg
+
 def funcHello(name_of_student):
-    return f"Здравствуйте, {name_of_student}!\n\n"
+    return 'Здравствуйте, '+ f'{name_of_student}' + '!\n\n'
 
 
 GMAIL_OF_TRPO = "trpo.automation@gmail.com"
@@ -62,20 +87,32 @@ MAS_OF_TO = ['yuri.silenok@gmail.com', '0sashasmirnov0@gmail.com',
              'molchok.yurij@gmail.com', 'amr15319@gmail.com']
 
 
-SIGNATURE = "\n\nС уважением,\nБот"
-""""
+"""
 Валидация
-""""
+"""
 
 
 SUBJECT_LIST = ['ТРПО'] # Список предметов
-SUBJECTNUMBER_LIST = ['ЛР№1', 'Лабораторная работа №1', 
-                      'ЛР№2', 'Лабораторная работа №2',
-                      'ЛР№3', 'Лабораторная работа №3',
-                      'ЛР№4', 'Лабораторная работа №4',
-                      'ЛР№5', 'Лабораторная работа №5',
-                      'ЛР№6', 'Лабораторная работа №6',
-                      'ЛР№7', 'Лабораторная работа №7',
-                      'ЛР№8', 'Лабораторная работа №8',
-                      'ЛР№9', 'Лабораторная работа №9']
-GREATING_LIST =  ['Добрый день','Добрый вечер'] # Список приветствий
+SUBJECTNUMBER_LIST = ['лр№1', 'лабораторная работа №1', 
+                      'лр№2', 'лабораторная работа №2',
+                      'лр№3', 'лабораторная работа №3',
+                      'лр№4', 'лабораторная работа №4',
+                      'лр№5', 'лабораторная работа №5',
+                      'лр№6', 'лабораторная работа №6',
+                      'лр№7', 'лабораторная работа №7',
+                      'лр№8', 'лабораторная работа №8',
+                      'лр№9', 'лабораторная работа №9',
+                      'лаба №1','лабораторная №1',
+                      'лаба №2','лабораторная №2',
+                      'лаба №3','лабораторная №3',
+                      'лаба №4','лабораторная №4',
+                      'лаба №5','лабораторная №5',
+                      'лаба №6','лабораторная №6',
+                      'лаба №7','лабораторная №7',
+                      'лаба №8','лабораторная №8',
+                      'лаба №9','лабораторная №9',]
+GREATING_LIST =  ['добрый день','добрый вечер',# Список приветствий
+                  'добрейший вечерочек','доброй ночи','здравствуйте','привет',
+                  'здравия желаю','хаю хай','доброго времени суток'] 
+SUBJECTNUMBERURL_LIST = ['7', '8', '9'] # Список ЛР c URL
+
