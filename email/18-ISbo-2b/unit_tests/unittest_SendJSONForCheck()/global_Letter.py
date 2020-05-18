@@ -11,9 +11,8 @@ class Letter:
     Body = ""
     VariantOfLab = 0
     NumberOfLab = 0
-    CodeStatus = None
-    CodeStatusComment = None
-
+    CodeStatus = 0
+    CodeStatusComment = ""
 
     def __init__(self, student=None, themeOfLetter=None, body=None, variant=None, number=None):
         """Конструктор, все входные данные не обязательны для того,
