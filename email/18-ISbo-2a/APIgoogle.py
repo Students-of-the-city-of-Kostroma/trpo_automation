@@ -374,7 +374,9 @@ def search_dolgi(group,position):
         return None
     if(len(ng) > 0):
         return ng
- def search_dolgi(group,name):
+
+
+def search_dolgi(group,name):
     """
     Метод для добавления студента
     group=(ТРПО) название группы
