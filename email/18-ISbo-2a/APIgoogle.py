@@ -425,4 +425,51 @@ def search_dolgi(group,position):
         return None
     if(len(ng) > 0):
         return ng
- 
+
+
+def add_table(group,name):
+    """
+    Метод для добавления студента
+    group=(ТРПО) название группы
+    name=ФИО студента
+    """
+    
+    spreadsheetId = SPREAD_SHEET_ID
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(
+                CREDENTIALS_FILE,
+                ['https://www.googleapis.com/auth/spreadsheets',
+                 'https://www.googleapis.com/auth/drive'])
+    httpAuth = credentials.authorize(httplib2.Http())
+    service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
+    column ='D'
+    column_number = 0
+    condition = 1
+    count = 0
+    while(condition):
+        try:
+           column_number  =column_number  + 1
+            range_name = group + '!' + column + str(column_number) + ':' + column + str(column_number)
+            table = service.spreadsheets().values().get(
+                spreadsheetId=spreadsheetId,
+                range=range_name).execute()
+            if(table.get('values')[0][0] == name):
+                condition = 0
+                status = ('available',)
+        except:
+            condition = 0
+            count = 1
+    if(count == 1):
+        try:
+            service.spreadsheets().values().batchUpdate(spreadsheetId =spreadsheetId , body = {
+                        "valueInputOption": "USER_ENTERED",
+                        "data": [
+                                {"range":range_name ,
+                                        "majorDimension": "ROWS",     
+                                        "values": [ [name] ]
+                                }
+                        ]
+                }).execute()
+            status = ('accepted',)
+        except:
+            status = ('error',)
+    return status
