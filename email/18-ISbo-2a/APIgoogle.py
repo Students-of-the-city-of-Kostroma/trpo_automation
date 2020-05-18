@@ -390,25 +390,24 @@ def search_dolgi(group,name):
                  'https://www.googleapis.com/auth/drive'])
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
-    b ='D'
-    c3 = 0
-    f = 1
-    yt = 0
-    while(f):
+    column ='D'
+    column_number = 0
+    condition = 1
+    count = 0
+    while(condition):
         try:
-            c3 = c3 + 1
-            range_name = group + '!' + b+ str(c3) + ':' + b + str(c3)
+           column_number  =column_number  + 1
+            range_name = group + '!' + column + str(column_number) + ':' + column + str(column_number)
             table = service.spreadsheets().values().get(
                 spreadsheetId=spreadsheetId,
                 range=range_name).execute()
-            print(table.get('values')[0][0])
             if(table.get('values')[0][0] == name):
-                f = 0
-                ng = ('available',)
+                condition = 0
+                status = ('available',)
         except:
-            f = 0
-            yt = 1
-    if(yt == 1):
+            condition = 0
+            count = 1
+    if(count == 1):
         try:
             service.spreadsheets().values().batchUpdate(spreadsheetId =spreadsheetId , body = {
                         "valueInputOption": "USER_ENTERED",
@@ -419,7 +418,7 @@ def search_dolgi(group,name):
                                 }
                         ]
                 }).execute()
-            ng = ('accepted',)
+            status = ('accepted',)
         except:
-            ng = ('error',)
-    return ng
+            status = ('error',)
+    return status
