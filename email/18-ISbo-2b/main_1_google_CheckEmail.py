@@ -31,7 +31,14 @@ def CheckEmail():
     # Получение резервных данных (функция пока не реализована)
     cfg.reserve_dates.GetReserveDate()
 
+
+    letters = []
+    for item in raw_letters:
+        letters.append(FormListWithLetters(item))
+
+
     # Проверка пользователей на существование в системе (функция пока не реализована)
+
     CheckUsers(letters)
 
     # Валидация писем
@@ -113,20 +120,25 @@ def FormListWithLetters(mails):
         from_mes = get_from(email_message)
         subject_mes = get_subject(email_message)
         user_email = from_parse(from_mes)
+        name = name_parse(from_mes)
         body_str = get_body(email_message)
         body = body_parse(body_str)
         if body == "UNKNOWN":
             error_code = "05"
-        user = User(None, None, user_email, None)
-        letter_item = Letter(user, subject_mes, body, error_code)
+
+        user = User(name, None, user_email, None)
+        letter_item = Letter(user, subject_mes, body, None, None)
+        letter_item.CodeStatus = error_code
 
         with open(cfg.filename, "a") as file:
             file.write("Письма сформированы!")
 
         return letter_item
     except:
-        user = User(None, None, "UNKNOWN", None)
-        return Letter(user, "UNKNOWN", "UNKNOWN", "07")
+        user = User("UNKNOWN", None, "UNKNOWN", None)
+        letter = Letter.Letter(user, "UNKNOWN", "UNKNOWN", None, None)
+        letter.CodeStatus = "07"
+        return letter
 
 
 def CheckUsers(letters):
@@ -184,21 +196,30 @@ def ValidateLetters(letters):
         if let.CodeStatus is None:
             val = Val(let.ThemeOfLetter, let.Body)
             let.CodeStatus = val.validation(val.subject, val.body)
-            if let.CodeStatus == '02':
-                let.CodeStatusComment = 'Структура письма не соответствует требованиям к оформлению'
+            if let.CodeStatus == '20':
+                if val.verify_name_and_group(let.Student.NameOfStudent, let.Student.GroupOfStudent) is not True:
+                    let.CodeStatus = '02'
+                    let.CodeStatusComment = 'Подпись не соответствует заявленной при регистрации'
+            if let.CodeStatus == '01':
+                let.CodeStatusComment = 'Тема письма не соответствует требованиям к теме'
+            elif let.CodeStatus == '02':
+                if let.CodeStatusComment is None:
+                    let.CodeStatusComment = 'Структура письма не соответствует требованиям к оформлению'
             elif let.CodeStatus == '03':
-                let.CodeStatusComment = 'Номер варианта меньше 1 или больше 15 или не число'
+                let.CodeStatusComment = 'Неверно указан номер работы или варианта'
+            elif let.CodeStatus == '04':
+                let.CodeStatusComment = 'Письмо не содержит необходимых ссылок на ресурсы.'
             else:
                 num, var = val.get_num_and_var(val.subject)
-                if int(num) < 1 or int(num) > 15 or int(var) == 0:
+                if num is None or (int(num) < 1 or int(num) > 15 or int(var) == 0):
                     let.CodeStatus = '03'
                     let.CodeStatusComment = 'Номер лабораторной не существует'
                 else:
-                    let.Number = var
-                    let.Variant = num
-            if let.CodeStatus == '20':
-                let.Body = re.findall(r'http[^ \n]*', let.Body)
-                let.CodeStatusComment = 'Работа отправлена на проверку'
+                    let.VariantOfLab = var
+                    let.NumberOfLab = num
+                    let.Body = re.findall(r'http[^ \n\r]*', let.Body)
+                    let.CodeStatusComment = 'Работа отправлена на проверку'
+
 
     with open(cfg.filename, "a") as file:
         file.write("Письма провалидированы!")
@@ -257,6 +278,19 @@ def from_parse(from_mes):
     except:
         return "UNKNOWN"
 
+def name_parse(from_mes):
+    try:
+        name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
+        return name
+    except:
+        return "UNKNOWN"
+
+def name_parse(from_mes):
+    try:
+        name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
+        return name
+    except:
+        return "UNKNOWN"
 
 def get_body(email_message):
     try:
