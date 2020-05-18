@@ -159,11 +159,10 @@ def email_archiving(service, user_id, message_info):
     user_id: наше мыло или спец слово 'me'.  
     message_info: словарь с данными письма.
     """
-    msg_labels = {'removeLabelIds': ['UNREAD', 'INBOX'],
-                  'addLabelIds': ['Label_4436622035204509097']}
-    message = service.users().messages().modify(userId=user_id,
-                                                id=message_info['id_of_msg'],
-                                                body=msg_labels).execute()
+     msg_labels = {'removeLabelIds':['UNREAD', 'INBOX'],
+                  'addLabelIds':['Label_4436622035204509097']}
+     message = service.users().messages().modify(userId=user_id,
+            id=message_info['id_of_msg'],body=msg_labels).execute()
 
 
 @log_method.log_method_info
@@ -375,4 +374,50 @@ def search_dolgi(group,position):
         return None
     if(len(ng) > 0):
         return ng
- 
+ def search_dolgi(group,name):
+    """
+    Метод для добавления студента
+    group=(ТРПО) название группы
+    name=ФИО студента
+    """
+    
+    spreadsheetId = SPREAD_SHEET_ID
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(
+                CREDENTIALS_FILE,
+                ['https://www.googleapis.com/auth/spreadsheets',
+                 'https://www.googleapis.com/auth/drive'])
+    httpAuth = credentials.authorize(httplib2.Http())
+    service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
+    b ='D'
+    c3 = 0
+    f = 1
+    yt = 0
+    while(f):
+        try:
+            c3 = c3 + 1
+            range_name = group + '!' + b+ str(c3) + ':' + b + str(c3)
+            table = service.spreadsheets().values().get(
+                spreadsheetId=spreadsheetId,
+                range=range_name).execute()
+            print(table.get('values')[0][0])
+            if(table.get('values')[0][0] == name):
+                f = 0
+                ng = ('available',)
+        except:
+            f = 0
+            yt = 1
+    if(yt == 1):
+        try:
+            service.spreadsheets().values().batchUpdate(spreadsheetId =spreadsheetId , body = {
+                        "valueInputOption": "USER_ENTERED",
+                        "data": [
+                                {"range":range_name ,
+                                        "majorDimension": "ROWS",     
+                                        "values": [ [name] ]
+                                }
+                        ]
+                }).execute()
+            ng = ('accepted',)
+        except:
+            ng = ('error',)
+    return ng
