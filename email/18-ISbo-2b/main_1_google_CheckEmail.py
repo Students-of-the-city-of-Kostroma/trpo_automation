@@ -42,8 +42,13 @@ def CheckEmail():
     cfg.reserve_dates.GetReserveDate()
 
 
+    letters = []
+    for item in raw_letters:
+        letters.append(FormListWithLetters(item))
 
-    # Проверка пользователей на существование в системе
+
+    # Проверка пользователей на существование в системе (функция пока не реализована)
+
     CheckUsers(letters)
 
     print(letters)
@@ -213,13 +218,22 @@ def ValidateLetters(letters):
         if let.CodeStatus == None or let.CodeStatus == "":
             val = Val(let.ThemeOfLetter, let.Body)
             let.CodeStatus = val.validation(val.subject, val.body)
-            if let.CodeStatus == '02':
-                let.CodeStatusComment = 'Структура письма не соответствует требованиям к оформлению'
+            if let.CodeStatus == '20':
+                if val.verify_name_and_group(let.Student.NameOfStudent, let.Student.GroupOfStudent) is not True:
+                    let.CodeStatus = '02'
+                    let.CodeStatusComment = 'Подпись не соответствует заявленной при регистрации'
+            if let.CodeStatus == '01':
+                let.CodeStatusComment = 'Тема письма не соответствует требованиям к теме'
+            elif let.CodeStatus == '02':
+                if let.CodeStatusComment is None:
+                    let.CodeStatusComment = 'Структура письма не соответствует требованиям к оформлению'
             elif let.CodeStatus == '03':
-                let.CodeStatusComment = 'Номер варианта меньше 1 или больше 15 или не число'
+                let.CodeStatusComment = 'Неверно указан номер работы или варианта'
+            elif let.CodeStatus == '04':
+                let.CodeStatusComment = 'Письмо не содержит необходимых ссылок на ресурсы.'
             else:
                 num, var = val.get_num_and_var(val.subject)
-                if int(num) < 1 or int(num) > 15 or int(var) == 0:
+                if num is None or (int(num) < 1 or int(num) > 15 or int(var) == 0):
                     let.CodeStatus = '03'
                     let.CodeStatusComment = 'Номер лабораторной не существует'
                 else:
@@ -302,6 +316,19 @@ def from_parse(from_mes):
     except:
         return "UNKNOWN"
 
+def name_parse(from_mes):
+    try:
+        name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
+        return name
+    except:
+        return "UNKNOWN"
+
+def name_parse(from_mes):
+    try:
+        name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
+        return name
+    except:
+        return "UNKNOWN"
 
 def name_parse(from_mes):
     try:

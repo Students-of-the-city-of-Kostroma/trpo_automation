@@ -11,8 +11,8 @@ class LetterResult:
     Comment = ""
     VariantOfLab = 0
     NumberOfLab = 0
-    CodeStatus = "0"
-    CodeStatusComment = ""
+    CodeStatus = None
+    CodeStatusComment = None
 
     def __init__(self, student=None, isOK=None, variant=None, number=None):
         """Конструктор, все входные данные не обязательны для того,

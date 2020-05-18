@@ -68,7 +68,6 @@ def send_mes(smtp_obj, message):
         mes['Subject'] = message.Theme
         mes.set_content(message.Body)
         smtp_obj.send_message(mes)
-
         with open(cfg.filename, "a") as file:
             file.write("\nОтвет отправлен!")
     except:
