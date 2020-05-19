@@ -2,7 +2,6 @@ from APIgoogle import *
 from log_method import *
 import client
 import Validation
-import config
 import time
 
 # Id почты
@@ -30,41 +29,53 @@ try:
                 logger.warning(r"main: Email don't exist in table_valid")
                 print(r"main: Email don't exist in table_valid")
             else:
-                # Проверка валидации письма
-                valid_dict = Validation.validation(message_info['head_of_msg'], message_info['body_of_msg'])
-                if len(valid_dict["errorDescription"]) > 0:
-                    send_message(service, USER_ID, email_name, email_name_surname, 2, None, valid_dict, message_info)
-                    logger.warning(r"main: Message failed validation. Email_id :%s" % email_id)
-                    print(f"main: Message failed validation. Email_id :{email_id}")
-                else:
-                    # Получение результата из модуля проверки
-                    answer = client.send_a_laboratory_work_for_verification(labNumber=valid_dict['Number'],
-                                                                            labLink=valid_dict['URL'])
-                    logger.info(r"main: Receiving a response from the verification module. Mark in table :%s" % answer)
-                    print(f"main: Receiving a response from the verification module. Mark in table :{answer}")
+                # Получение группы пользователя
+                result = search_group(email)
+                group_user = result[0]
+                group_name_surname = result[1]
+                # Выставление его в журнал, если отсутствует
+                result_add_table = add_table(group_user, group_name_surname)[0]
 
-                    # Получение группы и таблицы пользователя
-                    group_user = search_group(email)
-                    table_cell = search_tablic(data_user[0], valid_dict['Number'], data_user[1])
-                    logger.info(r"main: Get user's group and table")
-                    print(r"main: Get user's group and table")
-
-                    # Лабораторная неправильно сделана
-                    if answer == 0:
-                        send_message(service, USER_ID, email_name, email_name_surname, 1, answer, None, message_info)
-                        logger.warning(f'main: Lab done wrong from {email_id}')
-                        print('main: Lab done wrong from %s' % email_id)
-                    # Лабораторная сделана правильно
+                if result_add_table == 'available' or result_add_table == 'accepted':
+                    # Проверка валидации письма
+                    valid_dict = Validation.validation(message_info['head_of_msg'], message_info['body_of_msg'])
+                    if len(valid_dict["errorDescription"]) > 0:
+                        send_message(service, USER_ID, email_name, email_name_surname, 2, None, valid_dict, message_info)
+                        logger.warning(r"main: Message failed validation. Email_id :%s" % email_id)
+                        print(f"main: Message failed validation. Email_id :{email_id}")
                     else:
-                        add_mark_in_table(data_user[0], cell, 1)
-                        send_message(service, USER_ID, email, email_name_surname, 0, None, None, message_info)
-                        logger.info('main: Lab done right from %s' % email_id)
-                        print(f'main: Lab done wrong from {email_id}')
+                        # Получение результата из модуля проверки
+                        answer = client.send_a_laboratory_work_for_verification(labNumber=valid_dict['Number'],
+                                                                                labLink=valid_dict['URL'])
+                        logger.info(r"main: Receiving a response from the verification module. Mark in table :%s" % answer)
+                        print(f"main: Receiving a response from the verification module. Mark in table :{answer}")
 
+                        # Получение ячейчки для выставления
+                        table_cell = search_tablic(group_user, valid_dict['Number'], group_name_surname)
+                        logger.info(r"main: Get user's table cell for add mark")
+                        print(r"main: Get user's group and table")
+
+                        # Лабораторная неправильно сделана
+                        if answer == 0:
+                            send_message(service, USER_ID, email_name, email_name_surname, 1, answer, None, message_info)
+                            logger.warning(f'main: Lab done wrong from {email_id}')
+                            print('main: Lab done wrong from %s' % email_id)
+                        # Лабораторная сделана правильно
+                        else:
+                            add_str_in_table(group_user, table_cell, 1)
+                            send_message(service, USER_ID, email, email_name_surname, 0, None, None, message_info)
+                            logger.info('main: Lab done right from %s' % email_id)
+                            print(f'main: Lab done wrong from {email_id}')
+                else:
+                    send_message_to_techsub(service, USER_ID, email_name, email_name_surname, None,
+                                            {'message': 'все сломалось!'}, 1)
+                    logger.info('main: Error with add in table %s' % email_id)
+                    print(f'main: Error with add in table {email_id}')
             email_archiving(service, USER_ID, message_info)
+            print(f'main: Archive message {email_id}')
         else:
             logger.info('main: Service asleep and wait new message')
             print('main: Service asleep and wait new message')
-            time.sleep(1000)
+            time.sleep(1)
 except:
-    send_message_to_techsub(service, USER_ID, email_name, email_name_surname, None, {'message': 'все сломалось!'}, 1)
+    send_message_to_techsub(service, USER_ID, email_name, email_name_surname, None, {'message': 'все сломалось!'}, 0)

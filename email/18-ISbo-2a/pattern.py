@@ -9,8 +9,8 @@ def funcSt(str_of_val_er, str_of_er):
              'title': 'ТРПО. Работа успешно принята',
              'our_msg': 'Поздравляю!\nРабота успешно принята!' +
                         '\nОценку можно проверить в журнале:' +
-                        '\nhttps://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1' +
-                        'khhC16U1qDwaI-K6ndkp9LFWAHncuWA/edit?usp=sharing'
+                        '\nhttps://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1khhC16U1qDwaI-K6ndkp9LFWAHncuWA' +
+                        '/edit?usp=sharing'
         },
         {
             'title': 'ТРПО. Обнаружены ошибки в работе',
@@ -92,7 +92,7 @@ MAS_OF_TO = ['yuri.silenok@gmail.com', '0sashasmirnov0@gmail.com',
 """
 
 
-SUBJECT_LIST = ['ТРПО'] # Список предметов
+SUBJECT_LIST = ['трпо'] # Список предметов
 SUBJECTNUMBER_LIST = ['лр№1', 'лабораторная работа №1', 
                       'лр№2', 'лабораторная работа №2',
                       'лр№3', 'лабораторная работа №3',
