@@ -66,17 +66,17 @@ def add_str_in_table(table: str, cell: str, mark: str):
     :param mark: Символ\предложение.
     """
     log_method.logger.debug(f'add_mark_in_table: table - {table}, \
-							  cell - {cell}, mark - {mark}')
+                            cell - {cell}, mark - {mark}')
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-				    CREDENTIALS_FILE, 
-				    [
+                    CREDENTIALS_FILE,
+                    [
                         'https://www.googleapis.com/auth/spreadsheets',
-				        'https://www.googleapis.com/auth/drive'
+                        'https://www.googleapis.com/auth/drive'
                     ]
-                )
+    )
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http = httpAuth) 
-    rangeTab = f"{table}!{cell}"
+    rangeTab = f"(ТРПО) {table}!{cell}"
     service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, 
         body={
             "valueInputOption": "USER_ENTERED",
@@ -98,7 +98,7 @@ def cleaning_email(email_id: str):
     1234@gmail.com это будет запоминаться после метода очистки
 
     :param email: Передаваемая строка с почтой
-    return: email без спец.знаков
+    :return: email без спец.знаков
     """
     comp = re.compile(r'<(\S*?)>')
     y = comp.search(email_id)
@@ -111,6 +111,8 @@ def cleaning_email(email_id: str):
 def name_surname(email_id: str):
     """ 
     Метод для выделения и передачи имени и фамилии.
+    :param email_id: Строка по типу <Иван Иванович>
+    :return: Возвращает строку по типу "Иван Иванович"
     """
     comp = re.compile('(\S*?) '+'(\S*?) ')
     y = comp.search(email_id)
@@ -124,7 +126,7 @@ def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
 
     :param email_id: электронная почта
     :param spreadsheetid: таблица для поиска
-    return: возвращает электронную почту/None
+    :return: возвращает электронную почту/None
     """
     mail_str = cleaning_email(email_id)
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
@@ -217,14 +219,14 @@ def send_message(service, user_id, email_of_student, name_of_student,
     """
     Метод по отправке сообщения студенту.  
     
-    service: авторизация через мыло.  
-    user_id: наше мыло или спец слово 'me'.  
-    email_of_student: мыло студента.  
-    name_of_student: имя и фамилия студента.  
-    validation_dictionary: словарь с валидации письма, 
+    :param service: авторизация через мыло.
+    :param user_id: наше мыло или спец слово 'me'.
+    :param email_of_student: мыло студента.
+    :param name_of_student: имя и фамилия студента.
+    :param validation_dictionary: словарь с валидации письма,
     в котором есть ('Numder')номер работы и ('URL')ссылка на работу.  
-    error_dictionary: словарь с ошибками в коде студента.  
-    number_of_templates: номер используемого для заполнения письма шаблона. 
+    :param error_dictionary: словарь с ошибками в коде студента.
+    :param number_of_templates: номер используемого для заполнения письма шаблона.
     """
 
     str_of_val_er = ""
@@ -269,14 +271,14 @@ def send_message_to_techsub(service, user_id, email_of_student,
     Рассылка писем ТП.
     Вызывается преподавателю, если у студента есть ошибки в работе
     или ТП, если упал один из модулей
-    service: авторизация через мыло
-    user_id: наше мыло или спец слово 'me'
-    email_of_student: мыло студента
-    name_of_student: имя и фамилия студента
-    validation_dictionary: словарь с валидации письма, 
+    :param service: авторизация через мыло
+    :param user_id: наше мыло или спец слово 'me'
+    :param email_of_student: мыло студента
+    :param name_of_student: имя и фамилия студента
+    :param validation_dictionary: словарь с валидации письма,
     в котором есть ('Numder')номер работы и ('URL')ссылка на работу
-    error_dictionary: словарь с ошибками в коде студента
-    number_of_templates: номер используемого для заполнения письма шаблона
+    :param error_dictionary: словарь с ошибками в коде студента
+    :param number_of_templates: номер используемого для заполнения письма шаблона
     """
 
     if number_of_templates == 0:
@@ -284,8 +286,7 @@ def send_message_to_techsub(service, user_id, email_of_student,
     else:
         str_of_er = ""
 
-    message_templates = funcTs(name_of_student, validation_dictionary, 
-                                       str_of_er)
+    message_templates = funcTs(name_of_student, validation_dictionary, str_of_er)
     sending_msg = {}
 
     sending_msg['From'] = GMAIL_OF_TRPO
@@ -295,7 +296,8 @@ def send_message_to_techsub(service, user_id, email_of_student,
                            message_templates[number_of_templates]['our_msg'] + 
                            SIGNATURE)
     sending_msg['Subject'] = message_templates[number_of_templates]['title']
-    if number_of_templates != 0:
+    # Косяк!!!
+    if number_of_templates == 0:
         for i in MAS_OF_TO:
             sending_msg['To'] = i
 
@@ -309,15 +311,15 @@ def send_message_to_techsub(service, user_id, email_of_student,
         raw = raw.decode()
         body = {'raw': raw}
 
-    send_msg = service.users().messages().send(userId=user_id,
-                                               body=body).execute()
+    send_msg = service.users().messages().send(userId=user_id, body=body).execute()
     
 
 @log_method.log_method_info
-def error_in_work(some_errors):
+def error_in_work(some_errors: dict):
     """
     Метод преобразования массива с ошибками в строку
     Метод используется для валидации и ошибок кода студента
+    :param some_errors: Словарь из валидации
     """
     error = ""
     mas_of_er = some_errors["errorDescription"]
@@ -359,7 +361,7 @@ def search_group(email_id):
 
 @log_method.log_method_info
 def search_tablic(group, laba, surname):
-    group1 = '(ТРПО) '+group
+    group = f'(ТРПО) {group}'
     c = 2
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
                 CREDENTIALS_FILE,
@@ -368,7 +370,7 @@ def search_tablic(group, laba, surname):
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
     spreadsheetId = SPREAD_SHEET_ID
-    range_name = group1+'!D2:D1000'
+    range_name = f'{group}!D2:D1000'
     table = service.spreadsheets().values().get(
             spreadsheetId=spreadsheetId, range=range_name).execute()
     count = ord('J') + int(laba)-1
@@ -386,86 +388,88 @@ def search_tablic(group, laba, surname):
         return position
 
     
-def search_dolgi(group,position):
+def search_dolgi(group, position):
     """
     Метод для поиска долгов 
-    group=(ТРПО) название группы
-    position='J7' позиция студента в таблице
+    :param group: (ТРПО) название группы
+    :param position: 'J7' позиция студента в таблице
     """
-    spreadsheetId = SPREAD_SHEET_ID
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                CREDENTIALS_FILE,
-                ['https://www.googleapis.com/auth/spreadsheets',
-                 'https://www.googleapis.com/auth/drive'])
-    httpAuth = credentials.authorize(httplib2.Http())
-    service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
+        CREDENTIALS_FILE,
+        [
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/drive'
+        ]
+    )
+    http_auth = credentials.authorize(httplib2.Http())
+    service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
     c = 0
     ng = []
     b = ord('I')
-    i=-1
+    i = -1
     c3 = ord(position[1])
-    while(c<20):
+    while c < 20:
         c = c+1
         b = b+1
-        i=i+1
-        range_name=group+'!'+chr(b)+chr(c3)+':'+chr(b)+chr(c3)
-        table = service.spreadsheets().values().get(
-            spreadsheetId=spreadsheetId,
-            range=range_name).execute()
+        i = i+1
+        range_name = f'{group}!{chr(b)}{chr(c3)}:{chr(b)}{chr(c3)}'
+        table = service.spreadsheets().values().get(spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
         try:
-            if(table.get('values')[0][0] == '0'):
+            if table.get('values')[0][0] == '0':
                 range_name=group+'!'+chr(b)+'1'+':'+chr(b)+'1'
                 table = service.spreadsheets().values().get(
-                        spreadsheetId=spreadsheetId,
+                        spreadsheetId=SPREAD_SHEET_ID,
                         range=range_name).execute()
-                ng.insert(i,table.get('values')[0][0])
+                ng.insert(i, table.get('values')[0][0])
         except:
-            ng.insert(i,str(i+1))
-    if(len(ng) == 0):
+            ng.insert(i, str(i+1))
+    if len(ng) == 0:
         return None
-    if(len(ng) > 0):
+    if len(ng) > 0:
         return ng
 
 
-def add_table(group,name):
+def add_table(group, name):
     """
     Метод для добавления студента
-    group=(ТРПО) название группы
-    name=ФИО студента
+    :param group: (ТРПО) название группы
+    :param name: ФИО студента
     """
-    
-    spreadsheetId = SPREAD_SHEET_ID
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
                 CREDENTIALS_FILE,
-                ['https://www.googleapis.com/auth/spreadsheets',
-                 'https://www.googleapis.com/auth/drive'])
-    httpAuth = credentials.authorize(httplib2.Http())
-    service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
-    column ='D'
+                [
+                    'https://www.googleapis.com/auth/spreadsheets',
+                    'https://www.googleapis.com/auth/drive'
+                ]
+    )
+    http_auth = credentials.authorize(httplib2.Http())
+    service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
+    column = 'D'
     column_number = 0
     condition = 1
     count = 0
-    while(condition):
+    while condition:
         try:
-           column_number  =column_number  + 1
-            range_name = group + '!' + column + str(column_number) + ':' + column + str(column_number)
-            table = service.spreadsheets().values().get(
-                spreadsheetId=spreadsheetId,
-                range=range_name).execute()
-            if(table.get('values')[0][0] == name):
+            column_number = column_number + 1
+            range_name = f'(ТРПО) {group}!{column}{column_number}:{column}{column_number}'
+            table = service.spreadsheets().values().get(spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
+            if table.get('values')[0][0] == name:
                 condition = 0
                 status = ('available',)
         except:
             condition = 0
             count = 1
-    if(count == 1):
+    if count == 1:
         try:
-            service.spreadsheets().values().batchUpdate(spreadsheetId =spreadsheetId , body = {
+            service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, body={
                         "valueInputOption": "USER_ENTERED",
                         "data": [
-                                {"range":range_name ,
-                                        "majorDimension": "ROWS",     
-                                        "values": [ [name] ]
+                                {
+                                    "range":range_name ,
+                                    "majorDimension": "ROWS",
+                                    "values": [
+                                        [name]
+                                    ]
                                 }
                         ]
                 }).execute()
@@ -473,3 +477,14 @@ def add_table(group,name):
         except:
             status = ('error',)
     return status
+
+
+def get_log():
+    from collections import deque
+    try:
+        file_name = 'product_logs.log'
+        with open(file_name) as f:
+            date = list(deque(f, 5))
+        return date
+    except:
+        return "We have problems with file logs. Please help us"
