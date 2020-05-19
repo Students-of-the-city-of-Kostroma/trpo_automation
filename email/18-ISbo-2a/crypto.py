@@ -41,5 +41,10 @@ def decrypt_file(filename):
 
 
 if __name__ == '__main__':
-    crypt_file('main.py')
-    decrypt_file('main.py.bin')
+    crypt_file('credentials.json')
+    crypt_file('Example.json')
+    crypt_file('config.py')
+    crypt_file('token.pickle')
+    #decrypt_file('Example.json.bin')
+    #decrypt_file('credentials.json.bin')
+    #decrypt_file('config.py.bin')
