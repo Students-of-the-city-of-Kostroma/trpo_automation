@@ -19,7 +19,41 @@ StrategyLab::StrategyLab(QObject* parent)
         file.close();
     }
 }
-
+/**
+ * @brief Метод проверяет строку кода на наследование
+ * @param strOfCode - распарсенная строка кода
+ * @return возвращает 1 если строка является наследником и 0 если нет
+ */
+bool StrategyLab::findChildrenClasses(QString strOfCode)
+{
+    if (strOfCode.indexOf("class") != -1) {
+        if (strOfCode.indexOf(':', strOfCode.indexOf("class")) < strOfCode.indexOf('{', strOfCode.indexOf("class"))
+                && strOfCode.indexOf(':', strOfCode.indexOf("class")) != -1)
+            return 1;
+    }
+    return 0;
+}
+/**
+ * @brief Делим присланный код на классы Context, abstract, children и main функцию
+ * @param code - лист с кодом распарсенного решения
+ */
+void StrategyLab::divideIntoClasses(QList<QString> code)
+{
+    for (int i = 0; i < code.size(); i++) {
+        if (code[i].contains("Context") && code[i].contains("class")) {
+            classes.insert("Context", code[i]);
+        }
+        else if (code[i].contains("virtual") && code[i].contains("class")) {
+            classes.insert("parent", code[i]);
+        }
+        else if (code[i].contains("int main(")) {
+            classes.insert("main", code[i]);
+        }
+        else if (findChildrenClasses(code[i])) {
+            children.append(code[i]);
+        }
+    }
+}
 /**
  * @brief Здесь параллельно реализуется функицонал проверки кода по конфигу
  *        а также разделение кода на классы (divideIntoClasses)
@@ -30,6 +64,8 @@ StrategyLab::StrategyLab(QObject* parent)
  */
 void StrategyLab::checkByConfig(int variant, QList<QString> code)
 {
+    divideIntoClasses(code);
+
     /* Извлекаем часть конфига answerStructure.xml, подходящую для варианта лабораторной */
     QDomElement elem;
     QDomNodeList labsConfig = rootAnswerStructure.elementsByTagName("lab");
