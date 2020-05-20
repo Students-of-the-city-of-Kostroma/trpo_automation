@@ -113,7 +113,7 @@ def FormJSONDates(letters):
     return jsons
 
 def SendJSONForCheck(jsonDates, letters):
-    name = inspect.currentframe().f_code.co_name
+    name = inspect.currentframe().f_code.co_name	
     logs.Infor(name, jsonDates, letters)
     """
     Функционал:
@@ -194,40 +194,38 @@ def SendJSONForCheck(jsonDates, letters):
                         letter.CodeStatus = "30"
                         letter.Comment = ""
                         sock.close()
-
-                    elif otvetServ["messageType"] == 3:
-                        letter.CodeStatus = "07"
-                        letter.CodeStatusComment = ""
-                        letter.Comment = otv_serv.decode()
-                        sock.close()
-
-                    elif otvetServ["messageType"] == 4:
-                        letter.CodeStatus = "06"
-                        letter.CodeStatusComment = ""
-                        letter.Comment = otv_serv.decode()
-                        sock.close()
+                    else:
+                        if otvetServ["messageType"] == 3:
+                            letter.CodeStatus = "07"
+                            letter.CodeStatusComment = ""
+                            letter.Comment = otv_serv.decode()
+                            sock.close()
+                        else:
+                            if otvetServ["messageType"] == 4:
+                                letter.CodeStatus = "06"
+                                letter.CodeStatusComment = ""
+                                letter.Comment = otv_serv.decode()
+                                sock.close()
                 else:
                     sock.close()
                     letter.CodeStatus = "06"
                     letter.CodeStatusComment = "ERROR. Длительное ожидание ответа от сервера"
             except:
 
-                # Для того, чтобы знать что случилось
-                letter.CodeStatusComment = "Сервер был не доступен"
-                letter.CodeStatus = "06"
+                 # Для того, чтобы знать что случилось
+                 letter.CodeStatusComment = "Сервер был не доступен"
+                 letter.CodeStatus = "06"
         else:
+
             # Заполнение полей letterResult
             letter.CodeStatus = i.CodeStatus
-            letter.Student = i.Student
-            letter.IsOK = IsOk
-            letter.VariantOfLab = i.VariantOfLab
-            letter.NumberOfLab = i.NumberOfLab
+        letter.Student = i.Student
+        letter.IsOK = IsOk
+        letter.VariantOfLab = i.VariantOfLab
+        letter.NumberOfLab = i.NumberOfLab
 
         # Добавление нового письма
         new_letters.append(letter)
-
-    with open(cfg.filename, "a") as file:
-        file.write("Данные отправлены и обработаны!")
 
     return new_letters
 
