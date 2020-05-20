@@ -32,7 +32,7 @@ def CheckEmail():
     imap_obj = imap_login() # Создание IMAP объекта
     raw_letters = GetLetters(imap_obj) # Получение списка сырых писем
     letters = []
-    if count_unseen_mess(imap_obj) > 0:
+    if len(raw_letters) > 0:
         for item in raw_letters:
             letters.append(FormListWithLetters(item)) # Создание списка с информацией из писем
     quit_email_imap(imap_obj) # Закрытие IMAP объекта
