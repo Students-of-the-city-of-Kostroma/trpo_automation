@@ -7,7 +7,7 @@ name = None
 from time import sleep
 from datetime import datetime
 
-from main_4_moderate_FormAnswers import FormAnswers
+# from main_4_moderate_FormAnswers import FormAnswers
 import config_Project as cfg
 from google_Sheet import Sheet
 
@@ -23,7 +23,8 @@ def SetResults(letterResults):
     print(letterResults)
 
     # Вызов следующей функции для формирования ответов
-    FormAnswers(letterResults)
+    # FormAnswers(letterResults)
+    return letterResults
 
 def SetMarks(letterResults):
     name = inspect.currentframe().f_code.co_name

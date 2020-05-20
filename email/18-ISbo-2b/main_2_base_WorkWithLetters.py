@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 import global_Letter
 import requests
 from bs4 import BeautifulSoup
-from main_3_send_SetResults import SetResults
+# from main_3_send_SetResults import SetResults
 import config_Project as cfg
 
 def WorkWithLetters(letters):
@@ -40,7 +40,8 @@ def WorkWithLetters(letters):
     print(letters)
 
     # SetResults - Передать данные следующему модулю в формате списка экземпляров класса EmailResults
-    SetResults(letterResults)
+    # SetResults(letterResults)
+    return letterResults
 
 def LettersConvertToString(letters):
     name = inspect.currentframe().f_code.co_name
@@ -100,7 +101,7 @@ def FormJSONDates(letters):
                 "messageType" : 1,
                 "lab" : letters[i].NumberOfLab,
                 "variant" : letters[i].VariantOfLab,
-                "link" : letters[i].Body if num == 2 or num == 3 or num == 11 else None,
+                "link": letters[i].Body if num == 2 or num == 3 or num == 11 else None,
                 "code" : letters[i].Body if num == 4 or num == 5 or num == 6 or num == 7 or num == 8 or num == 9 or num == 10 or num == 12 else None
                 }
             mystr = json.dumps(json1)

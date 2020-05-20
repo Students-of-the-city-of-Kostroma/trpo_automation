@@ -8,7 +8,7 @@ from time import sleep
 from datetime import datetime
 
 from global_AnswersForUsers import AnswersForUsers
-from main_5_send_InformUsers import InformUsers
+# from main_5_send_InformUsers import InformUsers
 import config_Project as cfg
 import moderate_PatternsOfLetter
 
@@ -24,7 +24,8 @@ def FormAnswers(letterResult):
     print(letterResult)
 
     # Вызов функции информирования пользователей
-    InformUsers(answers)
+    # InformUsers(answers)
+    return answers
 
 
 def MakeAnswersForUsers(letterResult):

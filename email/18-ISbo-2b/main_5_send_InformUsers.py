@@ -16,7 +16,6 @@ name = None
 def InformUsers(answersForUsers):
     name = inspect.currentframe().f_code.co_name
     logs.Infor(name,answersForUsers)
-    print("main5")
     """
     Разослать письма пользователям, внести пользователей в список, заархивировать письма, дождаться таймера
     """

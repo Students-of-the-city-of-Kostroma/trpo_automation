@@ -5,6 +5,10 @@ from datetime import datetime
 from threading import Timer
 
 from main_1_google_CheckEmail import CheckEmail
+from main_2_base_WorkWithLetters import WorkWithLetters
+from main_3_send_SetResults import SetResults
+from main_4_moderate_FormAnswers import FormAnswers
+from main_5_send_InformUsers import InformUsers
 import config_Project as cfg
 from reserve_Reserve import Reserve
 
@@ -32,7 +36,12 @@ def Main():
         # while True:
             # Установка таймаута ожидания
 
-        CheckEmail()
+        letters = CheckEmail()                          # main_1
+        letterResults = WorkWithLetters(letters)        # main_2
+        letterResults = SetResults(letterResults)       # main_3
+        answers = FormAnswers(letterResults)            # main_4
+        InformUsers(answers)                            # main_5
+
 
         # start_function = Timer(cfg.timeout, CheckEmail)
         #
