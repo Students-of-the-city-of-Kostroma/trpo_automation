@@ -7,7 +7,7 @@ name = None
 from email import *
 from global_Letter import Letter
 from global_User import User
-from main_2_base_WorkWithLetters import WorkWithLetters
+# from main_2_base_WorkWithLetters import WorkWithLetters
 from google_ValidateRules import ValidationMail as Val
 import config_Project as cfg
 import re
@@ -54,7 +54,8 @@ def CheckEmail():
     print()
 
     # Вызов следующей функции
-    WorkWithLetters(letters)
+    # WorkWithLetters(letters)
+    return letters
 
 
 def GetLetters(mail):
