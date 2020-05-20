@@ -142,86 +142,86 @@ def SendJSONForCheck(jsonDates, letters):
     В этом случае заполнять не только поле IsOK но и поле Code
     """
 
-    "Список новых писем"
+    # Список новых писем
     new_letters = []
-    
-    configServ = open("configServ.txt", "r")  # IP адрес
+
+    # IP адрес
+    configServ = open("config_Server.txt", "r")
     HOST = configServ.readline()
     HOST = HOST.replace("\n", '')
-    config_port = open("config_port.json", "r")  # словарь лабораторных и портов к ним
+
+    # Словарь лабораторных и портов к ним
+    config_port = open("config_Port.json", "r")
     configLab = config_port.read()
-    """Соответствие номера лабораторной и номера порта"""
+
+    # Соответствие номера лабораторной и номера порта
     dataLab = json.loads(configLab)
-    """Счётчик для параллельного обращения в два списка"""
+
+    # Счётчик для параллельного обращения в два списка
     count = 0
 
     for i in letters:
         letter = global_LetterResult.LetterResult()
-        letter.Student = i.Student
-        letter.VariantOfLab = i.VariantOfLab
-        letter.NumberOfLab = i.NumberOfLab
 
-
-        if i.CodeStatus != "20":
-            letter.CodeStatus = i.CodeStatus
-            letter.CodeStatusComment = i.CodeStatusComment
-            letter.IsOK = False
-            new_letters.append(letter)
-            continue
-
-        """Данные для подключения"""
-        sock = socket.socket()
-        port = dataLab[str(i.NumberOfLab)]
-        config = open("config_Server.txt", "r")
-        HOST = config.readline()
-        HOST = HOST.replace("\n", '')
-
-        """Подключение и отправка JSON на порт"""
-        sock.connect((HOST, port))
-        sock.send(jsonDates[count].encode())
-        count += 1
         IsOk = False
         if i.CodeStatus == "20":
             sock = socket.socket()
-            """Подключение и отправка JSON на порт"""
+
+            # Подключение и отправка JSON на порт
             port = dataLab[str(i.NumberOfLab)]
-            sock.connect((HOST, port))
-            sock.send(jsonDates[count].encode())
-            count += 1
 
-            """Ожидание ответа сервера 10 секунд"""
-            ready = select.select([sock], [], [], 10)
-            if ready[0]:
-                otv_serv = sock.recv(1024)
-                otvetServ = json.loads(otv_serv.decode())
-                if otvetServ["messageType"] == 2:
-                    if otvetServ["grade"] == 1:
-                        IsOk = True
-                    letter.Comment = otvetServ["comment"]
-                    letter.CodeStatus = "30"
-                    letter.Comment = ""
+            # На случай если сервер не доступен
+            try:
+
+                # Подключение к серверу
+                sock.connect((HOST, port))
+                sock.send(jsonDates[count].encode())
+
+                count += 1
+
+                # Ожидание ответа сервера 10 секунд
+                ready = select.select([sock], [], [], 10)
+
+                # При условии, что ответ был получен в течение 10 секунд
+                if ready[0]:
+                    otv_serv = sock.recv(1024)
+                    otvetServ = json.loads(otv_serv.decode())
+                    if otvetServ["messageType"] == 2:
+                        if otvetServ["grade"] == 1:
+                            IsOk = True
+                        letter.Comment = otvetServ["comment"]
+                        letter.CodeStatus = "30"
+                        letter.Comment = ""
+                        sock.close()
+
+                    elif otvetServ["messageType"] == 3:
+                        letter.CodeStatus = "07"
+                        letter.CodeStatusComment = ""
+                        letter.Comment = otv_serv.decode()
+                        sock.close()
+
+                    elif otvetServ["messageType"] == 4:
+                        letter.CodeStatus = "06"
+                        letter.CodeStatusComment = ""
+                        letter.Comment = otv_serv.decode()
+                        sock.close()
+                else:
                     sock.close()
-
-                elif otvetServ["messageType"] == 3:
-                    letter.CodeStatus = "07"
-                    letter.CodeStatusComment = ""
-                    letter.Comment = otv_serv.decode()
-                    sock.close()
-
-                elif otvetServ["messageType"] == 4:
                     letter.CodeStatus = "06"
-                    letter.CodeStatusComment = ""
-                    letter.Comment = otv_serv.decode()
-                    sock.close()
-            else:
-                sock.close()
+                    letter.CodeStatusComment = "ERROR. Длительное ожидание ответа от сервера"
+            except:
+
+                # Для того, чтобы знать что случилось
+                letter.CodeStatusComment = "Сервер был не доступен"
                 letter.CodeStatus = "06"
-                letter.CodeStatusComment = "ERROR. Длительное ожидание ответа от сервера"
 
-        """Заполнение полей letterResult"""
-
+        # Заполнение полей letterResult
+        letter.Student = i.Student
         letter.IsOK = IsOk
-        """Добавление нового письма"""
+        letter.VariantOfLab = i.VariantOfLab
+        letter.NumberOfLab = i.NumberOfLab
+
+        # Добавление нового письма
         new_letters.append(letter)
 
     with open(cfg.filename, "a") as file:

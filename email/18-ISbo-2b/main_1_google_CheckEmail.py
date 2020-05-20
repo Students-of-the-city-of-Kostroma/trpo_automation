@@ -29,34 +29,29 @@ def CheckEmail():
     """
 
     # Получение писем с почты
-    imap_obj = imap_login()
-    raw_letters = GetLetters(imap_obj)
-    quit_email_imap(imap_obj)
+    imap_obj = imap_login() # Создание IMAP объекта
+    raw_letters = GetLetters(imap_obj) # Получение списка сырых писем
     letters = []
-    for item in raw_letters:
-        letters.append(FormListWithLetters(item))
+    if count_unseen_mess(imap_obj) > 0:
+        for item in raw_letters:
+            letters.append(FormListWithLetters(item)) # Создание списка с информацией из писем
+    quit_email_imap(imap_obj) # Закрытие IMAP объекта
 
-    print(letters)
+    print()
 
     # Получение резервных данных (функция пока не реализована)
     cfg.reserve_dates.GetReserveDate()
-
-
-    letters = []
-    for item in raw_letters:
-        letters.append(FormListWithLetters(item))
-
 
     # Проверка пользователей на существование в системе (функция пока не реализована)
 
     CheckUsers(letters)
 
-    print(letters)
+    print()
 
     # Валидация писем
     ValidateLetters(letters)
 
-    print(letters)
+    print()
 
     # Вызов следующей функции
     WorkWithLetters(letters)
@@ -81,7 +76,7 @@ def GetLetters(mail):
     with open(cfg.filename, "a") as file:
         file.write("\nПолучение писем... ")
 
-    count = count_unseen_mess(mail)
+    count = count_unseen_mess(mail) # Количество непрочитанных писем
     letters = []
 
     if count > 0:
@@ -89,9 +84,9 @@ def GetLetters(mail):
         print(count)
         for i in range(count):
             latest_email_uid = data[0].split()[i]
-            result, date = mail.uid('fetch', latest_email_uid, '(RFC822)')
-            raw_email = date[0][1]
-            letters.append(raw_email)
+            result, date = mail.uid('fetch', latest_email_uid, '(RFC822)') # Извлечение информации по заданному UID
+            raw_email = date[0][1] # Получение сырого письма
+            letters.append(raw_email) # Добавление сырого письма в список
 
 
         with open(cfg.filename, "a") as file:
@@ -131,20 +126,20 @@ def FormListWithLetters(mails):
 
     try:
         try:
-            email_message = email.message_from_string(mails)
+            email_message = email.message_from_string(mails) # Преобразуем сырое письмо в экземпляр класса Email
         except TypeError:
             email_message = email.message_from_bytes(mails)
         error_code = ""
-        from_mes = get_from(email_message)
-        subject_mes = get_subject(email_message)
-        user_email = from_parse(from_mes)
-        name = name_parse(from_mes)
-        body_str = get_body(email_message)
-        body = body_parse(body_str)
+        from_mes = get_from(email_message) # Извлечение информации об отправителе
+        subject_mes = get_subject(email_message) # Извлечение информации о теме письма
+        user_email = from_parse(from_mes) # Извлечение электронного адреса отправителя
+        user_name = name_parse(from_mes) # Извлечение ФИ отправителя
+        body_str = get_body(email_message) # Извлечение закодированного тела письма
+        body = body_parse(body_str) # Декодировка тела письма
         if body == "UNKNOWN":
             error_code = "05"
 
-        user = User(name, None, user_email, None)
+        user = User(user_name, None, user_email, None)
         letter_item = Letter(user, subject_mes, body, None, None)
         letter_item.CodeStatus = error_code
 
@@ -357,6 +352,20 @@ def get_body(email_message):
             str_body += email_message.get_payload()
         body_str = base64.b64decode(str_body).decode('utf8')
         return body_str
+    except:
+        result = extra_body_parse(str_body)
+        return result
+
+
+def extra_body_parse(raw_body):
+    try:
+        encode_body = raw_body.split("<")[0]
+        body = base64.b64decode(encode_body).decode('utf8')
+        result = body
+        if body.find("*") >= 0:
+            result = body.replace("*", "")
+        print("I am here")
+        return result
     except:
         return "UNKNOWN"
 

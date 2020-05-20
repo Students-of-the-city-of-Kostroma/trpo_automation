@@ -21,9 +21,9 @@ def InformUsers(answersForUsers):
     Разослать письма пользователям, внести пользователей в список, заархивировать письма, дождаться таймера
     """
     # Отправление писем пользователям
-    smtp_obj = smtp_login()
-    SendLetters(smtp_obj, answersForUsers)
-    quit_email_smtp(smtp_obj)
+    smtp_obj = smtp_login() # Создание SMTP объекта
+    SendLetters(smtp_obj, answersForUsers) # Отправка ответов пользователям
+    quit_email_smtp(smtp_obj) # Закрытие SMTP объекта
 
     print(answersForUsers)
 
@@ -55,19 +55,19 @@ def SendLetters(smtp_obj, answersForUsers):
         file.write("\nОтправление ответов пользователю... ")
 
     for i in answersForUsers:
-        send_mes(smtp_obj, i)
+        send_mes(smtp_obj, i) # Отправка ответа по экземпляру списка ответов
 
     with open(cfg.filename, "a") as file:
         file.write("Ответы отправлены!")
 
 def send_mes(smtp_obj, message):
     try:
-        mes = EmailMessage()
-        mes['From'] = "ТРПО ИАСТ"
-        mes['To'] = message.Who
-        mes['Subject'] = message.Theme
-        mes.set_content(message.Body)
-        smtp_obj.send_message(mes)
+        mes = EmailMessage() # Создание экземпляра класса Email Message
+        mes['From'] = "ТРПО ИАСТ" # Заполнение поля отправителя
+        mes['To'] = message.Who # Заполнение поля получателя
+        mes['Subject'] = message.Theme # Заполнение темы письма
+        mes.set_content(message.Body) # Заполнение тела письма
+        smtp_obj.send_message(mes) # отправка SMTP пакета
         with open(cfg.filename, "a") as file:
             file.write("\nОтвет отправлен!")
     except:
