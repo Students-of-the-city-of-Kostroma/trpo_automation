@@ -37,12 +37,11 @@ def create_connection(lab_number: int) -> None:
             logger.debug("Connection successful!")
             connections[lab_number] = local_sock
         else:
-            logger.error("Connection to server for lab {lab_number} refused".format(lab_number=lab_number))
-            #   TODO: продумать error processing
+            raise ConnectionRefusedError("Connection to server for lab {lab_number} refused"
+                                         .format(lab_number=lab_number))
     except socket.error as err:
-        logger.error("Error creating socket: {error} \n with traceback {tb}"
-                     .format(error=err, tb=traceback.format_exc()))
-        #   TODO: продумать error processing
+        raise SystemError("Error creating socket: {error} \n with traceback {tb}"
+                          .format(error=err, tb=traceback.format_exc()))
 
 
 @log_method_info
@@ -59,12 +58,10 @@ def get_port(lab_number: int) -> int:
         for lab in tree.getroot():
             if int(lab.attrib.get('number')) == lab_number:
                 return int(lab.attrib.get('port'))
-        logger.error("No port found for the lab number given")
-        #   TODO: продумать error processing
+        raise LookupError("No port found for the lab number given")
     except FileNotFoundError as err:
-        logger.error("Not found config file: {error} \n with traceback {tb}"
-                     .format(error=err, tb=traceback.format_exc()))
-        #   TODO: продумать error processing
+        raise FileNotFoundError("Not found config file: {error} \n with traceback {tb}"
+                                .format(error=err, tb=traceback.format_exc()))
 
 
 @log_method_info
@@ -90,14 +87,13 @@ def format_request(lab_number: int, variant: int, link: str) -> str:
                      .format(lab_number=lab_number, variant=variant, link=link))
         return json.dumps(request_data)
     except TypeError as err:
-        logger.error("Unable to serialize the object: {error}".format(error=err))
-        #   TODO: продумать error processing
+        raise TypeError("Unable to serialize the object: {error}".format(error=err))
 
 
 @log_method_info
 def check_lab(link: str = 'https://github.com/leshastern/strategy4',
               lab_number: int = 7,
-              variant: int = 1) -> dict or None:
+              variant: int = 1) -> dict:
     """
     Контролирует цикл общения с сервером
     TODO продумать систему в случае нескольих лаб (зависим от спеки)
@@ -107,24 +103,27 @@ def check_lab(link: str = 'https://github.com/leshastern/strategy4',
     :return: словарь с результатом проверки вида {'grade': int, 'comment': None or str},
         где ключ 'comment' присутствует только в случае grade == 0
     """
-    if lab_number not in connections:
-        logger.debug("No socket for connection found.")
-        create_connection(lab_number)
-
-    request: str = format_request(lab_number, variant, link)
     try:
-        return handle_reply(connections[lab_number], request)
-    except socket.timeout:
-        # Если сервер разорвал соединение, или не отвечает, пробуем еще раз
-        logger.debug("Connection was closed, trying one more time...")
-        create_connection(lab_number)
+        if lab_number not in connections:
+            logger.debug("No socket for connection found.")
+            create_connection(lab_number)
+
+        request: str = format_request(lab_number, variant, link)
         try:
             return handle_reply(connections[lab_number], request)
-        except socket.timeout as err:
-            logger.error("Server not responding: {error} \n with traceback {tb}"
-                         .format(error=err, tb=traceback.format_exc()))
-            #   TODO: продумать error processing
-            return None
+        except socket.timeout:
+            # Если сервер разорвал соединение, или не отвечает, пробуем еще раз
+            logger.debug("Connection was closed, trying one more time...")
+            create_connection(lab_number)
+            try:
+                return handle_reply(connections[lab_number], request)
+            except socket.timeout as err:
+                raise TimeoutError("Server not responding: {error} \n with traceback {tb}"
+                                   .format(error=err, tb=traceback.format_exc()))
+    # FIXME пока зашил общий Exception, так как неизвестна глубина обрабокти ислючений извне
+    except Exception as exc:
+        logger.error(exc)
+        raise exc
 
 
 @log_method_info
@@ -143,16 +142,13 @@ def handle_reply(current_socket: socket, request: str) -> dict:
         logger.info("Got a reply from server!")
         message_type: int = reply_data.pop('messageType')
         if message_type == MessageType.WRONG_REQUEST.value:
-            logger.error("We've got problems: an error \n {error} \n occurred with a key '{key}'"
-                         .format(error=reply_data['text'], key=reply_data['key']))
-            #   TODO: продумать error processing
+            raise SystemError("We've got problems: an error \n {error} \n occurred with a key '{key}'"
+                              .format(error=reply_data['text'], key=reply_data['key']))
         elif message_type == MessageType.SERVER_ERROR.value:
-            logger.error("Server has got a problem: {error}".format(error=reply_data['errorMessage']))
-            #   TODO: продумать error processing
+            raise SystemError("Server has got a problem: {error}".format(error=reply_data['errorMessage']))
         elif message_type == MessageType.DEFAULT_ANSWER.value:
             logger.debug("The lab was successfully checked, moving on..")
             return reply_data
     except TypeError as err:
-        logger.error("Error reading data from server: {error} \n with traceback {tb}"
-                     .format(error=err, tb=traceback.format_exc()))
-        #   TODO: продумать error processing
+        raise TypeError("Error reading data from server: {error} \n with traceback {tb}"
+                        .format(error=err, tb=traceback.format_exc()))
