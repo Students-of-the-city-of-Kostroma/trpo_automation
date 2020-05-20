@@ -113,6 +113,8 @@ def FormJSONDates(letters):
     return jsons
 
 def SendJSONForCheck(jsonDates, letters):
+    name = inspect.currentframe().f_code.co_name	
+    logs.Infor(name, jsonDates, letters)
     """
     Функционал:
     - Отправить письма на проверку в модули проверки писем от ВТ
@@ -210,7 +212,7 @@ def SendJSONForCheck(jsonDates, letters):
                     letter.CodeStatusComment = "ERROR. Длительное ожидание ответа от сервера"
             except:
 
-                 #Для того, чтобы знать что случилось
+                 # Для того, чтобы знать что случилось
                  letter.CodeStatusComment = "Сервер был не доступен"
                  letter.CodeStatus = "06"
         else:
