@@ -1,6 +1,6 @@
 from APIgoogle import *
 from log_method import *
-import client
+from client import check_lab
 import Validation
 import time
 
@@ -45,8 +45,7 @@ try:
                         print(f"main: Message failed validation. Email_id :{email_id}")
                     else:
                         # Получение результата из модуля проверки
-                        answer = client.send_a_laboratory_work_for_verification(labNumber=valid_dict['Number'],
-                                                                                labLink=valid_dict['URL'])
+                        answer = check_lab(valid_dict['URL'], valid_dict['Number'])['grade']
                         logger.info(r"main: Receiving a response from the verification module. Mark in table :%s" % answer)
                         print(f"main: Receiving a response from the verification module. Mark in table :{answer}")
 
