@@ -7,6 +7,10 @@
 *.json
 *.pickle
 
+# Virtual Environment & workspace index files
+.idea
+venv/
+
 # User-specific files
 *.rsuser
 *.suo
