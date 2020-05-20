@@ -214,12 +214,13 @@ def SendJSONForCheck(jsonDates, letters):
                 # Для того, чтобы знать что случилось
                 letter.CodeStatusComment = "Сервер был не доступен"
                 letter.CodeStatus = "06"
-
-        # Заполнение полей letterResult
-        letter.Student = i.Student
-        letter.IsOK = IsOk
-        letter.VariantOfLab = i.VariantOfLab
-        letter.NumberOfLab = i.NumberOfLab
+        else:
+            # Заполнение полей letterResult
+            letter.CodeStatus = i.CodeStatus
+            letter.Student = i.Student
+            letter.IsOK = IsOk
+            letter.VariantOfLab = i.VariantOfLab
+            letter.NumberOfLab = i.NumberOfLab
 
         # Добавление нового письма
         new_letters.append(letter)
