@@ -103,6 +103,11 @@ class ValidationMail():
 
     def verify_name_and_group(self, main_name, main_group):
         strings = self.body.split('\n')
+
+        count = strings.count("")
+        for i in range(count):
+            strings.remove("")
+
         name = strings[len(strings) - 1]
         res = re.match(r'\w+[ ]?\w+[, ]{2}\d{2}[-]?\w{4}[-]?\d\w', name)
         res = res.group(0).lower()
