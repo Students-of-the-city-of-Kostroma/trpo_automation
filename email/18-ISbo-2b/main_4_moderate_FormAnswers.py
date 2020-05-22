@@ -50,6 +50,7 @@ def MakeAnswersForUsers(letterResult):
 
     answers = []
     teacher = False
+    flag = False
     forteacher = moderate_PatternsOfLetter.ForTeacher()
     for i in letterResult:
         if i.CodeStatus == "00":
@@ -68,6 +69,8 @@ def MakeAnswersForUsers(letterResult):
             pattern = moderate_PatternsOfLetter.SystemFailure()
         elif i.CodeStatus == "07":
             pattern = moderate_PatternsOfLetter.SystemFailure()
+        elif i.CodeStatus == "08":
+            pattern = moderate_PatternsOfLetter.UncorrectedLink()
         elif i.CodeStatus == "10":
             pattern = moderate_PatternsOfLetter.WorkCompleted()
         elif i.CodeStatus == "30":
@@ -75,8 +78,12 @@ def MakeAnswersForUsers(letterResult):
             par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
             forteacher.add(par)
             teacher = True
-        answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
-        answers.append(answer)
+        else 
+            flag = True
+        if flag == False   
+            answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
+            answers.append(answer)
+        flag = False
     sleep(1)
     if teacher == True:
         answer = AnswersForUsers(cfg.teacher_email, forteacher.return_theme(), forteacher.return_body())
