@@ -74,7 +74,7 @@ def MakeAnswersForUsers(letterResult):
         elif i.CodeStatus == "10":
             pattern = moderate_PatternsOfLetter.WorkCompleted()
         elif i.CodeStatus == "30":
-            pattern = moderate_PatternsOfLetter.WorkVerified(i.IsOk)
+            pattern = moderate_PatternsOfLetter.WorkVerified(i.IsOK)
             par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
             forteacher.add(par)
             teacher = True
