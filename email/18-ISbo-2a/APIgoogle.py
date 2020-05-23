@@ -444,21 +444,21 @@ def add_table(group, name):
     )
     http_auth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
-    column = 'D'
-    column_number = 0
-    condition = 1
-    count = 0
-    while condition:
-        try:
-            column_number = column_number + 1
-            range_name = f'(ТРПО) {group}!{column}{column_number}:{column}{column_number}'
-            table = service.spreadsheets().values().get(spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
-            if table.get('values')[0][0] == name:
-                condition = 0
-                status = ('available',)
-        except:
-            condition = 0
+    range_name=f'{group}!A1:A100'
+    table = service.spreadsheets().values().get(
+                spreadsheetId=spreadsheetId,
+                range=range_name).execute()
+    column = 1
+    for i in table.get('values'):
+        if(i[0] == name):
+            status=('available',)
+            count=0
+            break
+        else:
+            column = column + 1
+            range_name = f'{group}!A{d}:A{d}'
             count = 1
+            
     if count == 1:
         try:
             service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, body={
