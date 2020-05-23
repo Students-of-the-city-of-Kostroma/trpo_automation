@@ -92,3 +92,9 @@ class ForTeacher(BasePattern):
 
     def add(self, parameter):
         self.MainPart += parameter[0] + " сдал Работу номер " + parameter[1] + ' ' + parameter[2] + '.\n'
+
+
+class UncorrectedLink(BasePattern):
+    Theme = "В письме нерабочая ссылка."
+    MainPart = "Ваше письмо было получено, но ссылка на ресурсы в письме нерабочая. Проверьте, что вы верно \n" \
+                "указали ссылку. Возможно, была допущена ошибка или ссылка уже не действительна.\n"
