@@ -403,30 +403,21 @@ def search_dolgi(group, position):
     )
     http_auth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
-    c = 0
-    ng = []
-    b = ord('I')
-    i = -1
-    c3 = ord(position[1])
-    while c < 20:
-        c = c+1
-        b = b+1
-        i = i+1
-        range_name = f'{group}!{chr(b)}{chr(c3)}:{chr(b)}{chr(c3)}'
-        table = service.spreadsheets().values().get(spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
+    dolg=[]
+    number_laboratorn=-1
+    range_name = f'{group}!D{position[1]}:P{position[1]}'
+    table = service.spreadsheets().values().get(spreadsheetId=spreadsheetId, range=range_name).execute()
+    for p in table.get('values')[0]:
+        number_laboratorn=number_laboratorn+1 
         try:
-            if table.get('values')[0][0] == '0':
-                range_name=group+'!'+chr(b)+'1'+':'+chr(b)+'1'
-                table = service.spreadsheets().values().get(
-                        spreadsheetId=SPREAD_SHEET_ID,
-                        range=range_name).execute()
-                ng.insert(i, table.get('values')[0][0])
+            if p[0] == '0':
+                dolg.append(number_laboratorn)
         except:
-            ng.insert(i, str(i+1))
-    if len(ng) == 0:
+            dolg.append(number_laboratorn)
+    if len(dolg) == 0:
         return None
-    if len(ng) > 0:
-        return ng
+    if len(dolg) > 0:
+        return dolg
 
 
 def add_table(group, name):
@@ -455,8 +446,8 @@ def add_table(group, name):
             count=0
             break
         else:
-            column = column + 1
-            range_name = f'{group}!A{d}:A{d}'
+            column =column  + 1
+            range_name = f'{group}!A{column}:A{column}'
             count = 1
             
     if count == 1:
