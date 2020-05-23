@@ -22,7 +22,7 @@ class test_MakeAnswersForUsers(unittest.TestCase):
         self.assertEqual(my_result, answers)
 
     def test_S_7_t2(self):
-        """"Список LetterResult с кодами: ""00"", ""01"", ""02"", ""03"", ""04"", ""03"", ""04"",
+        """Список LetterResult с кодами: ""00"", ""01"", ""02"", ""03"", ""04"", ""03"", ""04"",
 ""05"", ""06"", ""07"", ""08"", ""10"", ""30""."""
 
         # Создание входных данных
@@ -96,15 +96,13 @@ class test_MakeAnswersForUsers(unittest.TestCase):
         an7 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an7)
-        #an8 = global_AnswersForUsers.AnswersForUsers("НЕ РЕАЛИЗОВАНО")
-        an8 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
-                                                     pattern.return_body())
+        an8 = global_AnswersForUsers.AnswersForUsers("НЕ РЕАЛИЗОВАНО", "НЕ РЕАЛИЗОВАНО", "НЕ РЕАЛИЗОВАНО")
         answers.append(an8)
         pattern = moderate_PatternsOfLetter.WorkCompleted()
         an9 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an9)
-        pattern = moderate_PatternsOfLetter.WorkVerified(True)
+        pattern = moderate_PatternsOfLetter.WorkVerified(False)
         an10 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                       pattern.return_body())
         answers.append(an10)
@@ -117,10 +115,59 @@ class test_MakeAnswersForUsers(unittest.TestCase):
 
         my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)
 
-        self.assertEqual(my_result, answers)
+        # Заполненый массив answers содержащие ответы, сответствующие своим кодам
+        for i in range(len(answers)):
+            self.assertEqual(my_result[i].Body, answers[i].Body)
+            self.assertEqual(my_result[i].Theme, answers[i].Theme)  # Не реализована обработка кода 08
+            self.assertEqual(my_result[i].Who, answers[i].Who)
 
     def test_S_7_t3(self):
-        pass
+        """Список LettersResult с 1 пустым экземпляром"""
+
+        # Создание входных данных
+        us = global_User.User("Ельцов Андрей", "18-ИСбо-2б", "andreq64AhA@mail.ru", True)
+        Letters = []
+        let0 = global_LetterResult.LetterResult(us, True, '1', '1')
+        let0.CodeStatus = '00'
+        Letters.append(let0)
+        let1 = global_LetterResult.LetterResult(us, True, '1', '1')
+        let1.CodeStatus = '01'
+        Letters.append(let1)
+        let2 = global_LetterResult.LetterResult()
+        Letters.append(let2)
+
+        # Создание ожидаемого результата
+        answers = []
+        pattern = moderate_PatternsOfLetter.UnknownUser()
+        an0 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
+                                                     pattern.return_body())
+        answers.append(an0)
+        pattern = moderate_PatternsOfLetter.UncorrectedTheme()
+        an1 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
+                                                     pattern.return_body())
+        answers.append(an1)
+
+        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)  # Ошибка при обработке пустого экземпляра
+
+        # Заполненый массив answers содержащие ответы сответствующие своим кода и меньше на 1 элемент чем LetterResult
+        self.assertEqual(len(my_result), len(answers) - 1)
+
+    def test_S_7_t4(self):
+        """В списке LetterResult в поле IsOk, Student, NumberOfLab, VariantOfLab не заполнены"""
+
+        # Создание входных данных
+        Letters = []
+        let0 = global_LetterResult.LetterResult()
+        let0.CodeStatus = '00'
+        Letters.append(let0)
+
+        # Создание ожидаемого результата
+        answers = []
+
+        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)  # Ошибка при обработке пустого экземпляра
+
+        # Пустой массив answers
+        self.assertEqual(my_result, answers)
 
 
 if __name__ == '__main__':
