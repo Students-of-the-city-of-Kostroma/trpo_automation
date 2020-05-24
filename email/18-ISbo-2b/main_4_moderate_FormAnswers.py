@@ -78,14 +78,14 @@ def MakeAnswersForUsers(letterResult):
             par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
             forteacher.add(par)
             teacher = True
-        else 
+        else:
             flag = True
-        if flag == False   
+        if not flag:
             answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
             answers.append(answer)
         flag = False
     sleep(1)
-    if teacher == True:
+    if teacher:
         answer = AnswersForUsers(cfg.teacher_email, forteacher.return_theme(), forteacher.return_body())
         answers.append(answer)
 
