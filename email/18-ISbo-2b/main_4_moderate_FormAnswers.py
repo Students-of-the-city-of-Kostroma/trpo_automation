@@ -78,9 +78,9 @@ def MakeAnswersForUsers(letterResult):
             par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
             forteacher.add(par)
             teacher = True
-        else 
-            flag = True
-        if flag == False   
+        else:
+             flag = True
+        if flag == False:  
             answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
             answers.append(answer)
         flag = False
