@@ -229,12 +229,12 @@ def ValidateLetters(letters):
                 let.CodeStatusComment = 'Письмо не содержит необходимых ссылок на ресурсы.'
             else:
                 num, var = val.get_num_and_var(val.subject)
-                if num is None or (int(num) < 1 or int(num) > 15 or int(var) == 0):
+                if num is None or (int(var) > 15 or int(num) > 12 or int(var) == 0):
                     let.CodeStatus = '03'
                     let.CodeStatusComment = 'Номер лабораторной не существует'
                 else:
-                    let.NumberOfLab = int(str(var))
-                    let.VariantOfLab = int(str(num))
+                    let.NumberOfLab = int(num)
+                    let.VariantOfLab = int(var)
             if let.CodeStatus == '20':
                 let.Body = re.findall(r'http[^ \n]*', let.Body)[0]
                 body = let.Body[-1:]
