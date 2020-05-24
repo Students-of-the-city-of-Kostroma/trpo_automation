@@ -79,13 +79,12 @@ def MakeAnswersForUsers(letterResult):
             forteacher.add(par)
             teacher = True
         else:
-            flag = True
-        if not flag:
+             flag = True
+        if flag == False:  
             answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
             answers.append(answer)
         flag = False
-    sleep(1)
-    if teacher:
+    if teacher == True:
         answer = AnswersForUsers(cfg.teacher_email, forteacher.return_theme(), forteacher.return_body())
         answers.append(answer)
 
