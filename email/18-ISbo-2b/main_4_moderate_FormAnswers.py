@@ -84,7 +84,6 @@ def MakeAnswersForUsers(letterResult):
             answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
             answers.append(answer)
         flag = False
-    sleep(1)
     if teacher == True:
         answer = AnswersForUsers(cfg.teacher_email, forteacher.return_theme(), forteacher.return_body())
         answers.append(answer)
