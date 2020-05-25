@@ -27,32 +27,38 @@ void TestGateway::testTrueJson()
 }
 /**
  * @brief Метод, аккумулирующий некорректные Json для далнейшей проверки
+ * описания кейсов есть в сценариях https://vk.cc/auCgZM
  */
 void TestGateway::badJsons_data()
 {   QTest::addColumn<QByteArray>("jsons");
-
-    QTest::newRow("SendEmpty") << QByteArray("");
-    QTest::newRow("SendEmptyJson") << QByteArray("{}");
-    QTest::newRow("SendEmptyString") << QByteArray("");
-    QTest::newRow("SendSimpleString") << QByteArray("S");
-    QTest::newRow("SendWrongLink") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"yandex.ru\"}");
-    QTest::newRow("SendWrongLabID") << QByteArray("{\"messageType\": 1, \"lab\": 8, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("SendStringMsgType") << QByteArray("{\"messageType\": \"1\", \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("SendWrongMsgType") << QByteArray("{\"messageType\": 3, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("SendWithoutExceptedKey") << QByteArray(" \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("SendEveryoneKey") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\", \"code\": 7}");
-    QTest::newRow("SendWithExcessKey") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\", \"trpo\": false}");
-    QTest::newRow("SendFalseLab") << QByteArray("{\"messageType\": 1, \"lab\": false, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("SendOneKey") << QByteArray("{\"messageType\": 1}");
-    QTest::newRow("SendTwoKeys") << QByteArray("{\"messageType\": 1, \"lab\": 7");
-    QTest::newRow("SendThreeKeys") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1}");
-    QTest::newRow("SendFakeCode") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"code\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("SendFakeVar") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 10000, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-1") << QByteArray("");
+    QTest::newRow("issue-393-2") << QByteArray("{}");
+    QTest::newRow("issue-393-3") << QByteArray("");
+    QTest::newRow("issue-393-4") << QByteArray("S");
+    QTest::newRow("issue-393-5") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"yandex.ru\"}");
+    QTest::newRow("issue-393-6") << QByteArray("{\"messageType\": 1, \"lab\": 8, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-7") << QByteArray("{\"messageType\": \"1\", \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-8") << QByteArray("{\"messageType\": 1, \"lab\": \"7\", \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-9") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": \"1\", \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-10") << QByteArray("{\"messageType\": \"1\", \"lab\": 7, \"variant\": 1, \"link\": \"7\"}");
+    QTest::newRow("issue-393-11") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"code\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-12") << QByteArray("{\"messageType\": 3, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-13") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 2, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-14") << QByteArray("{\"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-15") << QByteArray("{\"messageType\": 1, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-16") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QTest::newRow("issue-393-17") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1}");
+    QTest::newRow("issue-393-18") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\", \"code\": []}");
+    QTest::newRow("issue-393-19") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\", \"TRPOTHEBEST\": true}");
+    QTest::newRow("issue-393-20") << QByteArray("{\"messageType\": 1}");
+    QTest::newRow("issue-393-21") << QByteArray("{\"messageType\": 1, \"lab\": 7}");
+    QTest::newRow("issue-393-22") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1}");
+    QTest::newRow("issue-393-11") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"code\": [yandex.ru]}");
 }
 
 /**
  * @brief Тестовая функция извлекает из заранее подготовленной таблицы
- * некорректные Json и отдает их на проверку методу validateData
+ * некорректные Json и отдает их на проверку методу validateData()
  */
 void TestGateway::badJsons()
 {
