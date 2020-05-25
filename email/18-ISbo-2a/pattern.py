@@ -61,7 +61,10 @@ def funcTs(name_of_student, validation_dictionary, str_of_er):
     return pattern
 
 
-SIGNATURE = "\n\nС уважением,\nБот"
+SIGNATURE = "\n\nСсылка на журнал: "\
+            "https://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1khhC"\
+            "16U1qDwaI-K6ndkp9LFWAHncuWA/edit?usp=sharing"\
+            "\n\nС уважением,\nБот"
 
 def funcReturnMsg(hello_student, our_msg, SIGNATURE, 
                    date_of_msg, return_body, return_head):
