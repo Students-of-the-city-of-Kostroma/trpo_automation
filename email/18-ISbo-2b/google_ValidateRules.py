@@ -82,15 +82,15 @@ class ValidationMail():
         else:
             return self.validation_subject(subject)
 
-    def get_num_and_var(self, subject):
+        def get_num_and_var(self, subject):
         if self.success is True:
             subject = subject.lower().replace(' ', '')
             var = subject[-2:]
-            if var.isdigit() is not True:
+            if var.isdigit() is not True or var[0] == '0':
                 var = var[1]
             index = subject.find("лр", 0, 10)
             number_work = subject[index + 2:index + 5]
-            if number_work[0].isdigit() is not True:
+            if number_work[0].isdigit() is not True or number_work[0] == '0':
                 number_work = number_work[1:]
             else:
                 number_work = number_work[:2]
