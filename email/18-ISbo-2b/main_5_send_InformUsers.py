@@ -19,11 +19,12 @@ def InformUsers(answersForUsers):
     """
     Разослать письма пользователям, внести пользователей в список, заархивировать письма, дождаться таймера
     """
-    # Отправление писем пользователям
     # Создание SMTP объекта
     smtp_obj = smtp_login()
+
     # Отправка ответов пользователям
     SendLetters(smtp_obj, answersForUsers)
+
     # Закрытие SMTP объекта
     quit_email_smtp(smtp_obj)
 
@@ -67,16 +68,22 @@ def send_mes(smtp_obj, message):
     try:
         # Создание экземпляра класса Email Message
         mes = EmailMessage()
+
         # Заполнение поля отправителя
         mes['From'] = "ТРПО ИАСТ"
+
         # Заполнение поля получателя
         mes['To'] = message.Who
+
         # Заполнение темы письма
         mes['Subject'] = message.Theme
+
         # Заполнение тела письма
         mes.set_content(message.Body)
+
         # отправка SMTP пакета
         smtp_obj.send_message(mes)
+        
         message.Success = True
         with open(cfg.filename, "a") as file:
             file.write("\nОтвет отправлен!")
