@@ -58,6 +58,7 @@ def SendLetters(smtp_obj, answersForUsers):
         file.write("\nОтправление ответов пользователю... ")
 
     for i in answersForUsers:
+        
         # Отправка ответа по экземпляру списка ответов
         send_mes(smtp_obj, i)
 
@@ -66,6 +67,7 @@ def SendLetters(smtp_obj, answersForUsers):
 
 def send_mes(smtp_obj, message):
     try:
+
         # Создание экземпляра класса Email Message
         mes = EmailMessage()
 
