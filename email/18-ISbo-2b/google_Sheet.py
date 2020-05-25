@@ -317,8 +317,15 @@ class Sheet:
             #print(value_table)
 
             ranges = sheet_name + '!' + value_table
-            result = Sheet.update_sheet(Journal_sheetId, ranges, value)
 
+            value_old = Sheet.read_sheet(Journal_sheetId, sheet_name, value_table)
+            result = ['','','']
+            if value_old:
+                result[0] = value_old[0][0]
+            result[1] = bool(0)
+            if result[0] != '1':
+                result[1] = Sheet.update_sheet(Journal_sheetId, ranges, value)
+            result[2] = bool(1)
             return result
         else:
             print('нет строки')
