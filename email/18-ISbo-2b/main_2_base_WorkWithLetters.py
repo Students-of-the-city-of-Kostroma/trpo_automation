@@ -12,7 +12,6 @@ import lxml
 import requests
 from bs4 import BeautifulSoup
 import global_Letter
-import requests
 from bs4 import BeautifulSoup
 # from main_3_send_SetResults import SetResults
 import config_Project as cfg
@@ -67,7 +66,8 @@ def LettersConvertToString(letters):
         if tmp.CodeStatus == "20" and tmp.NumberOfLab in LabsForWork:
             html = get_html(tmp.Body)
             tmp.Body = finding_files(html, tmp.Student.NameOfStudent)
-
+        if tmp.Body == "":
+            tmp.CodeStatus = "08"
     with open(cfg.filename, "a") as file:
         file.write("Данные получены!")
 
