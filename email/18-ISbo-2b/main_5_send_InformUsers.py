@@ -67,9 +67,11 @@ def send_mes(smtp_obj, message):
         mes['Subject'] = message.Theme # Заполнение темы письма
         mes.set_content(message.Body) # Заполнение тела письма
         smtp_obj.send_message(mes) # отправка SMTP пакета
+        message.Success = True
         with open(cfg.filename, "a") as file:
             file.write("\nОтвет отправлен!")
     except:
+        message.Success = False
         with open(cfg.filename, "a") as file:
             file.write("\nОшибка при отправке ответа!")
 
