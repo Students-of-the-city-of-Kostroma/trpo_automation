@@ -96,13 +96,15 @@ class test_MakeAnswersForUsers(unittest.TestCase):
         an7 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an7)
-        an8 = global_AnswersForUsers.AnswersForUsers("НЕ РЕАЛИЗОВАНО", "НЕ РЕАЛИЗОВАНО", "НЕ РЕАЛИЗОВАНО")
+        pattern = moderate_PatternsOfLetter.UncorrectedLink()
+        an8 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
+                                                     pattern.return_body())
         answers.append(an8)
         pattern = moderate_PatternsOfLetter.WorkCompleted()
         an9 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an9)
-        pattern = moderate_PatternsOfLetter.WorkVerified(False)
+        pattern = moderate_PatternsOfLetter.WorkVerified(True)
         an10 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                       pattern.return_body())
         answers.append(an10)
@@ -118,7 +120,7 @@ class test_MakeAnswersForUsers(unittest.TestCase):
         # Заполненый массив answers содержащие ответы, сответствующие своим кодам
         for i in range(len(answers)):
             self.assertEqual(my_result[i].Body, answers[i].Body)
-            self.assertEqual(my_result[i].Theme, answers[i].Theme)  # Не реализована обработка кода 08
+            self.assertEqual(my_result[i].Theme, answers[i].Theme)  
             self.assertEqual(my_result[i].Who, answers[i].Who)
 
     def test_S_7_t3(self):
@@ -147,7 +149,7 @@ class test_MakeAnswersForUsers(unittest.TestCase):
                                                      pattern.return_body())
         answers.append(an1)
 
-        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)  # Ошибка при обработке пустого экземпляра
+        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)
 
         # Заполненый массив answers содержащие ответы сответствующие своим кода и меньше на 1 элемент чем LetterResult
         self.assertEqual(len(my_result), len(answers) - 1)
@@ -164,7 +166,7 @@ class test_MakeAnswersForUsers(unittest.TestCase):
         # Создание ожидаемого результата
         answers = []
 
-        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)  # Ошибка при обработке пустого экземпляра
+        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)
 
         # Пустой массив answers
         self.assertEqual(my_result, answers)
