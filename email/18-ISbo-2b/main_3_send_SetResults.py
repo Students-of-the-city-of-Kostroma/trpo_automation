@@ -45,7 +45,7 @@ def SetMarks(letterResults):
     for i in letterResults:
         if i.CodeStatus == "30":
             value = 0
-            if i.isOK:
+            if i.IsOK:
                 value = 1
 
             group = i.Student.GroupOfStudent
