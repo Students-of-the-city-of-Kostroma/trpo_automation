@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         functional.cpp \
+        logfile.cpp \
         main.cpp \
         strategylab.cpp \
         tcpserver.cpp \
@@ -30,6 +31,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     functional.h \
+    logfile.h \
     strategylab.h \
     tcpserver.h \
     utils/gateway.h \
