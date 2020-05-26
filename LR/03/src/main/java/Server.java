@@ -1,41 +1,38 @@
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.json.simple.*;
-import org.json.simple.parser.*;
-
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Server {
-    public static Selenium Selenium;
-    public static int port;
-    private static final String FILENAME = "Repository.xml";
-    private static Socket clientSocket; //Сокет клиента
-    private static ServerSocket server; //Сокет сервера
-    private static BufferedReader in; //Чтобы принимать и отправлять сообщения буферы
-    private static BufferedWriter out;
+    public static LinkedList<ServerSomthing> serverList = new LinkedList<>();
+    public static int port=0;
+    public static Socket clientSocket; //Сокет клиента
+    public static ServerSocket server; //Сокет сервера
+    public static BufferedReader in; //Чтобы принимать и отправлять сообщения буферы
+    public static BufferedWriter out;
     public static String TypeMessage;
     public static String NomberVar;
     public static String Repos;
     public static String NomberLab;
     public static String Oshibka;
     public static boolean conec=false;
-    //ФУНКЦИЯ создания ДЖСОН ОТВЕТА
+    private static final String FILENAME = "Repository.xml";
 
-    public static void SetPort(){
-        port=12003;
+    private static void SetPort(){
         try {
             final File xmlFile = new File(System.getProperty("user.dir") + File.separator + FILENAME);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -56,10 +53,11 @@ public class Server {
             }
         }
         catch (ParserConfigurationException | SAXException | IOException ex){
-            Logger.getLogger(Selenium.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE,null,ex);
         }
     }
 
+    //ФУНКЦИЯ создания ДЖСОН ОТВЕТА
     public static String Otvet(String grade,String comment) {//Получаем рез.работы силениума
         JSONObject jsonObject = new JSONObject();//Создаем новый обьект
         jsonObject.put("messageType", "2");//Все ли успешно
@@ -246,231 +244,33 @@ public class Server {
             ErrorArg(NomberLab,NomberVar,Repos);
         }
     }
-    public static void main(String[] args) throws ParseException, IOException {
+
+    public static void Priem() throws IOException
+    {
+        SetPort();
+        server = new ServerSocket(port);
         try {
-            try  {
-                SetPort();
-                server = new ServerSocket(port); //Сервер на порте 4003
-                System.out.println("Сервер запущен!");
-                clientSocket = server.accept(); //Сервер готов принимать сигнал
+            while (true) {
+                // Блокируется до возникновения нового соединения:
+                Socket clientSocket = server.accept();
+                System.out.println("Sosdano");
                 try {
-                    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));   //Это тупо обертки буферов
-                    out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                    String word = in.readLine();
-                    //Это мы получаем строку закодированную
-                    try {
-                        System.out.println(word);
-                        JSONObject Cilka = (JSONObject)JSONValue.parseWithException(word);
-                        String proverka=Cilka.toString();
-                        conec=false;
-
-                        if(conec==false) {
-                            TypeMessage=Cilka.get("messageType").toString();
-//                        System.out.println(TypeMessage);
-                            String TestTipeMes1="";
-                            if(TypeMessage.equals(TestTipeMes1)&&conec==false)
-                            {
-                                TypeMessage="3";
-                                NomberLab="messageType";
-                                NomberVar="2";
-                                Repos="Отстуствует ключ";
-                                conec=true;
-                                out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                out.flush();
-                                clientSocket.close();
-                            }
-                            if(conec==false) {
-                                try {
-                                    byte x1=Byte.parseByte(TypeMessage);
-                                    if(x1!=1&&conec==false) {
-                                        TypeMessage="3";
-                                        NomberLab="messageType";
-                                        NomberVar="3";
-                                        Repos="Неверное значение";
-                                        conec=true;
-                                        out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                        out.flush();
-                                        clientSocket.close();
-                                    }
-                                }
-                                catch(NumberFormatException e) {
-                                    TypeMessage="3";
-                                    NomberLab="messageType";
-                                    NomberVar="4";
-                                    Repos="Не тот тип данных";
-                                    out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                    out.flush();
-                                    clientSocket.close();
-                                    conec=true;
-                                }
-                            }}
-                        System.out.println(TypeMessage);
-
-                        if(conec==false) {
-                            NomberLab=Cilka.get("lab").toString();
-//                        System.out.println(NomberLab);
-                            String TestNomberLab1="";
-                            if(NomberLab.equals(TestNomberLab1)&&conec==false)
-                            {
-                                TypeMessage="3";
-                                NomberLab="lab";
-                                NomberVar="2";
-                                Repos="Отстуствует ключ";
-                                out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                out.flush();
-                                clientSocket.close();
-                                conec=true;
-                            }
-                            if(conec==false) {
-                                try {
-                                    byte x2=Byte.parseByte(NomberLab);
-                                    if(x2!=3&&conec==false) {
-                                        TypeMessage="3";
-                                        NomberLab="lab";
-                                        NomberVar="3";
-                                        Repos="Неверное значение";
-                                        out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                        out.flush();
-                                        clientSocket.close();
-                                        conec=true;
-                                    }
-                                }
-                                catch(NumberFormatException e) {
-                                    TypeMessage="3";
-                                    NomberLab="lab";
-                                    NomberVar="4";
-                                    Repos="Не тот тип данных";
-                                    out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                    out.flush();
-                                    clientSocket.close();
-                                    conec=true;
-                                }
-                            } }
-                        System.out.println(NomberLab);
-
-
-                        if(conec==false) {
-                            NomberVar=Cilka.get("variant").toString();
-//                        System.out.println(NomberVar);
-                            String TestNomberVar1="";
-                            if(NomberVar.equals(TestNomberVar1)&&conec==false)
-                            {
-                                TypeMessage="3";
-                                NomberLab="variant";
-                                NomberVar="2";
-                                Repos="Отстуствует ключ";
-                                out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                out.flush();
-                                clientSocket.close();
-                                conec=true;
-                            }
-                            if(conec==false) {
-                                try {
-                                    byte x3=Byte.parseByte(NomberVar);
-                                    if((x3<=0||x3>15)&&conec==false) {
-                                        TypeMessage="3";
-                                        NomberLab="variant";
-                                        NomberVar="3";
-                                        Repos="Неверное значение";
-                                        out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                        out.flush();
-                                        clientSocket.close();
-                                        conec=true;
-                                    }
-                                }
-                                catch(NumberFormatException e) {
-                                    TypeMessage="3";
-                                    NomberLab="variant";
-                                    NomberVar="4";
-                                    Repos="Не тот тип данных";
-                                    out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                    out.flush();
-                                    clientSocket.close();
-                                    conec=true;
-                                }
-                            }}
-                        System.out.println(NomberVar);
-
-                        if(conec==false) {
-                            Repos=Cilka.get("link").toString();
-//                      System.out.println(Repos);
-                            try {
-                                String s2="https://github.com/";
-                                String s3="";
-                                if(Repos.equals(s3)&&conec==false)
-                                {
-                                    TypeMessage="3";
-                                    NomberLab="link";
-                                    NomberVar="2";
-                                    Repos="Отстуствует ключ";
-                                    out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                    out.flush();
-                                    clientSocket.close();
-                                    conec=true;
-                                }
-                                if(conec==false) {
-                                    String s1=Repos.substring(0,19);
-                                    if(!s1.equals(s2)&&conec==false) {
-                                        TypeMessage="3";
-                                        NomberLab="link";
-                                        NomberVar="3";
-                                        Repos="Неверное значение";
-                                        out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                        out.flush();
-                                        clientSocket.close();
-                                        conec=true;}
-                                }
-
-                            }
-                            catch(StringIndexOutOfBoundsException e) {
-                                TypeMessage="3";
-                                NomberLab="link";
-                                NomberVar="3";
-                                Repos="Неверное значение";
-                                out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                                out.flush();
-                                clientSocket.close();
-                                conec=true;
-                            }}
-                        System.out.println(Repos);
-                    }
-                    catch(ParseException e){
-                        TypeMessage="3";
-                        NomberLab="messageType, variant, link, lab";
-                        NomberVar="1";
-                        Repos="Неверная JSON строка";
-                        conec=true;
-                        out.write(ErrorArg(NomberLab,NomberVar,Repos));
-                        out.flush();
-                        clientSocket.close();
-                    }
-
-
-                    if(conec==false) {
-                        Selenium=new Selenium(Repos,NomberVar);
-                        Selenium.test();
-                        out.write("Привет, это Сервер! Ответ: " + Otvet(Selenium.Get_Ozenka(),Selenium.Get_Result()) + "\n");
-                        out.flush();
-                    }
-
-                } finally {
-                    System.out.println("Все удачно");
+                    serverList.add(new ServerSomthing(clientSocket));
+                    // добавить новое соединенние в список
+                } catch (IOException e) {
+                    // Если завершится неудачей, закрывается сокет,
+                    // в противном случае, нить закроет его при завершении работы:
                     clientSocket.close();
-                    in.close();
-                    out.close();
                 }
             }
-
-            finally {
-                System.out.println("Сервер закрыт!");
-                server.close();
-            }
-        } catch (IOException e) {
-            out.write(ErrorServer(e));//здесь формируется json ошибки и отправляется пользователю
-            out.flush();
-            clientSocket.close();
-            in.close();
-            out.close();
+        } finally {
+            server.close();
+            System.out.println("Server1 zakrit");
         }
+    }
+
+
+    public static void main(String[] args) throws ParseException, IOException {
+        Priem();
     }
 }
