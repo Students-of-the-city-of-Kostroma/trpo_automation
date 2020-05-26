@@ -11,6 +11,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -248,7 +252,11 @@ public class Server {
     public static void Priem() throws IOException
     {
         SetPort();
+
+        if (port!=0)
         server = new ServerSocket(port);
+        System.out.println("Sosdano");
+
         try {
             while (true) {
                 // Блокируется до возникновения нового соединения:
@@ -257,6 +265,7 @@ public class Server {
                 try {
                     serverList.add(new ServerSomthing(clientSocket));
                     // добавить новое соединенние в список
+
                 } catch (IOException e) {
                     // Если завершится неудачей, закрывается сокет,
                     // в противном случае, нить закроет его при завершении работы:
