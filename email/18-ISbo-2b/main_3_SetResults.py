@@ -1,34 +1,23 @@
 # coding=utf-8
+from work_Loger import Logs
+from work_Sheet import Sheet
+
 import inspect
-from Loger import Logs 
-logs = Logs()
-name = None
 
-from time import sleep
-from datetime import datetime
-
-# from main_4_moderate_FormAnswers import FormAnswers
-import config_Project as cfg
-from google_Sheet import Sheet
 
 def SetResults(letterResults):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,letterResults)
     """
     Выставить необходимые оценки в журнал
     """
-    # Выставление оценок в журнал (функция пока не реализована)
+
+    # Выставление оценок в журнал
+    # Глобальная функция 7
     SetMarks(letterResults)
 
-    print(letterResults)
-
-    # Вызов следующей функции для формирования ответов
-    # FormAnswers(letterResults)
     return letterResults
 
+
 def SetMarks(letterResults):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,letterResults)
     """
      Функционал:
     - Выставить необходимые оценки в журнал
@@ -39,13 +28,14 @@ def SetMarks(letterResults):
     Что предусмотреть:
     - None
     """
-    with open(cfg.filename, "a") as file:
-        file.write("\nВыставление оценок... ")
+    # logs = Logs()
+    # name = inspect.currentframe().f_code.co_name
+    # logs.Infor(name, letterResults)
 
     for i in letterResults:
         if i.CodeStatus == "30":
             value = 0
-            if i.isOK:
+            if i.IsOK:
                 value = 1
 
             group = i.Student.GroupOfStudent
@@ -59,6 +49,3 @@ def SetMarks(letterResults):
             if result:
                 if result[0] == '1':
                     i.CodeStatus = '10'
-
-    with open(cfg.filename, "a") as file:
-        file.write("Оценки выставлены!")

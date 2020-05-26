@@ -1,9 +1,9 @@
 import unittest
-import main_4_moderate_FormAnswers
+import main_4_FormAnswers
 import global_User
 import global_LetterResult
 import global_AnswersForUsers
-import moderate_PatternsOfLetter
+import work_PatternsOfLetter
 
 
 class test_MakeAnswersForUsers(unittest.TestCase):
@@ -17,7 +17,7 @@ class test_MakeAnswersForUsers(unittest.TestCase):
         # Создание ожидаемого результата
         answers = []
 
-        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(LetterResult)
+        my_result = main_4_FormAnswers.MakeAnswersForUsers(LetterResult)
 
         self.assertEqual(my_result, answers)
 
@@ -64,58 +64,58 @@ class test_MakeAnswersForUsers(unittest.TestCase):
 
         # Создание ожидаемого результата
         answers = []
-        pattern = moderate_PatternsOfLetter.UnknownUser()
+        pattern = work_PatternsOfLetter.UnknownUser()
         an0 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an0)
-        pattern = moderate_PatternsOfLetter.UncorrectedTheme()
+        pattern = work_PatternsOfLetter.UncorrectedTheme()
         an1 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an1)
-        pattern = moderate_PatternsOfLetter.UncorrectedStructure()
+        pattern = work_PatternsOfLetter.UncorrectedStructure()
         an2 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an2)
-        pattern = moderate_PatternsOfLetter.UncorrectedVariant()
+        pattern = work_PatternsOfLetter.UncorrectedVariant()
         an3 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an3)
-        pattern = moderate_PatternsOfLetter.LostLinks()
+        pattern = work_PatternsOfLetter.LostLinks()
         an4 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an4)
-        pattern = moderate_PatternsOfLetter.HaveAttachments()
+        pattern = work_PatternsOfLetter.HaveAttachments()
         an5 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an5)
-        pattern = moderate_PatternsOfLetter.SystemFailure()
+        pattern = work_PatternsOfLetter.SystemFailure()
         an6 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an6)
-        pattern = moderate_PatternsOfLetter.SystemFailure()
+        pattern = work_PatternsOfLetter.SystemFailure()
         an7 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an7)
-        pattern = moderate_PatternsOfLetter.UncorrectedLink()
+        pattern = work_PatternsOfLetter.UncorrectedLink()
         an8 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an8)
-        pattern = moderate_PatternsOfLetter.WorkCompleted()
+        pattern = work_PatternsOfLetter.WorkCompleted()
         an9 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an9)
-        pattern = moderate_PatternsOfLetter.WorkVerified(True)
+        pattern = work_PatternsOfLetter.WorkVerified(True)
         an10 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                       pattern.return_body())
         answers.append(an10)
         par = ("Ельцов Андрей", '1', '1')
-        forteacher = moderate_PatternsOfLetter.ForTeacher()
+        forteacher = work_PatternsOfLetter.ForTeacher()
         forteacher.add(par)
         an11 = global_AnswersForUsers.AnswersForUsers("trpo.help@gmail.com", forteacher.return_theme(),
                                                       forteacher.return_body())
         answers.append(an11)
 
-        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)
+        my_result = main_4_FormAnswers.MakeAnswersForUsers(Letters)
 
         # Заполненый массив answers содержащие ответы, сответствующие своим кодам
         for i in range(len(answers)):
@@ -140,16 +140,16 @@ class test_MakeAnswersForUsers(unittest.TestCase):
 
         # Создание ожидаемого результата
         answers = []
-        pattern = moderate_PatternsOfLetter.UnknownUser()
+        pattern = work_PatternsOfLetter.UnknownUser()
         an0 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an0)
-        pattern = moderate_PatternsOfLetter.UncorrectedTheme()
+        pattern = work_PatternsOfLetter.UncorrectedTheme()
         an1 = global_AnswersForUsers.AnswersForUsers("andreq64AhA@mail.ru", pattern.return_theme(),
                                                      pattern.return_body())
         answers.append(an1)
 
-        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)
+        my_result = main_4_FormAnswers.MakeAnswersForUsers(Letters)
 
         # Заполненый массив answers содержащие ответы сответствующие своим кода и меньше на 1 элемент чем LetterResult
         self.assertEqual(len(my_result), len(answers) - 1)
@@ -166,7 +166,7 @@ class test_MakeAnswersForUsers(unittest.TestCase):
         # Создание ожидаемого результата
         answers = []
 
-        my_result = main_4_moderate_FormAnswers.MakeAnswersForUsers(Letters)
+        my_result = main_4_FormAnswers.MakeAnswersForUsers(Letters)
 
         # Пустой массив answers
         self.assertEqual(my_result, answers)

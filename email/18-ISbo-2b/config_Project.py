@@ -1,12 +1,10 @@
 # coding=utf-8
 from datetime import datetime
 
-timer = None
-reserve_dates = None
 filename = ""
 timeout = 10
 teacher_email = "trpo.help@gmail.com"
-access = 'ссылка на форму регистрации'
+access = 'https://forms.gle/DRxYQxeRn9z7jvD96'
 
 
 def num_for_filename():

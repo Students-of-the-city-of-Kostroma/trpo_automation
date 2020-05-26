@@ -2,7 +2,7 @@ import unittest
 import global_User as User
 import global_Letter as Letter
 import global_LetterResult as LetterResult
-import main_2_base_WorkWithLetters
+import main_2_WorkWithLetters
 import socket
 import global_LetterResult
 import json
@@ -42,7 +42,7 @@ class TestSendJSONForCheck(unittest.TestCase):
         jsonDates.append(mystr)
 
         # Список ожидаемых писем
-        letters_expectation = main_2_base_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
+        letters_expectation = main_2_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
 
         # Ожидаемое письмо
         letterRes = LetterResult.LetterResult(student)
@@ -88,7 +88,7 @@ class TestSendJSONForCheck(unittest.TestCase):
         jsonDates.append(mystr)
 
         # Список ожидаемых писем
-        letters_expectation = main_2_base_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
+        letters_expectation = main_2_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
 
         # Ожидаемое письмо
         letterRes = LetterResult.LetterResult(student)
@@ -134,7 +134,7 @@ class TestSendJSONForCheck(unittest.TestCase):
         jsonDates.append(mystr)
 
         # Список ожидаемых писем
-        letters_expectation = main_2_base_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
+        letters_expectation = main_2_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
 
         # Ожидаемое письмо
         letterRes = LetterResult.LetterResult(student)
@@ -180,7 +180,7 @@ class TestSendJSONForCheck(unittest.TestCase):
         jsonDates.append(mystr)
 
         # Список ожидаемых писем
-        letters_expectation = main_2_base_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
+        letters_expectation = main_2_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
 
         # Ожидаемое письмо
         letterRes = LetterResult.LetterResult(student)
@@ -226,7 +226,7 @@ class TestSendJSONForCheck(unittest.TestCase):
         jsonDates.append(mystr)
 
         # Список ожидаемых писем
-        letters_expectation = main_2_base_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
+        letters_expectation = main_2_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
 
         # Ожидаемое письмо
         letterRes = LetterResult.LetterResult(student)
@@ -272,7 +272,7 @@ class TestSendJSONForCheck(unittest.TestCase):
         jsonDates.append(mystr)
 
         # Список ожидаемых писем
-        letters_expectation = main_2_base_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
+        letters_expectation = main_2_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
 
         # Ожидаемое письмо
         letterRes = LetterResult.LetterResult(student)
@@ -318,7 +318,7 @@ class TestSendJSONForCheck(unittest.TestCase):
         jsonDates.append(mystr)
 
         # Список ожидаемых писем
-        letters_expectation = main_2_base_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
+        letters_expectation = main_2_WorkWithLetters.SendJSONForCheck(jsonDates, letters)
 
         # Ожидаемое письмо
         letterRes = LetterResult.LetterResult(student)

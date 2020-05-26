@@ -1,15 +1,17 @@
 import inspect 
 import logging 
-logging.basicConfig(filename="log2.txt", level = logging.DEBUG) 
+logging.basicConfig(filename="log.txt", level=logging.DEBUG)
 name = None
-arg=arg1=arg2=arg3=None
+arg = None
+arg1 = None
+arg2 = None
+arg3 = None
+
+
 class Logs:
     def __init__(self):
         pass
 
-    
-        
-    
     def Infor (self,name, *args, **kwargs):
         self.name = name
         try:
@@ -26,7 +28,6 @@ class Logs:
                 arg2=args[1]
                 
                 logging.debug('Параметры: %s, %s', arg1, arg2) 
-                
 
             if(args.__len__()==3):
                 arg1=args[0]
@@ -42,12 +43,9 @@ class Logs:
 
                 logging.debug('Параметры: %s, %s, %s, %s',arg1, arg2, arg3, arg4)
 
-               
         
         except Exception as e: 
             logging.error(str(e)) 
-         
 
         finally: 
             logging.info("Program end")
-  
