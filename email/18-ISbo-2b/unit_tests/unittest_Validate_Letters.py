@@ -1,5 +1,5 @@
 import unittest
-import main_1_google_CheckEmail
+import main_1_CheckEmail
 import global_Letter
 import  global_User
 
@@ -28,7 +28,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].NumberOfLab, letter_Res.NumberOfLab)
 
@@ -58,7 +58,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -88,7 +88,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -118,7 +118,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -146,7 +146,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -174,7 +174,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -202,7 +202,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -230,7 +230,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -258,7 +258,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -286,7 +286,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -314,7 +314,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -342,7 +342,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -370,7 +370,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 
@@ -398,7 +398,7 @@ class test_Validate_Letters(unittest.TestCase):
         letter_Res.NumberOfLab = 3
         letter_Res.VariantOfLab = 1
 
-        main_1_google_CheckEmail.ValidateLetters(letters)
+        main_1_CheckEmail.ValidateLetters(letters)
 
         self.assertEqual(letters[0].CodeStatusComment, letter_Res.CodeStatusComment)
 

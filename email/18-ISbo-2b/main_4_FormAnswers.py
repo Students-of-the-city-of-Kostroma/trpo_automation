@@ -1,36 +1,24 @@
 # coding=utf-8
-import inspect	
-from Loger import Logs 	
-logs = Logs()	
-name = None	
-
-from time import sleep
-from datetime import datetime
-
+from work_Loger import Logs
 from global_AnswersForUsers import AnswersForUsers
-# from main_5_send_InformUsers import InformUsers
 import config_Project as cfg
-import moderate_PatternsOfLetter
+import work_PatternsOfLetter
+
+import inspect
 
 def FormAnswers(letterResult):
-    name = inspect.currentframe().f_code.co_name	
-    logs.Infor(name,letterResult)
     """
     Формирование ответов пользователям
     """
+
     # Формирование ответов пользователю
+    # Глобальная функция 8
     answers = MakeAnswersForUsers(letterResult)
 
-    print(letterResult)
-
-    # Вызов функции информирования пользователей
-    # InformUsers(answers)
     return answers
 
 
 def MakeAnswersForUsers(letterResult):
-    name = inspect.currentframe().f_code.co_name	
-    logs.Infor(name,letterResult)
     """
     Функционал:
     - Сформировать список экземпляров класса AnswersForUsers, используя уже готовые ответы на письма
@@ -45,50 +33,63 @@ def MakeAnswersForUsers(letterResult):
     Участвующие внешние типы переменных
     - AnswersForUsers - из import
     """
-    with open(cfg.filename, "a") as file:
-        file.write("\nФормирование ответов пользователю... ")
+    # logs = Logs()
+    # name = inspect.currentframe().f_code.co_name
+    # logs.Infor(name, letterResult)
 
     answers = []
     teacher = False
     flag = False
-    forteacher = moderate_PatternsOfLetter.ForTeacher()
+    forTeacher = work_PatternsOfLetter.ForTeacher()
+
     for i in letterResult:
         if i.CodeStatus == "00":
-            pattern = moderate_PatternsOfLetter.UnknownUser()
+            pattern = work_PatternsOfLetter.UnknownUser()
+
         elif i.CodeStatus == "01":
-            pattern = moderate_PatternsOfLetter.UncorrectedTheme()
+            pattern = work_PatternsOfLetter.UncorrectedTheme()
+
         elif i.CodeStatus == "02":
-            pattern = moderate_PatternsOfLetter.UncorrectedStructure()
+            pattern = work_PatternsOfLetter.UncorrectedStructure()
+
         elif i.CodeStatus == "03":
-            pattern = moderate_PatternsOfLetter.UncorrectedVariant()
+            pattern = work_PatternsOfLetter.UncorrectedVariant()
+
         elif i.CodeStatus == "04":
-            pattern = moderate_PatternsOfLetter.LostLinks()
+            pattern = work_PatternsOfLetter.LostLinks()
+
         elif i.CodeStatus == "05":
-            pattern = moderate_PatternsOfLetter.HaveAttachments()
+            pattern = work_PatternsOfLetter.HaveAttachments()
+
         elif i.CodeStatus == "06":
-            pattern = moderate_PatternsOfLetter.SystemFailure()
+            pattern = work_PatternsOfLetter.SystemFailure()
+
         elif i.CodeStatus == "07":
-            pattern = moderate_PatternsOfLetter.SystemFailure()
+            pattern = work_PatternsOfLetter.SystemFailure()
+
         elif i.CodeStatus == "08":
-            pattern = moderate_PatternsOfLetter.UncorrectedLink()
+            pattern = work_PatternsOfLetter.UncorrectedLink()
+
         elif i.CodeStatus == "10":
-            pattern = moderate_PatternsOfLetter.WorkCompleted()
+            pattern = work_PatternsOfLetter.WorkCompleted()
+
         elif i.CodeStatus == "30":
-            pattern = moderate_PatternsOfLetter.WorkVerified(i.IsOK)
+            pattern = work_PatternsOfLetter.WorkVerified(i.IsOK)
             par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
-            forteacher.add(par)
+            forTeacher.add(par)
             teacher = True
+
         else:
              flag = True
+
         if flag == False:  
             answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
             answers.append(answer)
-        flag = False
-    if teacher == True:
-        answer = AnswersForUsers(cfg.teacher_email, forteacher.return_theme(), forteacher.return_body())
-        answers.append(answer)
 
-    with open(cfg.filename, "a") as file:
-        file.write("Ответы для пользователей сформированы!")
+        flag = False
+
+    if teacher == True:
+        answer = AnswersForUsers(cfg.teacher_email, forTeacher.return_theme(), forTeacher.return_body())
+        answers.append(answer)
 
     return answers
