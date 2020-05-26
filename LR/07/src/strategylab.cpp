@@ -238,7 +238,65 @@ void StrategyLab::checkAbstractMethodModifier(QString className, QString classBo
  */
 void StrategyLab::checkContext()
 {
-    return;
+    /* Убираем лишние элементы в строке */
+       QString context = classes.value("context");
+       for (int i = 0; i < context.size(); i++) {
+           context.remove(" ");
+           context.remove("\n");
+           context.remove("\t");
+           context.remove("\r");
+       }
+
+       /* Получаем имя класса */
+       QString nameClassContext = "";
+       QString nameClassField = "";
+       for (int i = 0; context[i] != "{"; i++) {
+           nameClassContext.append(context[i]);
+       }
+       nameClassContext.remove(QChar('class'), Qt::CaseInsensitive);
+       nameClassContext.remove(QChar('{'), Qt::CaseInsensitive);
+
+       /* Проверка приватного поля */
+       if (!context.contains("private:" + abstractClassName + "*")) {
+           throw UnexpectedResultException(nameClassContext + " must contain a private field such as an abstract class");
+       }
+
+       /* Имя приватного поля */
+       for (int i = context.indexOf("private:"); i != context.indexOf(";"); i++) {
+           nameClassField.append(context[i]);
+       }
+       for (int i = 0; i < nameClassField.size(); i++) {
+                 nameClassField.remove("private:");
+                 nameClassField.remove(abstractClassName);
+       }
+       nameClassField.remove(QChar('*'), Qt::CaseInsensitive);
+       nameClassField.remove(QChar(';'), Qt::CaseInsensitive);
+
+       /* Методы не должны возвращать */
+       if (context.contains("return")) {
+           throw UnexpectedResultException("Class " + nameClassContext + " 1 methods should not return");
+       }
+
+       /* Оставляем модификатор public */
+       for (int i = 0; i < context.indexOf("public"); i++) {
+           context[i] = ' ';
+       }
+       context.remove(" ");
+       for (int i = context.indexOf(nameClassContext); i < context.indexOf("}"); i++) {
+           context[i] = ' ';
+       }
+       context.remove(" ");
+
+       /* Проверка необходимых вызовов в методах */
+       if ((!context.contains("this->" + nameClassField + "->")) && (!context.contains("this." + nameClassField + "."))) {
+           throw UnexpectedResultException("Class " + nameClassContext + " should call a strategy method");
+       }
+       if (!context.contains( abstractClassName + "*")) {
+           throw UnexpectedResultException("One of the methods of class " + nameClassContext + "1 must accept an argument of the type of an abstract class.");
+       }
+       if ((!context.contains("this->" + nameClassField + "=")) && (!context.contains("this." + nameClassField + "="))) {
+           throw UnexpectedResultException("One of the methods of class " + nameClassContext + " must assign an argument to a property of a class such as an abstract class");
+       }
 }
 
 /**
