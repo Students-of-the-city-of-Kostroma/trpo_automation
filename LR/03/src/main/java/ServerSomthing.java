@@ -60,12 +60,21 @@ public class ServerSomthing {
         // если потоку ввода/вывода приведут к генерированию исключения, оно проброситься дальше
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+        out.write("New connection!");
+        out.flush();
+
+
         run(); // вызываем run()
     }
     public void run() {
         String word;
         try {
             word = in.readLine();
+
+            System.out.println(word);
+
+
             try {
                 System.out.println(word);
                 JSONObject Cilka = (JSONObject)JSONValue.parseWithException(word);
@@ -230,7 +239,11 @@ public class ServerSomthing {
 
             if(conec==false) {
                 selenium=new Selenium(Repos,NomberVar);
-                send("Привет, это Сервер! Ответ: " + Otvet(selenium.Get_Ozenka(),selenium.Get_Result()) + "\n"); // отослать принятое сообщение с
+
+                selenium.test();
+                send( Otvet(selenium.Get_Ozenka(),selenium.Get_Result())); // отослать принятое сообщение с
+                selenium.driver.quit();
+
             }
 
 
@@ -241,7 +254,9 @@ public class ServerSomthing {
 
     private void send(String msg) {
         try {
-            out.write(msg + "Rabotaet\n");
+            System.out.println(msg);
+            out.write(msg);
+
             out.flush();
         } catch (IOException ignored) {}
     }

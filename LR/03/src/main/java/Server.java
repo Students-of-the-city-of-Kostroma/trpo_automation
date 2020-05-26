@@ -10,6 +10,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -251,15 +252,20 @@ public class Server {
     public static void Priem() throws IOException
     {
         SetPort();
+
         if (port!=0)
         server = new ServerSocket(port);
         System.out.println("Sosdano");
+
         try {
             while (true) {
                 // Блокируется до возникновения нового соединения:
                 Socket clientSocket = server.accept();
+                System.out.println("Sosdano");
                 try {
-                    serverList.add(new ServerSomthing(clientSocket)); // добавить новое соединенние в список
+                    serverList.add(new ServerSomthing(clientSocket));
+                    // добавить новое соединенние в список
+
                 } catch (IOException e) {
                     // Если завершится неудачей, закрывается сокет,
                     // в противном случае, нить закроет его при завершении работы:

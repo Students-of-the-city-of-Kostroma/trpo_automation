@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 
 public class Selenium {
     private static final String FILENAME = "Repository.xml";
-    public static WebDriver driver=null;
+    public WebDriver driver=null;
     private String result ="";
     public  String Repository;// Ссылка на репозитори
     public  String variant; // Номер варика который приходит
@@ -516,7 +516,7 @@ public class Selenium {
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
         driver.get(Repository);
-        if (driver.findElements(By.xpath("//div[@class='blankslate blankslate-narrow']")).size()!=0){
+        if (driver.findElements(By.xpath("//img[2]")).size()!=0){
             empty=true;
         }
     }
@@ -569,6 +569,7 @@ public class Selenium {
 
             }else{result = "Неверный вариант\n"; driver.quit();}
         } else {System.out.println("Не найден вариант в файле\n"); }
+
         driver.quit();
     }
 }
