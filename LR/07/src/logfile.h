@@ -5,6 +5,10 @@
 #include<QTextStream>
 #include<QDateTime>
 
+
+/**
+ * @brief Класс - система логирования
+ */
 class logfile
 {
 public:

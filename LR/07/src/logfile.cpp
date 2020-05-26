@@ -1,10 +1,17 @@
 #include "logfile.h"
 
+/**
+ * @brief Конструктор
+ */
 logfile::logfile()
 {
 
 }
 
+/**
+ * @brief Метод создания лога типа Info
+ * @param Сообщение лога
+ */
 void logfile::logInfo(QString msg) {
     QFile logFile("logFile.txt");
     if(logFile.open(QIODevice::Append | QIODevice::Text)) {
@@ -18,6 +25,10 @@ void logfile::logInfo(QString msg) {
     }
 }
 
+/**
+ * @brief Метод создания лога типа Debug
+ * @param Сообщение лога
+ */
 void logfile::logDebug(QString msg) {
     QFile logFile("logFile.txt");
     if(logFile.open(QIODevice::Append | QIODevice::Text)) {
@@ -31,6 +42,10 @@ void logfile::logDebug(QString msg) {
     }
 }
 
+/**
+ * @brief Метод создания лога типа Warning
+ * @param Сообщение лога
+ */
 void logfile::logWarning(QString msg) {
     QFile logFile("logFile.txt");
     if(logFile.open(QIODevice::Append | QIODevice::Text)) {
@@ -44,6 +59,10 @@ void logfile::logWarning(QString msg) {
     }
 }
 
+/**
+ * @brief Метод создания лога типа Critical
+ * @param Сообщение лога
+ */
 void logfile::logCritical(QString msg) {
     QFile logFile("logFile.txt");
     if(logFile.open(QIODevice::Append | QIODevice::Text)) {
@@ -57,6 +76,10 @@ void logfile::logCritical(QString msg) {
     }
 }
 
+/**
+ * @brief Метод создания лога типа Fatal
+ * @param Сообщение лога
+ */
 void logfile::logFatal(QString msg) {
     QFile logFile("logFile.txt");
     if(logFile.open(QIODevice::Append | QIODevice::Text)) {
