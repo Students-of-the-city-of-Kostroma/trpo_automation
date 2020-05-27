@@ -15,9 +15,11 @@ class StrategyLab: public QObject
     Q_OBJECT
 
 private:
+    QList<QString> className;
     QDomElement rootAnswerStructure;
     QMap<QString, QString> classes;
     QList<QString> children;
+    QString nameClassContext;
     QString abstractClassName;
     QString abstractMethodName;
     int heirsAmount;
