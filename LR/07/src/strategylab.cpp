@@ -64,6 +64,7 @@ void StrategyLab::divideIntoClasses(QList<QString> code)
  */
 void StrategyLab::checkByConfig(int variant, QList<QString> code)
 {
+    //Делим присланный код на классы для удобства работы с ними
     divideIntoClasses(code);
 
     /* Извлекаем часть конфига answerStructure.xml, подходящую для варианта лабораторной */
@@ -72,6 +73,10 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
     for (QDomNode node = labsConfig.at(0); !node.isNull(); node = node.nextSibling()) {
         elem = node.toElement();
         if (elem.attribute("number").toInt() == variant) break;
+    }
+
+    for (int i = 0; i < elem.elementsByTagName("class").size(); i++) {
+    className.append(elem.elementsByTagName("class").at(i).toElement().attribute("name"));
     }
 
     QDomElement abstract = elem.elementsByTagName("abstract").at(0).toElement();
@@ -248,7 +253,7 @@ void StrategyLab::checkContext()
        }
 
        /* Получаем имя класса */
-       QString nameClassContext = "";
+       nameClassContext = "";
        QString nameClassField = "";
        for (int i = 0; context[i] != "{"; i++) {
            nameClassContext.append(context[i]);
@@ -305,7 +310,32 @@ void StrategyLab::checkContext()
  */
 void StrategyLab::checkMainFunction()
 {
-    return;
+    QString mainFunction = classes.value("main"), methodName;
+    //Проверка на создание объекта класса context
+    if (!mainFunction.contains("new " + nameClassContext)) {
+       throw UnexpectedResultException("Object of class context is not created");
+    }
+    if (mainFunction.lastIndexOf(nameClassContext + "->") != -1) {
+        QString arrow = "->";
+        int index = mainFunction.lastIndexOf(nameClassContext + "->") + nameClassContext.size() + arrow.size(), i = 0;
+        while (mainFunction[index] != '(') {
+            methodName[i] = mainFunction[index];
+            i++;
+            index++;
+        }
+        if (mainFunction.indexOf(methodName) != mainFunction.lastIndexOf(methodName)) {
+            throw UnexpectedResultException("The execute function is called more than once");
+        }
+    }
+    else {
+        throw UnexpectedResultException("There is no function call on the context class object");
+    }
+
+    for (int i = 0; i < className.size(); i++) {
+        if (!mainFunction.contains("new " + className[i])) {
+            throw UnexpectedResultException("In the main function, the descendants of the abstract class are not created");
+        }
+    }
 }
 
 /**
