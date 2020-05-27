@@ -1,109 +1,99 @@
 # coding=utf-8
-import inspect
-from Loger import Logs 
-logs = Logs()
-name = None
-
-from email import *
+from work_Sheet import Sheet
 from global_Letter import Letter
 from global_User import User
-# from main_2_base_WorkWithLetters import WorkWithLetters
-from google_ValidateRules import ValidationMail as Val
-import config_Project as cfg
+from work_ValidateRules import ValidationMail as Val
+from work_Loger import Logs
+
+import inspect
 import re
-from email.message import EmailMessage
 import config_Mail
 import imaplib
 import email
 import base64
-from google_Sheet import Sheet
 
 
 def CheckEmail():
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name)
-    
     """
     Точка входа в работу модуля.
+    Первая функция-контроллер
     Чтение писем, их парсинг и валидация.
     """
 
     # Получение писем с почты
-    imap_obj = imap_login() # Создание IMAP объекта
-    raw_letters = GetLetters(imap_obj) # Получение списка сырых писем
+    # Создание IMAP объекта
+    imap_obj = imap_login()
+
+    # Получение списка сырых писем
+    raw_letters = GetLetters(imap_obj)
     letters = []
+
     if len(raw_letters) > 0:
         for item in raw_letters:
-            letters.append(FormListWithLetters(item)) # Создание списка с информацией из писем
-    quit_email_imap(imap_obj) # Закрытие IMAP объекта
+            # Создание списка с информацией из писем
+            # Глобальная функция 1
+            letters.append(FormListWithLetters(item))
 
-    print()
+    # Закрытие IMAP объекта
+    quit_email_imap(imap_obj)
 
-    # Получение резервных данных (функция пока не реализована)
-    cfg.reserve_dates.GetReserveDate()
-
-    # Проверка пользователей на существование в системе (функция пока не реализована)
-
+    # Проверка пользователей на существование в системе
+    # Глобальная функция 2
     CheckUsers(letters)
 
-    print()
-
     # Валидация писем
+    # Глобальная функция 3
     ValidateLetters(letters)
 
-    print()
-
-    # Вызов следующей функции
-    # WorkWithLetters(letters)
     return letters
 
 
 def GetLetters(mail):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,mail)
     """
-   Функционал:
-   - Прочитать письма на почте
-   - Пометить прочитанные письма метками
-   На входе:
-   - None
-   На выходе:
-   - letters - объект, содержащий письма
-   Что предусмотреть:
-   - None
-   Участвующие внешние типы переменных
-   - None
-   """
-    with open(cfg.filename, "a") as file:
-        file.write("\nПолучение писем... ")
+    Функционал:
+    - Прочитать письма на почте
+    - Пометить прочитанные письма метками
+    На входе:
+    - None
+    На выходе:
+    - letters - объект, содержащий письма
+    Что предусмотреть:
+    - None
+    Участвующие внешние типы переменных
+    - None
+    """
+    # logs = Logs()
+    # name = inspect.currentframe().f_code.co_name
+    # logs.Infor(name, mail)
 
-    count = count_unseen_mess(mail) # Количество непрочитанных писем
+    # Количество непрочитанных писем
+    count = count_unseen_mess(mail)
     letters = []
 
     if count > 0:
-        result, data = mail.uid('search', None, "unseen")  # Выполняет поиск и возвращает UID писем.
+        # Выполняет поиск и возвращает UID писем.
+        result, data = mail.uid('search', None, "unseen")
         print(count)
+
         for i in range(count):
             latest_email_uid = data[0].split()[i]
-            result, date = mail.uid('fetch', latest_email_uid, '(RFC822)') # Извлечение информации по заданному UID
-            raw_email = date[0][1] # Получение сырого письма
-            letters.append(raw_email) # Добавление сырого письма в список
 
+            # Извлечение информации по заданному UID
+            result, date = mail.uid('fetch', latest_email_uid, '(RFC822)')
 
-        with open(cfg.filename, "a") as file:
-            file.write("Письма получены!")
+            # Получение сырого письма
+            raw_email = date[0][1]
+
+            # Добавление сырого письма в список
+            letters.append(raw_email)
 
     else:
-        with open(cfg.filename, "a") as file:
-            file.write("Новых сообщений нет!")
-        # raise Exception("Letters is empty")
+        pass
 
     return letters
 
 
 def FormListWithLetters(mails):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,mails)
     """
     Функционал:
     - Сформировать список экземпляров класса Letter на основе сырых данных по письмам
@@ -122,21 +112,37 @@ def FormListWithLetters(mails):
     - User (from import)
     - Letter (from import)
     """
-    with open(cfg.filename, "a") as file:
-        file.write("\nФормировка списка писем... ")
+    # logs = Logs()
+    # name = inspect.currentframe().f_code.co_name
+    # logs.Infor(name, mails)
 
     try:
         try:
-            email_message = email.message_from_string(mails) # Преобразуем сырое письмо в экземпляр класса Email
+            # Преобразуем сырое письмо в экземпляр класса Email
+            email_message = email.message_from_string(mails)
+
         except TypeError:
             email_message = email.message_from_bytes(mails)
+
         error_code = ""
-        from_mes = get_from(email_message) # Извлечение информации об отправителе
-        subject_mes = get_subject(email_message) # Извлечение информации о теме письма
-        user_email = from_parse(from_mes) # Извлечение электронного адреса отправителя
-        user_name = name_parse(from_mes) # Извлечение ФИ отправителя
-        body_str = get_body(email_message) # Извлечение закодированного тела письма
-        body = body_parse(body_str) # Декодировка тела письма
+
+        # Извлечение информации об отправителе
+        from_mes = get_from(email_message)
+
+        # Извлечение информации о теме письма
+        subject_mes = get_subject(email_message)
+
+        # Извлечение электронного адреса отправителя
+        user_email = from_parse(from_mes)
+
+        # Извлечение ФИ отправителя
+        user_name = name_parse(from_mes)
+
+        # Извлечение закодированного тела письма
+        body_str = get_body(email_message)
+
+        # Декодировка тела письма
+        body = body_parse(body_str)
         if body == "UNKNOWN":
             error_code = "05"
 
@@ -144,10 +150,8 @@ def FormListWithLetters(mails):
         letter_item = Letter(user, subject_mes, body, None, None)
         letter_item.CodeStatus = error_code
 
-        with open(cfg.filename, "a") as file:
-            file.write("Письма сформированы!")
-
         return letter_item
+
     except:
         user = User("UNKNOWN", None, "UNKNOWN", None)
         letter = Letter(user, "UNKNOWN", "UNKNOWN", None, None)
@@ -156,8 +160,6 @@ def FormListWithLetters(mails):
 
 
 def CheckUsers(letters):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,letters)
     """
     Функционал:
     - Проверить зарегистрированность каждого пользователя в системе по email
@@ -170,8 +172,9 @@ def CheckUsers(letters):
     Участвующие внешние типы переменных
     - None
     """
-    with open(cfg.filename, "a") as file:
-        file.write("\nПроверка пользователей... ")
+    # logs = Logs()
+    # name = inspect.currentframe().f_code.co_name
+    # logs.Infor(name, letters)
 
     for i in letters:
         if i.CodeStatus == "":
@@ -186,13 +189,7 @@ def CheckUsers(letters):
                 i.Student.GroupOfStudent = '{}'.format(result[0][3])
 
 
-    with open(cfg.filename, "a") as file:
-        file.write("Пользователи проверены!")
-
-
 def ValidateLetters(letters):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,letters)
     """
     Функционал:
     - Провалидировать каждое письмо по правилам валидации
@@ -207,49 +204,54 @@ def ValidateLetters(letters):
     Участвующие внешние типы переменных
     - None
     """
-    with open(cfg.filename, "a") as file:
-        file.write("\nВалидация писем... ")
+    # logs = Logs()
+    # name = inspect.currentframe().f_code.co_name
+    # logs.Infor(name, letters)
 
     for let in letters:
-        if let.CodeStatus == None or let.CodeStatus == "":
+        if let.CodeStatus is None or let.CodeStatus == "":
             val = Val(let.ThemeOfLetter, let.Body)
             let.CodeStatus = val.validation(val.subject, val.body)
+
             if let.CodeStatus == '20':
                 if val.verify_name_and_group(let.Student.NameOfStudent, let.Student.GroupOfStudent) is not True:
                     let.CodeStatus = '02'
                     let.CodeStatusComment = 'Подпись не соответствует заявленной при регистрации'
+
             if let.CodeStatus == '01':
                 let.CodeStatusComment = 'Тема письма не соответствует требованиям к теме'
+
             elif let.CodeStatus == '02':
                 if let.CodeStatusComment is None:
                     let.CodeStatusComment = 'Структура письма не соответствует требованиям к оформлению'
+
             elif let.CodeStatus == '03':
                 let.CodeStatusComment = 'Неверно указан номер работы или варианта'
+
             elif let.CodeStatus == '04':
                 let.CodeStatusComment = 'Письмо не содержит необходимых ссылок на ресурсы.'
+
             else:
                 num, var = val.get_num_and_var(val.subject)
                 if num is None or (int(var) > 15 or int(num) > 12 or int(var) == 0):
                     let.CodeStatus = '03'
                     let.CodeStatusComment = 'Номер лабораторной не существует'
+
                 else:
                     let.NumberOfLab = int(num)
                     let.VariantOfLab = int(var)
+
             if let.CodeStatus == '20':
                 let.Body = re.findall(r'http[^ \n]*', let.Body)[0]
                 body = let.Body[-1:]
+
                 if body == "\r":
                     let.Body = let.Body[:-1]
 
                 let.CodeStatusComment = 'Работа отправлена на проверку'
 
-    with open(cfg.filename, "a") as file:
-        file.write("Письма провалидированы!")
-
 
 def imap_login():
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name)
     """
     Авторизация в Gmail аккаунте.
     Функция возвращает SMTP объект.
@@ -260,9 +262,8 @@ def imap_login():
     imap.select('inbox')
     return imap
 
+
 def quit_email_imap(imapObj):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name)
     """
     Закрытие SMTP объекта.
     Функция должна быть вызвана после завершения рыботы с SMTP объектом.
@@ -271,9 +272,8 @@ def quit_email_imap(imapObj):
     """
     imapObj.close()
 
+
 def count_unseen_mess(mail):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,mail)
     """
     Возвращает кол-во непрочитанных сообщений
     :param mail:
@@ -284,8 +284,6 @@ def count_unseen_mess(mail):
 
 
 def get_from(email_message):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,email_message)
     try:
         from_mes = str(email.header.make_header(email.header.decode_header(email_message['From'])))
         return from_mes
@@ -294,8 +292,6 @@ def get_from(email_message):
 
 
 def get_subject(email_message):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,email_message)
     try:
         subject_mes = str(email.header.make_header(email.header.decode_header(email_message['Subject'])))
         return subject_mes
@@ -304,34 +300,12 @@ def get_subject(email_message):
 
 
 def from_parse(from_mes):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,from_mes)
     try:
         user_email = from_mes[from_mes.find("<", 0, len(from_mes))+1:from_mes.find(">", 0, len(from_mes))]
         return user_email
     except:
         return "UNKNOWN"
 
-def name_parse(from_mes):
-    try:
-        name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
-        return name
-    except:
-        return "UNKNOWN"
-
-def name_parse(from_mes):
-    try:
-        name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
-        return name
-    except:
-        return "UNKNOWN"
-
-def name_parse(from_mes):
-    try:
-        name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
-        return name
-    except:
-        return "UNKNOWN"
 
 def name_parse(from_mes):
     try:
@@ -342,8 +316,6 @@ def name_parse(from_mes):
 
 
 def get_body(email_message):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name, email_message)
     try:
         str_body = ""
         if email_message.is_multipart():
@@ -372,8 +344,6 @@ def extra_body_parse(raw_body):
 
 
 def body_parse(body_str):
-    name = inspect.currentframe().f_code.co_name
-    logs.Infor(name,body_str)
     if body_str.find("<div"):
         body_str = body_str.split("<div")[0]
         return body_str

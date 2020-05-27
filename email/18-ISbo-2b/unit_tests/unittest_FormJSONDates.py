@@ -1,7 +1,7 @@
 import unittest
 import global_User
 import global_Letter
-import main_2_base_WorkWithLetters
+import main_2_WorkWithLetters
 import json
 
 class MyTestCase(unittest.TestCase):
@@ -22,7 +22,7 @@ class MyTestCase(unittest.TestCase):
         letters.append(letter)
 
         # Формирование JSON
-        jsonDates_received = main_2_base_WorkWithLetters.FormJSONDates(letters)
+        jsonDates_received = main_2_WorkWithLetters.FormJSONDates(letters)
 
         # Формирование ожидаемого JSON
         json3_expected = {
@@ -53,7 +53,7 @@ class MyTestCase(unittest.TestCase):
         letters.append(letter)
 
         # Формирование JSON
-        jsonDates_received = main_2_base_WorkWithLetters.FormJSONDates(letters)
+        jsonDates_received = main_2_WorkWithLetters.FormJSONDates(letters)
 
         # Формирование ожидаемого JSON
         json3_expected = {
@@ -84,7 +84,7 @@ class MyTestCase(unittest.TestCase):
 
         letters.append(letter)
 
-        jsonDates_received = main_2_base_WorkWithLetters.FormJSONDates(letters)
+        jsonDates_received = main_2_WorkWithLetters.FormJSONDates(letters)
 
         self.assertEqual(jsonDates_received, [])
 

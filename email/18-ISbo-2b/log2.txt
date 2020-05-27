@@ -1,8 +1,0 @@
-INFO:root:Program started
-INFO:root:Вызвана функция LettersConvertToString 
-DEBUG:root:Параметр [<global_Letter.Letter object at 0x0000024A08BB1D88>]
-INFO:root:Program end
-INFO:root:Program started
-INFO:root:Вызвана функция LettersConvertToString 
-DEBUG:root:Параметр [<global_Letter.Letter object at 0x00000148E7FFDE08>]
-INFO:root:Program end

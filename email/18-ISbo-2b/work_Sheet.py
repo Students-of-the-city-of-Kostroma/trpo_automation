@@ -40,7 +40,7 @@ result = Sheet.journal(group, first_name, surname, patronymic, lab_id, value)
 """
 
 
-from google_Auth import Auth
+from work_Auth import Auth
 import datetime
 import re
 
