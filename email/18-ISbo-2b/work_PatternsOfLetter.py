@@ -91,7 +91,7 @@ class ForTeacher(BasePattern):
     MainPart = ""
 
     def add(self, parameter):
-        self.MainPart += parameter[0] + " сдал Работу номер " + parameter[1] + ' ' + parameter[2] + '.\n'
+        self.MainPart += parameter[0] + " сдал Работу номер " + str(parameter[1]) + ' ' + str(parameter[2]) + '.\n'
 
 
 class UncorrectedLink(BasePattern):
