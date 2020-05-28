@@ -370,10 +370,10 @@ def search_tablic(group, laba, surname):
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
     spreadsheetId = SPREAD_SHEET_ID
-    range_name = f'{group}!D2:D1000'
+    range_name = f'{group}!A1:A100'
     table = service.spreadsheets().values().get(
             spreadsheetId=spreadsheetId, range=range_name).execute()
-    count = ord('J') + int(laba)-1
+    count = ord('D') + int(laba)-1
     nomer_stolbca = chr(count)
     try:
         for name in table.get('values'):
