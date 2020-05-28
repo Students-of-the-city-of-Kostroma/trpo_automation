@@ -3,7 +3,8 @@
 """
 
 
-def funcSt(str_of_val_er, str_of_er):  
+
+def funcSt(str_of_val_er, str_of_er, validation_dictionary):   
     """
     Паттерн сообщений для рассылки писем студентам
     :param str_of_val_er: ошибки в валидации письма, где накосячил студент
@@ -12,19 +13,17 @@ def funcSt(str_of_val_er, str_of_er):
     """
     pattern = [
         {
-             'title': 'ТРПО. Работа успешно принята',
+             'title': f'ТРПО. Работа ЛР№{validation_dictionary[Numder]} успешно принята',
              'our_msg': 'Поздравляю!\nРабота успешно принята!' +
-                        '\nОценку можно проверить в журнале:' +
-                        '\nhttps://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1khhC16U1qDwaI-K6ndkp9LFWAHncuWA' +
-                        '/edit?usp=sharing'
+                        '\nОценку можно проверить в журнале!'
         },
         {
-            'title': 'ТРПО. Обнаружены ошибки в работе',
+            'title': f'ТРПО. Обнаружены ошибки в работе ЛР№{validation_dictionary[Numder]}',
             'our_msg': 'В Вашей работе обнаружены ошибки:\n\n' + str_of_val_er +
                        '\nПросьба исправить их и отправить письмо повторно.'
         },
         {
-            'title': 'ТРПО. Обнаружены ошибки в заполнении письма',
+            'title': f'ТРПО. ЛР№{validation_dictionary[Numder]} Обнаружены ошибки в заполнении письма',
             'our_msg': 'В структуре письма обнаружены следующие ошибки:\n\n' +
                        str_of_er + '\nПросьба исправить их в соответствии с ' +
                        'документом\n' + 'https://docs.google.com/document/d/' +
@@ -32,13 +31,13 @@ def funcSt(str_of_val_er, str_of_er):
                        'usp=sharing'
         },
         {
-            'title': 'ТРПО. Авторизация пользователя',
+            'title': f'ТРПО. ЛР№{validation_dictionary[Numder]} Авторизация пользователя',
             'our_msg': 'Вы не найдены в системе. Пожалуйста, перейдите по' +
                        ' ссылке и зарегистрируйтесь.\n'
                        'https://forms.gle/pNzAtYKWAiDom6MEA'
         },
         {
-            'title': 'Ошибка модуля',
+            'title': 'Ошибка модуля ...',
             'our_msg': 'В модуле ... обнаружена ошибка. В ближайшее время ' +
                        'проблема будет исправлена. Просим прощения за неудобства.'
         }
@@ -75,7 +74,10 @@ def funcTs(name_of_student, validation_dictionary, str_of_er):
     return pattern
 
 
-SIGNATURE = "\n\nС уважением,\nБот"
+SIGNATURE = "\n\nСсылка на журнал: "\
+            "https://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1khhC"\
+            "16U1qDwaI-K6ndkp9LFWAHncuWA/edit?usp=sharing"\
+            "\nС уважением,\nБот"
 
 def funcReturnMsg(hello_student, our_msg, SIGNATURE, 
                    date_of_msg, return_body, return_head):
@@ -95,7 +97,7 @@ def funcReturnMsg(hello_student, our_msg, SIGNATURE,
     return text_of_msg
 
 def funcHello(name_of_student):
-    return 'Здравствуйте, '+ f'{name_of_student}' + '!\n\n'
+    return 'Здравствуйте, '+ name_of_student + '!\n\n'
 
 
 GMAIL_OF_TRPO = "trpo.automation@gmail.com"

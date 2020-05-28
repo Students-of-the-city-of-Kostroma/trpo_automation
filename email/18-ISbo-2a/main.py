@@ -3,6 +3,7 @@ from log_method import *
 from client import check_lab
 import Validation
 import time
+import random
 
 # Id почты
 USER_ID = 'me'
@@ -45,7 +46,7 @@ try:
                         print(f"main: Message failed validation. Email_id :{email_id}")
                     else:
                         # Получение результата из модуля проверки
-                        answer = check_lab(valid_dict['URL'], valid_dict['Number'])['grade']
+                        answer = random.randint(0,1)#check_lab(valid_dict['URL'], valid_dict['Number'])['grade']
                         logger.info(r"main: Receiving a response from the verification module. Mark in table :%s" % answer)
                         print(f"main: Receiving a response from the verification module. Mark in table :{answer}")
 
