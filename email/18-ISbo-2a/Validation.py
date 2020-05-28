@@ -4,6 +4,12 @@ from pattern import *
 
 @log_method.log_method_info
 def validation(head_of_msg,body_of_msg):
+    """
+    Проверка полученного письма на все возможные ошибки
+    :param head_of_msg: тема письма (заголовок)
+    :param body_of_msg: тело письма, основной текст
+    :return: { 'Number', 'URL', "errorDescription" }
+    """
     Errors_list = [] # Список ошибок
     for x in SUBJECT_LIST: # Проверка на название предмета
         a = head_of_msg.lower().find(x)
@@ -45,6 +51,12 @@ def validation(head_of_msg,body_of_msg):
     
 @log_method.log_method_info
 def url_cheack(Number,body_of_msg): # Проверка на наличие URL. Возврат ссылки.
+    """
+    Проверка на наличие URL
+    :param Number: номер проверяемой лабораторной работы
+    :param body_of_msg: тело письма, основной текст
+    :return: { 'URL' }
+    """
     for x in SUBJECTNUMBERURL_LIST:  # Проверка на содержание URL
         if Number == x:
             a = body_of_msg.find('http')
