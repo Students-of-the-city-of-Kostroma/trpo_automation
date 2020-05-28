@@ -84,7 +84,7 @@ class MyTestCase(unittest.TestCase):
         letters.append(letter)
         letters = LettersConvertToString(letters)
 
-        "Правильные данные"
+        # Правильные данные
         student_true = User.User("Валерий Бублин", "18-ИСбо-2", None, None)
         letter_true = Letter.Letter(student_true, "ЛР01",
                                     "https://github.com/Students-of-the-city-of-Kostroma/TasksOfStudents/tree/master"
@@ -106,7 +106,7 @@ class MyTestCase(unittest.TestCase):
         letters.append(letter)
         letters = LettersConvertToString(letters)
 
-        "Правильные данные"
+        # Правильные данные
         student_true = User.User("Валерий Бублин", "18-ИСбо-2", None, None)
         letter_true = Letter.Letter(student_true, "ЛР01", "https://www.youtube.com/watch?v=b5hM5nydmXU&t=2566s", None,
                                     4)
