@@ -3,8 +3,7 @@
 """
 
 
-
-def funcSt(str_of_val_er, str_of_er, validation_dictionary):   
+def funcSt(str_of_val_er, str_of_er, validation_dictionary):
     """
     Паттерн сообщений для рассылки писем студентам
     :param str_of_val_er: ошибки в валидации письма, где накосячил студент
@@ -13,9 +12,9 @@ def funcSt(str_of_val_er, str_of_er, validation_dictionary):
     """
     pattern = [
         {
-             'title': f'ТРПО. Работа ЛР№{validation_dictionary[Numder]} успешно принята',
-             'our_msg': 'Поздравляю!\nРабота успешно принята!' +
-                        '\nОценку можно проверить в журнале!'
+            'title': f'ТРПО. Работа ЛР№{validation_dictionary[Numder]} успешно принята',
+            'our_msg': 'Поздравляю!\nРабота успешно принята!' +
+                       '\nОценку можно проверить в журнале!'
         },
         {
             'title': f'ТРПО. Обнаружены ошибки в работе ЛР№{validation_dictionary[Numder]}',
@@ -74,13 +73,14 @@ def funcTs(name_of_student, validation_dictionary, str_of_er):
     return pattern
 
 
-SIGNATURE = "\n\nСсылка на журнал: "\
-            "https://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1khhC"\
-            "16U1qDwaI-K6ndkp9LFWAHncuWA/edit?usp=sharing"\
+SIGNATURE = "\n\nСсылка на журнал: " \
+            "https://docs.google.com/spreadsheets/d/1gOX8T8ihy3J1khhC" \
+            "16U1qDwaI-K6ndkp9LFWAHncuWA/edit?usp=sharing" \
             "\nС уважением,\nБот"
 
-def funcReturnMsg(hello_student, our_msg, SIGNATURE, 
-                   date_of_msg, return_body, return_head):
+
+def funcReturnMsg(hello_student, our_msg, SIGNATURE,
+                  date_of_msg, return_body, return_head):
     """
     Паттерн сообщений для рассылки писем преподавателю или команде
     :param hello_student: приветсвие студента, полученное из метода funcHello.
@@ -96,30 +96,27 @@ def funcReturnMsg(hello_student, our_msg, SIGNATURE,
     text_of_msg = hello_student + our_msg + return_part + SIGNATURE
     return text_of_msg
 
+
 def funcHello(name_of_student):
-    return 'Здравствуйте, '+ name_of_student + '!\n\n'
+    return 'Здравствуйте, ' + name_of_student + '!\n\n'
 
 
 GMAIL_OF_TRPO = "trpo.automation@gmail.com"
 
-
 EMAIL_OF_TEACHER = 'yuri.silenok@gmail.com'
-
 
 MAS_OF_TO = ['yuri.silenok@gmail.com', '0sashasmirnov0@gmail.com',
              'k.svyat395@gmail.com', 'MaXLyuT2000@gmail.com',
              'majishpro@gmail.com', 'Sirokko77@gmail.com',
-             'nikita.lukyanow@gmail.com', 'generalgrigorevous@gmail.com', 
+             'nikita.lukyanow@gmail.com', 'generalgrigorevous@gmail.com',
              'molchok.yurij@gmail.com', 'amr15319@gmail.com']
-
 
 """
 Валидация
 """
 
-
-SUBJECT_LIST = ['трпо'] # Список предметов
-SUBJECTNUMBER_LIST = ['лр№1', 'лабораторная работа №1', 
+SUBJECT_LIST = ['трпо']  # Список предметов
+SUBJECTNUMBER_LIST = ['лр№1', 'лабораторная работа №1',
                       'лр№2', 'лабораторная работа №2',
                       'лр№3', 'лабораторная работа №3',
                       'лр№4', 'лабораторная работа №4',
@@ -128,17 +125,16 @@ SUBJECTNUMBER_LIST = ['лр№1', 'лабораторная работа №1',
                       'лр№7', 'лабораторная работа №7',
                       'лр№8', 'лабораторная работа №8',
                       'лр№9', 'лабораторная работа №9',
-                      'лаба №1','лабораторная №1',
-                      'лаба №2','лабораторная №2',
-                      'лаба №3','лабораторная №3',
-                      'лаба №4','лабораторная №4',
-                      'лаба №5','лабораторная №5',
-                      'лаба №6','лабораторная №6',
-                      'лаба №7','лабораторная №7',
-                      'лаба №8','лабораторная №8',
-                      'лаба №9','лабораторная №9',]
-GREATING_LIST =  ['добрый день','добрый вечер',# Список приветствий
-                  'добрейший вечерочек','доброй ночи','здравствуйте','привет',
-                  'здравия желаю','хаю хай','доброго времени суток'] 
-SUBJECTNUMBERURL_LIST = ['7', '8', '9'] # Список ЛР c URL
-
+                      'лаба №1', 'лабораторная №1',
+                      'лаба №2', 'лабораторная №2',
+                      'лаба №3', 'лабораторная №3',
+                      'лаба №4', 'лабораторная №4',
+                      'лаба №5', 'лабораторная №5',
+                      'лаба №6', 'лабораторная №6',
+                      'лаба №7', 'лабораторная №7',
+                      'лаба №8', 'лабораторная №8',
+                      'лаба №9', 'лабораторная №9', ]
+GREATING_LIST = ['добрый день', 'добрый вечер',  # Список приветствий
+                 'добрейший вечерочек', 'доброй ночи', 'здравствуйте', 'привет',
+                 'здравия желаю', 'хаю хай', 'доброго времени суток']
+SUBJECTNUMBERURL_LIST = ['7', '8', '9']  # Список ЛР c URL

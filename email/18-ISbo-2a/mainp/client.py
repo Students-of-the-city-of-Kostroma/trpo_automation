@@ -1,5 +1,5 @@
-import socket
 import json
+import socket
 import traceback
 import xml.etree.ElementTree as etree
 from enum import Enum
