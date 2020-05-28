@@ -18,22 +18,38 @@ logging.basicConfig(
 logger = logging.getLogger(__name__) 
 
 def log_method_info(method):
+    """
+    Декоратор, который выполняет логирование методов
+
+    method - метод, который нужно залогировать
+    """
     def write_logs(*args, **kwargs):
+        """
+        Выполняет логирование
+
+        args, kwargs - параметры, которые нужно передать в метод
+        """
         try:
-            logger.info(f'Got into "{method.__name__}" with data {args} and {kwargs}')
+            #Записываем вход в метод
+            logger.info(f'Got into - {method.__name__}')
+            #Выполняем метод, помещаем результат работы метода в result
             result = method(*args, **kwargs)
-            logger.debug(f'Method "{method.__name__}" has returned - {result}')
-            logger.info(f'Method "{method.__name__}" has completed')
+            #Записываем результат выполнения метода
+            logger.debug(f'Method {method.__name__} has returned - {result}')
+            logger.info(f'Method has completed - {method.__name__}')
+            #Возвращаем значение, которое было получено из метода
             return result
         except Exception as ex:
+            #Записываем в логи ошибку, если такая была
             logger.exception(ex)
-            logger.error(f'Method "{method.__name__}" has crashed')
+            logger.error(f'Method has crashed - {method.__name__}')
     return write_logs
 
+#Пример использования декоратора. Если он не нужен, то все, что ниже, можно просто удалить. Не будет выполняться при имортировании модуля
 if __name__ == '__main__':
     @log_method_info
-    def ananas(x):
+    def ananas():
         print ('ananas')
         print(1/0)
 
-    ananas(65)
+    ananas()
