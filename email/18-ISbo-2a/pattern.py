@@ -3,7 +3,14 @@
 """
 
 
+
 def funcSt(str_of_val_er, str_of_er, validation_dictionary):   
+    """
+    Паттерн сообщений для рассылки писем студентам
+    :param str_of_val_er: ошибки в валидации письма, где накосячил студент
+    :param str_of_er: ошибки в коде студента
+    :return: pattern: шаблоны писем, которые мы отправляем студенту после проверок
+    """
     pattern = [
         {
              'title': f'ТРПО. Работа ЛР№{validation_dictionary[Numder]} успешно принята',
@@ -39,6 +46,14 @@ def funcSt(str_of_val_er, str_of_er, validation_dictionary):
 
 
 def funcTs(name_of_student, validation_dictionary, str_of_er):
+    """
+    Паттерн сообщений для рассылки писем преподавателю или команде
+    :param name_of_student: имя и фамилия студента.
+    :param validation_dictionary: словарь с валидации письма,
+    в котором есть ('Numder')номер работы и ('URL')ссылка на работу.
+    :param str_of_er: ошибки в коде студента
+    :return: pattern: шаблоны писем, которые мы отправляем студенту после проверок
+    """
     pattern = [
         {
             'hello': 'Здравствуйте, Юрий Викторович!\n\n',
@@ -66,6 +81,16 @@ SIGNATURE = "\n\nСсылка на журнал: "\
 
 def funcReturnMsg(hello_student, our_msg, SIGNATURE, 
                    date_of_msg, return_body, return_head):
+    """
+    Паттерн сообщений для рассылки писем преподавателю или команде
+    :param hello_student: приветсвие студента, полученное из метода funcHello.
+    :param our_msg: тело нашего ответного письма, полученного из паттерна писем из функции funcSt
+    :param SIGNATURE: подпись в нашем ответном письме(С уважением,Бот)
+    :param date_of_msg: время письма
+    :param return_body: тело письма
+    :param return_head: заголовок письма
+    :return: pattern: шаблоны писем, которые мы отправляем студенту после проверок
+    """
     date_part = f'\n\n-----\nRe: <{date_of_msg}>\n'
     return_part = date_part + f'Тема: {return_head}\n{return_body}\n-----'
     text_of_msg = hello_student + our_msg + return_part + SIGNATURE
