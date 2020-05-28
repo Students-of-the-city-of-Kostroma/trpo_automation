@@ -236,7 +236,7 @@ def send_message(service, user_id, email_of_student, name_of_student,
     elif number_of_templates == 2:
         str_of_er = error_in_work(error_dictionary)
 
-    message_templates = funcSt(str_of_val_er, str_of_er)
+    message_templates = funcSt(str_of_val_er, str_of_er, validation_dictionary)
 
     sending_msg = {}
     hello_student = funcHello(name_of_student)
