@@ -406,7 +406,7 @@ def search_dolgi(group, position):
     dolg=[]
     number_laboratorn=-1
     range_name = f'{group}!D{position[1]}:P{position[1]}'
-    table = service.spreadsheets().values().get(spreadsheetId=spreadsheetId, range=range_name).execute()
+    table = service.spreadsheets().values().get(spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
     for p in table.get('values')[0]:
         number_laboratorn=number_laboratorn+1 
         try:
@@ -437,7 +437,7 @@ def add_table(group, name):
     service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
     range_name=f'{group}!A1:A100'
     table = service.spreadsheets().values().get(
-                spreadsheetId=spreadsheetId,
+                spreadsheetId=SPREAD_SHEET_ID,
                 range=range_name).execute()
     column = 1
     for i in table.get('values'):
