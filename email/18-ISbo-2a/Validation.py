@@ -1,4 +1,5 @@
 import log_method
+import re
 from pattern import *
 
 
@@ -14,28 +15,35 @@ def validation(head_of_msg,body_of_msg):
                                    item is incorrect.')
         Errors_list.append('неверно указано название предмета')
     for x in SUBJECTNUMBER_LIST: # Проверка на номер лабораторной
+       # texttofind=r"\S+ +\d"
+       # result=re.findall(texttofind,head_of_msg)
+       # if result!=[]:
         a = head_of_msg.lower().find(x)
         if a != -1:
             a = head_of_msg.find('№')
             Number=head_of_msg[a+1]
             break
-    if a == -1:
+    if result==[]:
         log_method.logger.warning('validation: The lab number \
                                    is incorrect.')
         Errors_list.append('неверно указан номер ЛР')
         Number = None
-    for x in GREATING_LIST: # Проверка на приветствие 
-        a = body_of_msg.lower().find(x)
+    
+    for x in GREATING_LIST: # Проверка на приветствие
+        texttofind=r"\S+\d+\s"
+        result=re.findall(texttofind,head_of_msg)
+       # if result!=[]: 
+       # a = body_of_msg.lower().find(x)
         if a != -1:
             break
-    if a == -1:
+    if result!=[]:
         log_method.logger.warning('validation: Missing greeting.')
         Errors_list.append('отсутствует приветствие')
     URL=url_cheack(Number,body_of_msg) # Проверка на URL
     a = body_of_msg.find('--') # Проверка на подпись
-    if a == -1:
-        log_method.logger.warning('validation: Missing signature.')
-        Errors_list.append('отсутствует подпись')
+    #if result!=[]:
+    #    log_method.logger.warning('validation: Missing signature.')
+    #    Errors_list.append('отсутствует подпись')
     validation_dictionary={ # Словарь
      'Number':Number,
      'URL': URL,
