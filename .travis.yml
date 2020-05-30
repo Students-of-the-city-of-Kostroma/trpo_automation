@@ -1,6 +1,6 @@
 version: ~> 1.0
 import:
 - source: .travis/18-VTbo-1a.yml
-  if: ((branch = 18-VTbo-1a) || (head_branch=18-VTbo-1a) ||(($TRAVIS_COMMIT_MESSAGE == *"dev-18-VTbo-1a"*)&& (head_branch=dev))
+  if: [branch = 18-VTbo-1a] || [head_branch=18-VTbo-1a] || [$TRAVIS_COMMIT_MESSAGE == *"dev-18-VTbo-1a"* && head_branch=dev]
 - source: .travis/18-VTbo-1b.yml
-  if: ((branch = 18-VTbo-1b) || (head_branch=18-VTbo-1b))||(($TRAVIS_COMMIT_MESSAGE == *"dev-18-VTbo-1b"*)&& (head_branch=dev))
+  if: [branch = 18-VTbo-1b] || [head_branch=18-VTbo-1b] || [$TRAVIS_COMMIT_MESSAGE == *"dev-18-VTbo-1b"* && head_branch=dev]
