@@ -1,5 +1,6 @@
 import config as cfg
 import datetime
+import os
 
 
 class Logger:
@@ -7,18 +8,14 @@ class Logger:
     d_file = None
 
     def __init__(self):
-        self.createlogfile()
+        pass
 
     def createlogfile(self):
         filename = cfg.filename
-        num = filename[-2:]
-        if num[0].isdigit() is not True:
-            num = num[1]
-        num = int(num) + 1
-        filename = 'log' + str(num)
-        cfg.filename = filename
+        self.updatelogfiles()
         filename = filename + '.txt'
-        self.d_file = open(filename, 'a', encoding='utf-8')
+        fullpath = 'logfiles/' + filename
+        self.d_file = open(fullpath, 'a', encoding='utf-8')
 
     def closelogfile(self):
         self.d_file.close()
@@ -26,7 +23,9 @@ class Logger:
     def logdebug(self, func):
         def decorated(*args, **kwargs):
             now = datetime.datetime.now()
-            info = '[' + str(now.hour) + ':' + str(now.minute) + ']' + '[DEBUG]:' + str(func.__name__) + '\n'
+            info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[DEBUG]:' \
+                   + str(func.__name__) + '\n'
+            info += '-----------------------\n'
             self.d_file.write(info)
             result = func(*args, **kwargs)
             return result
@@ -35,15 +34,30 @@ class Logger:
     def loginfo(self, func):
         def decorated(*args, **kwargs):
             now = datetime.datetime.now()
-            info = '[' + str(now.hour) + ':' + str(now.minute) + ']' + '[INFO]:' + str(func.__name__) + '\n'
+            info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[INFO]:' \
+                   + str(func.__name__) + '\n'
             info += '[\nВходные параметры\n'
             for i in args:
                 info += str(i) + '\n'
             for i in kwargs:
                 info += str(i) + '\n'
             info += ']\n'
+            info += '-----------------------\n'
             self.d_file.write(info)
             result = func(*args, **kwargs)
             return result
         return decorated
+
+    def updatelogfiles(self):
+        filename = cfg.filename
+        num = filename[-2:]
+        if num[0].isdigit() is not True:
+            num = num[1]
+        num = int(num) + 1
+        filename = 'log' + str(num)
+        cfg.filename = filename
+        if cfg.filename[-2:] == '20':
+            pass
+        cfg.filename = filename
+
 #Logger()
