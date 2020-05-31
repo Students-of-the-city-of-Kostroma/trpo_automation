@@ -1,0 +1,49 @@
+# пример логирования функциии ValidateLetters с одним письмом
+
+[17:44:37][DEBUG]:ValidateLetters
+-----------------------
+[17:44:37][INFO]:validation
+[
+Входные параметры
+<google_ValidateRules.ValidationMail object at 0x0000017F938303D0>
+ТРПО ЛР10 ВАР21
+
+Здравствуйте
+https://vk.com/im
+
+
+Ельцов Андрей, 18-ИСбо-2б
+]
+-----------------------
+[17:44:37][INFO]:validation_subject
+[
+Входные параметры
+ТРПО ЛР10 ВАР21
+]
+-----------------------
+[17:44:37][INFO]:validation_body
+[
+Входные параметры
+
+Здравствуйте
+https://vk.com/im
+
+
+Ельцов Андрей, 18-ИСбо-2б
+]
+-----------------------
+[17:44:37][INFO]:verify_name_and_group
+[
+Входные параметры
+<google_ValidateRules.ValidationMail object at 0x0000017F938303D0>
+Ельцов Андрей Сергеевич
+18-ИСбо-2б
+]
+-----------------------
+[17:44:37][INFO]:get_num_and_var
+[
+Входные параметры
+<google_ValidateRules.ValidationMail object at 0x0000017F938303D0>
+ТРПО ЛР10 ВАР21
+]
+-----------------------
