@@ -1,4 +1,4 @@
-import config as cfg
+import log_config as cfg
 import datetime
 import os
 
@@ -11,9 +11,8 @@ class Logger:
         pass
 
     def createlogfile(self):
-        filename = cfg.filename
         self.updatelogfiles()
-        filename = filename + '.txt'
+        filename = cfg.filename + '.txt'
         fullpath = 'logfiles/' + filename
         self.d_file = open(fullpath, 'a', encoding='utf-8')
 
@@ -55,9 +54,13 @@ class Logger:
             num = num[1]
         num = int(num) + 1
         filename = 'log' + str(num)
-        cfg.filename = filename
-        if cfg.filename[-2:] == '20':
-            pass
+        if cfg.filename[-1:] == '20':
+            folder = 'logfiles/'
+            files = os.listdir(folder)
+            for i in files:
+                path = os.path.join(folder, i)
+                os.remove(path)
+            filename = 'log' + str(1)
         cfg.filename = filename
 
 #Logger()
