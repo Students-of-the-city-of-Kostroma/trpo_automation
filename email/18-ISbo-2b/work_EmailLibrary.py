@@ -1,6 +1,6 @@
 import config_Mail
 import imaplib
-import email
+from email.message import EmailMessage
 import base64
 import smtplib
 import email

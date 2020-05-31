@@ -1,6 +1,5 @@
 # coding=utf-8
 from work_Loger import Logs
-from email.message import EmailMessage
 import work_EmailLibrary as EmailLibrary
 import config_Project as cfg
 import config_Mail
