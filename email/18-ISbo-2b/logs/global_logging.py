@@ -11,15 +11,18 @@ class Logger:
         pass
 
     def createlogfile(self):
+        """Создает файл для логов в папке logfiles"""
         self.updatelogfiles()
         filename = cfg.filename + '.txt'
         fullpath = 'logfiles/' + filename
         self.d_file = open(fullpath, 'a', encoding='utf-8')
 
     def closelogfile(self):
+        """Закрывает дескриптор файла"""
         self.d_file.close()
 
     def logdebug(self, func):
+        """Логирование уровня DEGUG"""
         def decorated(*args, **kwargs):
             now = datetime.datetime.now()
             info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[DEBUG]:' \
@@ -31,6 +34,7 @@ class Logger:
         return decorated
 
     def loginfo(self, func):
+        """Логирование уровня INFO"""
         def decorated(*args, **kwargs):
             now = datetime.datetime.now()
             info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[INFO]:' \
@@ -48,6 +52,7 @@ class Logger:
         return decorated
 
     def updatelogfiles(self):
+        """Увеличивает номер файла логов. Чистит папку, если их скопилось 20"""
         filename = cfg.filename
         num = filename[-2:]
         if num[0].isdigit() is not True:
@@ -62,5 +67,3 @@ class Logger:
                 os.remove(path)
             filename = 'log' + str(1)
         cfg.filename = filename
-
-#Logger()
