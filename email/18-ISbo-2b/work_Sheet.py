@@ -295,11 +295,11 @@ class Sheet:
     """
     # добавление оценки в журнал
     def journal(group, first_name, surname, patronymic, lab_id, value):
-        #ID документа в гугл-таблицах
+        # ID документа в гугл-таблицах
         Journal_sheetId = '1MPkVTspH5MCtCvUXNTduhgQl90N3LIjzLjqfjYTDPdc'
 
-        sheet_name = Sheet.sheet_name_list(Journal_sheetId, group) #имя листа
-        #print(sheet_name)
+        sheet_name = Sheet.sheet_name_list(Journal_sheetId, group)      # имя листа
+        # print(sheet_name)
         if not sheet_name:
             print(1)
             return bool(0)
@@ -310,16 +310,17 @@ class Sheet:
             return bool(0)
 
         number_str = Sheet.search_for_student(Journal_sheetId, sheet_name, first_name, surname, patronymic)
-        
-        if number_str:        
-            #адрес ячейки для выставления оценки
+        if not number_str:
+            number_str = Sheet.update_journal(Journal_sheetId, sheet_name, first_name, surname, patronymic)
+        if number_str:
+            # адрес ячейки для выставления оценки
             value_table = alfa + '{}'.format(number_str)
-            #print(value_table)
+            # print(value_table)
 
             ranges = sheet_name + '!' + value_table
 
             value_old = Sheet.read_sheet(Journal_sheetId, sheet_name, value_table)
-            result = ['','','']
+            result = ['', '', '']   # ['предыдущее значение ячейки', 'было ли обновление журнала', 'отработал ли метод']
             if value_old:
                 result[0] = value_old[0][0]
             result[1] = bool(0)
@@ -328,8 +329,51 @@ class Sheet:
             result[2] = bool(1)
             return result
         else:
-            print('нет строки')
+            # print('нет строки')
             return bool(0)
+
+    # добавление в журнал ФИО студента
+    def update_journal(Journal_sheetId, sheet_name, first_name, surname, patronymic):
+        """
+        Добавление студента в журнал
+            принимает
+                Journal_sheetId = "id документа в гугл-таблицах",
+                sheet_name = "название листа",
+                first_name = "фамилия",
+                surname = "имя",
+                patronymic = "отчество"
+            возвращает
+                номер строки или bool
+        """
+        d_start = "D3"  # начало диапазона
+        d_end = "D"  # конец диапазона
+
+        # получаем весь столбец с ФИО студентов из списка, кроме первых двух строк
+        name_full = Sheet.read_sheet(Journal_sheetId, sheet_name, d_start, d_end)
+        if not name_full:
+            return bool(0)
+
+        number_str = Sheet.search_number_string(name_full, '\A\Z') + 2
+        if not number_str:
+            return bool(0)
+
+        # адрес ячейки для добавления студента
+        value_table = 'D{}'.format(number_str)
+        ranges = sheet_name + '!' + value_table
+
+        student = '{} {} {}'.format(first_name, surname, patronymic)
+
+        # Анализ ячеек и обновление
+        value_old = Sheet.read_sheet(Journal_sheetId, sheet_name, value_table)
+        result = ['', '']  # ['предыдущее значение ячейки', 'было ли обновление журнала']
+        if value_old:
+            result[0] = value_old[0][0]
+        result[1] = bool(0)
+        if result[0] == '':
+            result[1] = Sheet.update_sheet(Journal_sheetId, ranges, student)
+        if not result[1]:
+            return bool(0)
+        return number_str
 
     """
     #поиск адреса столбца по id лабы
@@ -340,12 +384,12 @@ class Sheet:
         возвращает
            имя столбца или bool 
     """    
-    #поиск адреса столбца по id лабы
+    # поиск адреса столбца по id лабы
     def search_for_id(Journal_sheetId, sheet_name, lab_id):
         d_start = "A1"  #начало диапазона
         d_end = "1" #конец диапазона
             
-        #получаем всю строку с id из списка
+        # получаем всю строку с id из списка
         id_full = Sheet.read_sheet(Journal_sheetId, sheet_name, d_start, d_end)
 
         result = Sheet.search_alfa(id_full, lab_id)
@@ -359,14 +403,14 @@ class Sheet:
         возвращает
            имя столбца или bool
     """    
-    #поиск адреса столбца в строке по шаблону
+    # поиск адреса столбца в строке по шаблону
     def search_alfa(full_str, pattern):
         alfa = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                   
         """ поиск адреса столбца по шаблону """
         count_pattern = full_str[0].count(pattern) # проверяем наличие ячейки (шаблона) в полученном объекте 
             
-        #если шаблон найден, то получаем его индекс в списке
+        # если шаблон найден, то получаем его индекс в списке
         if count_pattern != 0:
             index_pattern = full_str[0].index(pattern)
 
@@ -393,17 +437,17 @@ class Sheet:
         возвращает
             номер строки или bool 
     """
-    #поиск номера строки в журнале по ФИО студента
+    # поиск номера строки в журнале по ФИО студента
     def search_for_student(Journal_sheetId, sheet_name, first_name, surname, patronymic):
-        d_start = "D1"  #начало диапазона
-        d_end = "D" #конец диапазона
+        d_start = "D1"  # начало диапазона
+        d_end = "D"     # конец диапазона
             
-        #получаем весь столбец с ФИО студентов из списка
+        # получаем весь столбец с ФИО студентов из списка
         name_full = Sheet.read_sheet(Journal_sheetId, sheet_name, d_start, d_end)
         if not name_full:
             return bool(0)
         
-        pattern = first_name + "\W+" + surname + "\W+" + patronymic #"\[\'" + email + "\'\]"        
+        pattern = first_name + "\W+" + surname + "\W+" + patronymic     # "\[\'" + email + "\'\]"
 
         result = Sheet.search_number_string(name_full, pattern)
         return result
@@ -416,15 +460,15 @@ class Sheet:
             номер строки, если шаблон найден
             bool (false), если шаблон не найден 
     """
-    #поиск содержимого ячейки в столбце
+    # поиск содержимого ячейки в столбце
     def search_number_string(full_column, pattern):
         for i in range(len(full_column)):
             value = ' '.join(map(str, full_column[i]))
             match = re.search(pattern, value)
             if match:
-                number_str = i + 1     #номер строки
-                #print(match[0])    #содержимое ячейки
+                number_str = i + 1     # номер строки
+                # print(match[0])    # содержимое ячейки
                 return number_str
-        #print("pattern не найден")
+        # print("pattern не найден")
         return bool(0)
         
