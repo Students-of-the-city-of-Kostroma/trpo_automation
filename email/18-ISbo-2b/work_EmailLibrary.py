@@ -152,3 +152,17 @@ def quit_email_smtp(smtpObj):
     """
 
     smtpObj.close()
+
+def check_attachments(mail):
+    """
+    Проверка на наличие вложений
+    :param mail:
+    :return:
+    """
+    if mail.is_multipart():
+        for part in mail.walk():
+            filename = part.get_filename()
+            if filename:
+                return True
+    else:
+        return False
