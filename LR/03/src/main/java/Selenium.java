@@ -36,7 +36,7 @@ public class Selenium {
         ChromeOptions options = new ChromeOptions();
 
         options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-     //   options.addArguments("--headless");
+        //   options.addArguments("--headless");
         options.addArguments("start-maximized");
         options.addArguments("enable-automation");
         options.addArguments("--no-sandbox");
@@ -472,8 +472,10 @@ public class Selenium {
             Var_Milestone=pull_String("//h2",true);
             Change_Tab(0);
             if (Good_Milestone.equals(Var_Milestone)){
+                driver.get(Var_Repository+"/milestone/1");
                 Good_Milestone=pull_String("//a[@class='btn-link selected']",true)+pull_String("//a[@class='btn-link ']",true);
                 Change_Tab(1);
+                driver.get(Repository+"/milestone/1");
                 Var_Milestone=pull_String("//a[@class='btn-link selected']",true)+pull_String("//a[@class='btn-link ']",true);
                 Change_Tab(0);
                 if(Good_Milestone.equals(Var_Milestone)){
