@@ -69,39 +69,28 @@ def name_parse(from_mes):
         return "UNKNOWN"
 
 
-def get_body(email_message):
+def get_body(email_message_instance):
     try:
-        str_body = ""
-        if email_message.is_multipart():
-            for payload in email_message.get_payload():
-                str_body += payload.get_payload()
-        else:
-            str_body += email_message.get_payload()
-        body_str = base64.b64decode(str_body).decode('utf8')
-        return body_str
-    except:
-        result = extra_body_parse(str_body)
-        return result
-
-
-def extra_body_parse(raw_body):
-    try:
-        encode_body = raw_body.split("<")[0]
-        body = base64.b64decode(encode_body).decode('utf8')
-        result = body
-        if body.find("*") >= 0:
-            result = body.replace("*", "")
-        return result
+        maintype = email_message_instance.get_content_maintype()
+        if maintype == 'multipart':
+            for part in email_message_instance.get_payload():
+                if part.get_content_maintype() == 'text':
+                    return part.get_payload()
+        elif maintype == 'text':
+            return email_message_instance.get_payload()
     except:
         return "UNKNOWN"
 
 
-def body_parse(body_str):
-    if body_str.find("<div"):
-        body_str = body_str.split("<div")[0]
-        return body_str
-    else:
-        return body_str
+def body_parse(mail):
+    text = mail
+    try:
+        result = base64.b64decode(text).decode('utf8')
+        if result.find("*") >= 0:
+            result = result.replace("*", "")
+        return result
+    except:
+        return mail
 
 def send_mes(smtp_obj, message):
     try:
@@ -152,3 +141,17 @@ def quit_email_smtp(smtpObj):
     """
 
     smtpObj.close()
+
+def check_attachments(mail):
+    """
+    Проверка на наличие вложений
+    :param mail:
+    :return:
+    """
+    if mail.is_multipart():
+        for part in mail.walk():
+            filename = part.get_filename()
+            if filename:
+                return True
+    else:
+        return False
