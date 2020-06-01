@@ -1,6 +1,6 @@
 version: ~> 1.0
 import:
 - source: .travis/18-VTbo-1a.yml
-  if: ((branch = 18-VTbo-1a) ||  (branch = issue-*) ||  ((commit_message == "dev18-VTbo-1a")&&(branch_head = dev)))
+  if: ((head_branch = 18-VTbo-1a) ||  (branch = 18-VTbo-1a) ||  ((commit_message == "dev18-VTbo-1a")&&(head_branch = dev)))
 - source: .travis/18-VTbo-1b.yml
-  if: ((branch = 18-VTbo-1b) ||  (branch = issue-*) ||  ((commit_message == "dev18-VTbo-1b")&&(branch_head = dev)))
+  if: ((head_branch = 18-VTbo-1b) ||  (branch = 18-VTbo-1b) ||  ((commit_message == "dev18-VTbo-1b")&&(head_branch = dev)))
