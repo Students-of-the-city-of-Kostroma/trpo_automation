@@ -1,4 +1,4 @@
 version: ~> 1.0
 import:
 - source: .travis/18-VTbo-1a.yml
-  if: (head_branch = dev)
+  if: ((head_branch = dev) ||  (branch = dev))
