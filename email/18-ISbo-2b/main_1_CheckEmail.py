@@ -234,7 +234,7 @@ def ValidateLetters(letters):
                 num, var = val.get_num_and_var(val.subject)
                 if num is None or (int(var) > 15 or int(num) > 12 or int(var) == 0):
                     let.CodeStatus = '03'
-                    let.CodeStatusComment = 'Номер лабораторной не существует'
+                    let.CodeStatusComment = 'Неверно указан номер работы или варианта'
 
                 else:
                     let.NumberOfLab = int(num)

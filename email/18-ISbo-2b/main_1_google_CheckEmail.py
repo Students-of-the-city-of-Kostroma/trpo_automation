@@ -8,7 +8,7 @@ from email import *
 from global_Letter import Letter
 from global_User import User
 # from main_2_base_WorkWithLetters import WorkWithLetters
-from google_ValidateRules import ValidationMail as Val
+from work_ValidateRules import ValidationMail as Val
 import config_Project as cfg
 import re
 from email.message import EmailMessage
@@ -16,7 +16,7 @@ import config_Mail
 import imaplib
 import email
 import base64
-from google_Sheet import Sheet
+from work_Sheet import Sheet
 
 
 def CheckEmail():

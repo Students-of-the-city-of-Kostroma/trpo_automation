@@ -67,6 +67,8 @@ class ValidationMail():
             return '04'
         if body.find('http', 0, len(body)) != body.rfind('http', 0, len(body)):
             return '04'
+        if body.find('http', 0, len(body)) != body.rfind('http', 0, len(body)):
+            return '04'
         return '20'
 
     def validation(self, subject, body):
