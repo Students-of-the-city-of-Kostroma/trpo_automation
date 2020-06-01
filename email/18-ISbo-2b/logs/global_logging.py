@@ -26,8 +26,8 @@ class Logger:
         def decorated(*args, **kwargs):
             now = datetime.datetime.now()
             info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[DEBUG]:' \
-                   + str(func.__name__) + '\n'
-            info += '-----------------------\n'
+                   + str(func.__name__)
+            info += '\n\n'
             self.d_file.write(info)
             result = func(*args, **kwargs)
             return result
@@ -39,13 +39,15 @@ class Logger:
             now = datetime.datetime.now()
             info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[INFO]:' \
                    + str(func.__name__) + '\n'
-            info += '[\nВходные параметры\n'
+            info += '[Входные параметры\n'
             for i in args:
+                #if str(i).find('object at') != -1:
+                #    continue
                 info += str(i) + '\n'
             for i in kwargs:
-                info += str(i) + '\n'
-            info += ']\n'
-            info += '-----------------------\n'
+                info += str(i)
+            info = info[:-2]
+            info += ']\n\n'
             self.d_file.write(info)
             result = func(*args, **kwargs)
             return result
@@ -67,3 +69,14 @@ class Logger:
                 os.remove(path)
             filename = 'log' + str(1)
         cfg.filename = filename
+
+    @staticmethod
+    def getobjectdata(ob):
+        info = ''
+        ats = ob.__dict__
+        for i in ats.values():
+            if str(i).startswith('__main__.'):
+                info += getobjectdata(i)
+            else:
+                info += str(i) + '\n'
+        return info
