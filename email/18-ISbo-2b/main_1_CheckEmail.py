@@ -124,6 +124,7 @@ def FormListWithLetters(mails):
             email_message = email.message_from_bytes(mails)
 
         error_code = ""
+        error_comment = ""
 
         # Извлечение информации об отправителе
         from_mes = EmailLibrary.get_from(email_message)
@@ -142,12 +143,17 @@ def FormListWithLetters(mails):
 
         # Декодировка тела письма
         body = EmailLibrary.body_parse(body_str)
-        if body == "UNKNOWN":
+
+        # Проверка на наличие вложений
+        if EmailLibrary.check_attachments(email_message):
+            body = "UNKNOWN"
             error_code = "05"
+            error_comment = "В письме присутствуют вложения."
 
         user = User(user_name, None, user_email, None)
         letter_item = Letter(user, subject_mes, body, None, None)
         letter_item.CodeStatus = error_code
+        letter_item.CodeStatusComment = error_comment
 
         return letter_item
 
@@ -155,6 +161,7 @@ def FormListWithLetters(mails):
         user = User("UNKNOWN", None, "UNKNOWN", None)
         letter = Letter(user, "UNKNOWN", "UNKNOWN", None, None)
         letter.CodeStatus = "07"
+        letter.CodeStatusComment = "Неизвестная ошибка."
         return letter
 
 
