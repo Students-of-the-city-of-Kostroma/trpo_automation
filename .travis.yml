@@ -2,3 +2,5 @@ version: ~> 1.0
 import:
 - source: .travis/18-VTbo-1a.yml
   if: ((head_branch = dev) ||  (branch = dev))
+- source: .travis/18-VTbo-1b.yml
+  if: ((head_branch = dev) ||  (branch = dev))
