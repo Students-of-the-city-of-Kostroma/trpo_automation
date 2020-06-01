@@ -27,7 +27,7 @@ class UnknownUser(BasePattern):
     MainPart = "Ваше письмо было получено, но вас нет в журнале учащихся. Пожалуйста, заполните форму\n" \
                "для вашей регистрации в журнале учащихся и отправьте письмо повторно.\n" \
                "Без этого вы не сможете сдать свои работы дистанционно.\n\n" \
-               "Форма: "+ cfg.access + " .\n"
+               "Форма: " + cfg.access + " .\n"
 
 
 class UncorrectedTheme(BasePattern):
@@ -38,12 +38,12 @@ class UncorrectedTheme(BasePattern):
 
 
 class WorkCompleted(BasePattern):
-    Theme = "Ваша работа уже была проверена.\n"
+    Theme = "Ваша работа уже была проверена."
     MainPart = "Ваша работа уже прошла проверку и зачтена, поэтому вам не надо больше отправлять на проверку.\n"
 
 
 class UncorrectedStructure(BasePattern):
-    Theme = " Ваше письмо не соответствует требованиям к оформлению письма."
+    Theme = "Ваше письмо не соответствует требованиям к оформлению письма."
     MainPart = "Ваше письмо было получено, но письмо не соответствует требованиям. Возможно, это случилось из-за \n" \
                "того, что вы пользуетесь нашей системой впервые и не были ознакомлены с требованиями к оформлению \n" \
                "писем. Пожалуйста, прочитайте правила оформления писем и проверьте, что вы могли забыть\n" \
@@ -75,7 +75,7 @@ class WorkVerified(BasePattern):
 
 
 class SystemFailure(BasePattern):
-    Theme = " Система временно недоступна."
+    Theme = "Система временно недоступна."
     MainPart = "Извините, но в данный момент система не может проверить вашу работу. Поэтому, пожалуйста, немного \n" \
                "подождите и отправьте письмо повторно.\n"
 
@@ -91,7 +91,7 @@ class ForTeacher(BasePattern):
     MainPart = ""
 
     def add(self, parameter):
-        self.MainPart += parameter[0] + " сдал Работу номер " + parameter[1] + ' ' + parameter[2] + '.\n'
+        self.MainPart += parameter[0] + " сдал Работу номер " + str(parameter[1]) + ' ' + str(parameter[2]) + '.\n'
 
 
 class UncorrectedLink(BasePattern):

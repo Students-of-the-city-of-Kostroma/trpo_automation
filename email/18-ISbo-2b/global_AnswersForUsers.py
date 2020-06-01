@@ -8,6 +8,7 @@ class AnswersForUsers:
     Who = ""
     Theme = ""
     Body = ""
+    Success = True
 
     def __init__(self, who=None, theme=None, body=None):
         """Конструктор, все входные данные не обязательны для того,
