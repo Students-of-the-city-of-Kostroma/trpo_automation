@@ -23,6 +23,10 @@ after_script:
   - make clean
 jobs:
   include:
+    - stage: Compile
+      before_script: cd LR/07/src
+      script:
+        - sudo qmake src.pro && make
     - stage: Unit Tests
       before_script: cd LR/07/tests
       script:
