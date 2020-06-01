@@ -12,17 +12,17 @@ def funcSt(str_of_val_er, str_of_er, validation_dictionary):
     """
     pattern = [
         {
-            'title': f'ТРПО. Работа ЛР№{validation_dictionary[Numder]} успешно принята',
+            'title': f'ТРПО. Работа ЛР№{validation_dictionary[Number]} успешно принята',
             'our_msg': 'Поздравляю!\nРабота успешно принята!' +
                        '\nОценку можно проверить в журнале!'
         },
         {
-            'title': f'ТРПО. Обнаружены ошибки в работе ЛР№{validation_dictionary[Numder]}',
+            'title': f'ТРПО. Обнаружены ошибки в работе ЛР№{validation_dictionary[Number]}',
             'our_msg': 'В Вашей работе обнаружены ошибки:\n\n' + str_of_val_er +
                        '\nПросьба исправить их и отправить письмо повторно.'
         },
         {
-            'title': f'ТРПО. ЛР№{validation_dictionary[Numder]} Обнаружены ошибки в заполнении письма',
+            'title': f'ТРПО. ЛР№{validation_dictionary[Number]} Обнаружены ошибки в заполнении письма',
             'our_msg': 'В структуре письма обнаружены следующие ошибки:\n\n' +
                        str_of_er + '\nПросьба исправить их в соответствии с ' +
                        'документом\n' + 'https://docs.google.com/document/d/' +
@@ -30,7 +30,7 @@ def funcSt(str_of_val_er, str_of_er, validation_dictionary):
                        'usp=sharing'
         },
         {
-            'title': f'ТРПО. ЛР№{validation_dictionary[Numder]} Авторизация пользователя',
+            'title': f'ТРПО. ЛР№{validation_dictionary[Number]} Авторизация пользователя',
             'our_msg': 'Вы не найдены в системе. Пожалуйста, перейдите по' +
                        ' ссылке и зарегистрируйтесь.\n'
                        'https://forms.gle/pNzAtYKWAiDom6MEA'
@@ -49,7 +49,7 @@ def funcTs(name_of_student, validation_dictionary, str_of_er):
     Паттерн сообщений для рассылки писем преподавателю или команде
     :param name_of_student: имя и фамилия студента.
     :param validation_dictionary: словарь с валидации письма,
-    в котором есть ('Numder')номер работы и ('URL')ссылка на работу.
+    в котором есть ('Number')номер работы и ('URL')ссылка на работу.
     :param str_of_er: ошибки в коде студента
     :return: pattern: шаблоны писем, которые мы отправляем студенту после проверок
     """
@@ -59,7 +59,7 @@ def funcTs(name_of_student, validation_dictionary, str_of_er):
             'title': 'ТРПО. Ошибка в работе студента',
             'our_msg': 'Студент ' + name_of_student +
                        ' не справился с задачей №' +
-                       validation_dictionary['Numder'] +
+                       validation_dictionary['Number'] +
                        ' (' + validation_dictionary['URL'] + ')' +
                        '\nБыли допущены ошибки в работе:\n\n' +
                        str_of_er
