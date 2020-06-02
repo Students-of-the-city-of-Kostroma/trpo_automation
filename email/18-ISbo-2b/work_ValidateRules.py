@@ -74,7 +74,7 @@ class ValidationMail():
         :param body: Тело письма
         :return: Устпех валидации
         """
-                if self.validation_subject(self.subject) == '20' and self.validation_body(self.body) == '20':
+        if self.validation_subject(self.subject) == '20' and self.validation_body(self.body) == '20':
             self.success = True
             return '20'
         elif self.validation_subject(self.subject) == '20':
