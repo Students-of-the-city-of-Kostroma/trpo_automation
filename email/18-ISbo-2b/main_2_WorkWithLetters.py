@@ -50,15 +50,17 @@ def LettersConvertToString(letters):
     # logs.Infor(name, letters)
 
     LabsForWork = [4, 5, 6, 7, 8, 9, 10, 12]
-
     for tmp in letters:
         if tmp.CodeStatus == "20" and tmp.NumberOfLab in LabsForWork:
-            html = get_html(tmp.Body)
-            tmp.Body = finding_files(html, tmp.Student.NameOfStudent)
-
-        if tmp.Body == "":
-            tmp.CodeStatus = "08"
-            tmp.CodeStatusComment = "Некорректные ссылки в письме"
+            if tmp.Body == "":
+                tmp.CodeStatus = "08"
+            else:
+                Body = tmp.Body
+                html = get_html(tmp.Body)
+                tmp.Body = finding_files(html, tmp.Student.NameOfStudent)
+                if tmp.Body == "":
+                    tmp.Body = Body
+                    tmp.CodeStatus = "08"
 
     return letters
 
