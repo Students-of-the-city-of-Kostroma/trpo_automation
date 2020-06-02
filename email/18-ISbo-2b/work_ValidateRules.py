@@ -63,7 +63,9 @@ class ValidationMail():
             pattern = re.findall(r'https://[^ ]*', item)
             if len(pattern) != 0:
                 links.append(pattern)
-        if len(links) == 0:  # Если ссылок нет, то False
+        if len(links) == 0:  
+            return '04'
+        if body.find('http', 0, len(body)) != body.rfind('http', 0, len(body)):
             return '04'
         return '20'
 

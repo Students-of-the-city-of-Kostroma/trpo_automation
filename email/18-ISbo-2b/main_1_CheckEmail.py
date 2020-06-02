@@ -4,13 +4,12 @@ from global_Letter import Letter
 from global_User import User
 from work_ValidateRules import ValidationMail as Val
 from work_Loger import Logs
+import work_EmailLibrary as EmailLibrary
 
 import inspect
 import re
-import config_Mail
-import imaplib
 import email
-import base64
+
 
 
 def CheckEmail():
@@ -22,7 +21,7 @@ def CheckEmail():
 
     # Получение писем с почты
     # Создание IMAP объекта
-    imap_obj = imap_login()
+    imap_obj = EmailLibrary.imap_login()
 
     # Получение списка сырых писем
     raw_letters = GetLetters(imap_obj)
@@ -35,7 +34,7 @@ def CheckEmail():
             letters.append(FormListWithLetters(item))
 
     # Закрытие IMAP объекта
-    quit_email_imap(imap_obj)
+    EmailLibrary.quit_email_imap(imap_obj)
 
     # Проверка пользователей на существование в системе
     # Глобальная функция 2
@@ -67,7 +66,7 @@ def GetLetters(mail):
     # logs.Infor(name, mail)
 
     # Количество непрочитанных писем
-    count = count_unseen_mess(mail)
+    count = EmailLibrary.count_unseen_mess(mail)
     letters = []
 
     if count > 0:
@@ -125,30 +124,36 @@ def FormListWithLetters(mails):
             email_message = email.message_from_bytes(mails)
 
         error_code = ""
+        error_comment = ""
 
         # Извлечение информации об отправителе
-        from_mes = get_from(email_message)
+        from_mes = EmailLibrary.get_from(email_message)
 
         # Извлечение информации о теме письма
-        subject_mes = get_subject(email_message)
+        subject_mes = EmailLibrary.get_subject(email_message)
 
         # Извлечение электронного адреса отправителя
-        user_email = from_parse(from_mes)
+        user_email = EmailLibrary.from_parse(from_mes)
 
         # Извлечение ФИ отправителя
-        user_name = name_parse(from_mes)
+        user_name = EmailLibrary.name_parse(from_mes)
 
         # Извлечение закодированного тела письма
-        body_str = get_body(email_message)
+        body_str = EmailLibrary.get_body(email_message)
 
         # Декодировка тела письма
-        body = body_parse(body_str)
-        if body == "UNKNOWN":
+        body = EmailLibrary.body_parse(body_str)
+
+        # Проверка на наличие вложений
+        if EmailLibrary.check_attachments(email_message):
+            body = "UNKNOWN"
             error_code = "05"
+            error_comment = "В письме присутствуют вложения."
 
         user = User(user_name, None, user_email, None)
         letter_item = Letter(user, subject_mes, body, None, None)
         letter_item.CodeStatus = error_code
+        letter_item.CodeStatusComment = error_comment
 
         return letter_item
 
@@ -156,6 +161,7 @@ def FormListWithLetters(mails):
         user = User("UNKNOWN", None, "UNKNOWN", None)
         letter = Letter(user, "UNKNOWN", "UNKNOWN", None, None)
         letter.CodeStatus = "07"
+        letter.CodeStatusComment = "Неизвестная ошибка."
         return letter
 
 
@@ -235,7 +241,7 @@ def ValidateLetters(letters):
                 num, var = val.get_num_and_var(val.subject)
                 if num is None or (int(var) > 15 or int(num) > 12 or int(var) == 0):
                     let.CodeStatus = '03'
-                    let.CodeStatusComment = 'Номер лабораторной не существует'
+                    let.CodeStatusComment = 'Неверно указан номер работы или варианта'
 
                 else:
                     let.NumberOfLab = int(num)
@@ -249,104 +255,3 @@ def ValidateLetters(letters):
                     let.Body = let.Body[:-1]
 
                 let.CodeStatusComment = 'Работа отправлена на проверку'
-
-
-def imap_login():
-    """
-    Авторизация в Gmail аккаунте.
-    Функция возвращает SMTP объект.
-    :return:
-    """
-    imap = imaplib.IMAP4_SSL("imap.gmail.com")
-    imap.login(config_Mail.EMAIL_ADDRESS, config_Mail.EMAIL_PASSWORD)
-    imap.select('inbox')
-    return imap
-
-
-def quit_email_imap(imapObj):
-    """
-    Закрытие SMTP объекта.
-    Функция должна быть вызвана после завершения рыботы с SMTP объектом.
-    :param smtpObj:
-    :return:
-    """
-    imapObj.close()
-
-
-def count_unseen_mess(mail):
-    """
-    Возвращает кол-во непрочитанных сообщений
-    :param mail:
-    :return:
-    """
-    result, data = mail.uid('search', None, "unseen")
-    return len(data[0].split())
-
-
-def get_from(email_message):
-    try:
-        from_mes = str(email.header.make_header(email.header.decode_header(email_message['From'])))
-        return from_mes
-    except:
-        return "UNKNOWN"
-
-
-def get_subject(email_message):
-    try:
-        subject_mes = str(email.header.make_header(email.header.decode_header(email_message['Subject'])))
-        return subject_mes
-    except:
-        return "UNKNOWN"
-
-
-def from_parse(from_mes):
-    try:
-        user_email = from_mes[from_mes.find("<", 0, len(from_mes))+1:from_mes.find(">", 0, len(from_mes))]
-        return user_email
-    except:
-        return "UNKNOWN"
-
-
-def name_parse(from_mes):
-    try:
-        name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
-        return name
-    except:
-        return "UNKNOWN"
-
-
-def get_body(email_message):
-    try:
-        str_body = ""
-        if email_message.is_multipart():
-            for payload in email_message.get_payload():
-                str_body += payload.get_payload()
-        else:
-            str_body += email_message.get_payload()
-        body_str = base64.b64decode(str_body).decode('utf8')
-        return body_str
-    except:
-        result = extra_body_parse(str_body)
-        return result
-
-
-def extra_body_parse(raw_body):
-    try:
-        encode_body = raw_body.split("<")[0]
-        body = base64.b64decode(encode_body).decode('utf8')
-        result = body
-        if body.find("*") >= 0:
-            result = body.replace("*", "")
-        print("I am here")
-        return result
-    except:
-        return "UNKNOWN"
-
-
-def body_parse(body_str):
-    if body_str.find("<div"):
-        body_str = body_str.split("<div")[0]
-        return body_str
-    else:
-        return body_str
-
