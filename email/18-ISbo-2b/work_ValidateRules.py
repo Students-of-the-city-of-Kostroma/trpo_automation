@@ -69,24 +69,24 @@ class ValidationMail():
             return '04'
         return '20'
 
-    def validation(self, subject, body):
+    def validation(self):
         """
         Проверяет тему и тело письма на соответствие структуре
         :param subject: Тема письма
         :param body: Тело письма
         :return: Устпех валидации
         """
-        if self.validation_subject(subject) == '20' and self.validation_body(body) == '20':
+        if self.validation_subject(self.subject) == '20' and self.validation_body(self.body) == '20':
             self.success = True
             return '20'
-        elif self.validation_subject(subject) == '20':
-            return self.validation_body(body)
+        elif self.validation_subject(self.subject) == '20':
+            return self.validation_body(self.body)
         else:
-            return self.validation_subject(subject)
+            return self.validation_subject(self.subject)
 
-    def get_num_and_var(self, subject):
+    def get_num_and_var(self):
         if self.success is True:
-            subject = subject.lower().replace(' ', '')
+            subject = self.subject.lower().replace(' ', '')
             var = subject[-2:]
             if var.isdigit() is not True or var[0] == '0':
                 var = var[1]
