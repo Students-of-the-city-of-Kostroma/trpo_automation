@@ -1,4 +1,3 @@
-import config_Mail
 import imaplib
 from email.message import EmailMessage
 import base64
@@ -12,6 +11,7 @@ def imap_login():
     :return:
     """
     imap = imaplib.IMAP4_SSL("imap.gmail.com")
+    import config_Mail
     imap.login(config_Mail.EMAIL_ADDRESS, config_Mail.EMAIL_PASSWORD)
     imap.select('inbox')
     return imap
@@ -92,8 +92,10 @@ def body_parse(mail):
     except:
         return mail
 
-def send_mes(smtp_obj, message):
+def send_mes(message):
     try:
+        smtp_obj = smtp_login()
+
         # Создание экземпляра класса Email Message
         mes = EmailMessage()
 
@@ -112,6 +114,8 @@ def send_mes(smtp_obj, message):
         # отправка SMTP пакета
         smtp_obj.send_message(mes)
 
+        quit_email_smtp(smtp_obj)
+
         message.Success = True
 
     except:
@@ -124,10 +128,12 @@ def smtp_login():
     :return:
     """
 
+
     smtpObj = smtplib.SMTP('smtp.gmail.com:587')
     smtpObj.ehlo()
     smtpObj.starttls()
     smtpObj.ehlo()
+    import config_Mail
     smtpObj.login(config_Mail.EMAIL_ADDRESS, config_Mail.EMAIL_PASSWORD)
 
     return smtpObj

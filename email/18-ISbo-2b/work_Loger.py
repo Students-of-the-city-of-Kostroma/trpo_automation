@@ -1,6 +1,6 @@
 import inspect 
-import logging 
-logging.basicConfig(filename="log.txt", level=logging.DEBUG)
+import logging
+# logging.basicConfig(filename="log.txt", level=logging.DEBUG)
 name = None
 arg = None
 arg1 = None
