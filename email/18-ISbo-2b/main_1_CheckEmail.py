@@ -210,7 +210,7 @@ def ValidateLetters(letters):
 
     for let in letters:
         if let.CodeStatus is None or let.CodeStatus == "":
-            val = Val(let.ThemeOfLetter, let.Body)
+            val = Val()
             let.CodeStatus = val.validation(val.subject, val.body)
 
             if let.CodeStatus == '20':

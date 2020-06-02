@@ -1,9 +1,9 @@
 # пример логирования функциии ValidateLetters с двумя письмами
 # функции повторяются так как вызываются неоднократно
 
-[9:18:16][DEBUG]:ValidateLetters
+[9:31:10][DEBUG]:ValidateLetters
 
-[9:18:16][INFO]:validation
+[9:31:10][INFO]:validation
 [Входные параметры
 ТРПО ЛР10 ВАР1
 
@@ -13,21 +13,13 @@ https://vk.com/im
 https://vk.com/im
 
 Ельцов Андрей, 18-ИСбо-2б
-False
-ТРПО ЛР10 ВАР1
+False]
 
-Здравствуйте
-https://vk.com/im
-
-https://vk.com/im
-
-Ельцов Андрей, 18-ИСбо-2б]
-
-[9:18:16][INFO]:validation_subject
+[9:31:10][INFO]:validation_subject
 [Входные параметры
 ТРПО ЛР10 ВАР1]
 
-[9:18:16][INFO]:validation_body
+[9:31:10][INFO]:validation_body
 [Входные параметры
 
 Здравствуйте
@@ -37,11 +29,11 @@ https://vk.com/im
 
 Ельцов Андрей, 18-ИСбо-2б]
 
-[9:18:16][INFO]:validation_subject
+[9:31:10][INFO]:validation_subject
 [Входные параметры
 ТРПО ЛР10 ВАР1]
 
-[9:18:16][INFO]:validation_body
+[9:31:10][INFO]:validation_body
 [Входные параметры
 
 Здравствуйте
@@ -51,26 +43,24 @@ https://vk.com/im
 
 Ельцов Андрей, 18-ИСбо-2б]
 
-[9:18:16][INFO]:validation
+[9:31:10][INFO]:validation
 [Входные параметры
 ТРПО ЛР33 ВАР15
 Здравствуйте
-False
-ТРПО ЛР33 ВАР15
-Здравствуйте]
+False]
 
-[9:18:16][INFO]:validation_subject
+[9:31:10][INFO]:validation_subject
 [Входные параметры
 ТРПО ЛР33 ВАР15]
 
-[9:18:16][INFO]:validation_body
+[9:31:10][INFO]:validation_body
 [Входные параметры
 Здравствуйте]
 
-[9:18:16][INFO]:validation_subject
+[9:31:10][INFO]:validation_subject
 [Входные параметры
 ТРПО ЛР33 ВАР15]
 
-[9:18:16][INFO]:validation_body
+[9:31:10][INFO]:validation_body
 [Входные параметры
 Здравствуйте]
