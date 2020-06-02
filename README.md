@@ -1,8 +1,13 @@
+# trpo_automation
+
 MAIL
+
 Модуль приёма писем
+
 Версия подгруппы 18-ИСбо-2б
 
 Актуальная версия модуля:
+
 https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/tree/dev/email/18-ISbo-2b
 
 Функционал модуля:
