@@ -1,4 +1,5 @@
 # coding=utf-8
+from logs import log_config as l_cfg
 from work_Sheet import Sheet
 from global_Letter import Letter
 from global_User import User
@@ -12,6 +13,7 @@ import email
 
 
 
+@l_cfg.logger.logdebug
 def CheckEmail():
     """
     Точка входа в работу модуля.
@@ -47,6 +49,7 @@ def CheckEmail():
     return letters
 
 
+@l_cfg.logger.logdebug
 def GetLetters(mail):
     """
     Функционал:
@@ -92,6 +95,7 @@ def GetLetters(mail):
     return letters
 
 
+@l_cfg.logger.logdebug
 def FormListWithLetters(mails):
     """
     Функционал:
@@ -165,6 +169,7 @@ def FormListWithLetters(mails):
         return letter
 
 
+@l_cfg.logger.logdebug
 def CheckUsers(letters):
     """
     Функционал:
@@ -195,6 +200,7 @@ def CheckUsers(letters):
                 i.Student.GroupOfStudent = '{}'.format(result[0][3])
 
 
+@l_cfg.logger.logdebug
 def ValidateLetters(letters):
     """
     Функционал:

@@ -1,4 +1,5 @@
 import inspect 
+from logs import log_config as l_cfg
 import logging 
 logging.basicConfig(filename="log.txt", level=logging.DEBUG)
 name = None
@@ -12,6 +13,7 @@ class Logs:
     def __init__(self):
         pass
 
+    @l_cfg.logger.loginfo
     def Infor (self,name, *args, **kwargs):
         self.name = name
         try:

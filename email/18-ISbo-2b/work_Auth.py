@@ -1,4 +1,5 @@
 # Подключаем библиотеки
+from logs import log_config as l_cfg
 import httplib2 
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
@@ -6,7 +7,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 class Auth:
     """Авторизация в системе, выбор API для работы с Google Sheets """
-
+    @l_cfg.logger.loginfo	
     def auth_sheets():
         # Имя файла с закрытым ключом, вы должны подставить свое
         CREDENTIALS_FILE = 'trpo-bot-1eb977889b18.json'
