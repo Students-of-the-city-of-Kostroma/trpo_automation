@@ -232,7 +232,7 @@ def ValidateLetters(letters):
                 let.CodeStatusComment = 'Письмо не содержит необходимых ссылок на ресурсы.'
 
             else:
-                num, var = val.get_num_and_var(val.subject)
+                num, var = val.get_num_and_var()
                 if num is None or (int(var) > 15 or int(num) > 12 or int(var) == 0):
                     let.CodeStatus = '03'
                     let.CodeStatusComment = 'Номер лабораторной не существует'
