@@ -84,10 +84,10 @@ def MakeAnswersForUsers(letterResult):
                 continue
 
         else:
-             continue
+            continue
 
-            answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
-            answers.append(answer)
+        answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
+        answers.append(answer)
 
     if teacher == True:
         answer = AnswersForUsers(cfg.teacher_email, forTeacher.return_theme(), forTeacher.return_body())
