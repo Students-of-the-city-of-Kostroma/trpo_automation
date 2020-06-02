@@ -210,8 +210,8 @@ def ValidateLetters(letters):
 
     for let in letters:
         if let.CodeStatus is None or let.CodeStatus == "":
-            val = Val()
-            let.CodeStatus = val.validation(val.subject, val.body)
+            val = Val(let.ThemeOfLetter, let.Body)
+            let.CodeStatus = val.validation()
 
             if let.CodeStatus == '20':
                 if val.verify_name_and_group(let.Student.NameOfStudent, let.Student.GroupOfStudent) is not True:
