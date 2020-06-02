@@ -1,4 +1,9 @@
-version: ~> 1.0
+branches:
+  only:
+  - master
+  - dev
+  - 18-VTbo-1b
+  - 18-VTbo-1a
 import:
 - source: .travis/18-VTbo-1a.yml
   if: (((branch = issue-*)&&(head_branch = 18-VTbo-1a) ||  (branch = 18-VTbo-1a)))
