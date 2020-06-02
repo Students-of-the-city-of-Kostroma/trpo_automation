@@ -1,6 +1,6 @@
 from global_logging import Logger
 
 
-filename = 'log0'
+filename = ""
 logger = Logger()
 

@@ -1,6 +1,5 @@
 import log_config as cfg
 import datetime
-import os
 
 
 class Logger:
@@ -41,12 +40,10 @@ class Logger:
                    + str(func.__name__) + '\n'
             info += '[Входные параметры\n'
             for i in args:
-                #if str(i).find('object at') != -1:
-                #    continue
-                info += str(i) + '\n'
+                info += Logger.getobjectdata(i)
             for i in kwargs:
-                info += str(i)
-            info = info[:-2]
+                info += Logger.getobjectdata(i)
+            info = info[:-1]
             info += ']\n\n'
             self.d_file.write(info)
             result = func(*args, **kwargs)
@@ -54,29 +51,27 @@ class Logger:
         return decorated
 
     def updatelogfiles(self):
-        """Увеличивает номер файла логов. Чистит папку, если их скопилось 20"""
-        filename = cfg.filename
-        num = filename[-2:]
-        if num[0].isdigit() is not True:
-            num = num[1]
-        num = int(num) + 1
-        filename = 'log' + str(num)
-        if cfg.filename[-1:] == '20':
-            folder = 'logfiles/'
-            files = os.listdir(folder)
-            for i in files:
-                path = os.path.join(folder, i)
-                os.remove(path)
-            filename = 'log' + str(1)
+        """Изменяет номер файла логов"""
+        now = datetime.datetime.now()
+        min = str(now.minute)
+        if len(min) == 1:
+            min = '0' + min
+        filename = 'log' + str(now.year) + '.' + str(now.month) + '.' + str(now.day) + '-' + \
+                   str(now.hour) + '.' + min
         cfg.filename = filename
 
     @staticmethod
     def getobjectdata(ob):
         info = ''
-        ats = ob.__dict__
-        for i in ats.values():
-            if str(i).startswith('__main__.'):
-                info += getobjectdata(i)
-            else:
-                info += str(i) + '\n'
+        if str(ob).startswith('<') and str(ob)[-4:] != 'html':
+            ats = ob.__dict__
+            for i in ats.values():
+                if str(i).startswith('<'):
+                    info += '<Object attributes:\n'
+                    info += Logger.getobjectdata(i)
+                    info += '>\n'
+                else:
+                    info += str(i) + '\n'
+        else:
+            info += str(ob) + '\n'
         return info
