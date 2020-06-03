@@ -2,6 +2,7 @@
 #define STARTEGYLAB_H
 
 #include "utils/internalexception.h"
+#include "logfile.h"
 
 #include <QObject>
 #include <QtXml>
@@ -23,6 +24,7 @@ private:
     QString abstractClassName;
     QString abstractMethodName;
     int heirsAmount;
+    logfile log;
 
 public:
     explicit StrategyLab(QObject* parent = nullptr);
