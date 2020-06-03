@@ -6,7 +6,7 @@ branches:
 language: python
 python: "3.7"
 dist: trusty
-sudo: required
+os: linux
 cache: pip
 before_install: cd email/18-ISbo-2a
 install:
