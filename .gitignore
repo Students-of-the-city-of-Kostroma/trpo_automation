@@ -11,9 +11,6 @@
 .idea
 venv/
 
-# Logs should not be included
-email/18-ISbo-2a/*.log
-
 # User-specific files
 *.rsuser
 *.suo
