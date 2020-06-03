@@ -11,10 +11,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -34,7 +30,7 @@ public class Server {
     public static String NomberLab;
     public static String Oshibka;
     public static boolean conec=false;
-    private static final String FILENAME = "Repository.xml";
+    private static final String FILENAME = "labs.xml";
 
     private static void SetPort(){
         try {
@@ -45,14 +41,17 @@ public class Server {
 
             doc.getDocumentElement().normalize();
 
-            NodeList NodeList = doc.getElementsByTagName("port");
+            NodeList NodeList = doc.getElementsByTagName("lab");
 
             for (int i = 0; i < NodeList.getLength(); i++) {
                 // Вывoдиm инфopmaцию пo kaждomy из нaйдeнных элemeнтoв
                 Node node = NodeList.item(i);
                 if (Node.ELEMENT_NODE == node.getNodeType()) {
                     Element element = (Element) node;
-                    port= Integer.parseInt(element.getElementsByTagName("portnumber").item(0).getTextContent());
+                    if (element.getAttribute("number").equals("3")){
+                        port=Integer.parseInt(element.getAttribute("port"));
+                        break;
+                    }
                 }
             }
         }
@@ -252,11 +251,7 @@ public class Server {
     public static void Priem() throws IOException
     {
         SetPort();
-
-        if (port!=0)
         server = new ServerSocket(port);
-        System.out.println("Sosdano");
-
         try {
             while (true) {
                 // Блокируется до возникновения нового соединения:
@@ -265,7 +260,6 @@ public class Server {
                 try {
                     serverList.add(new ServerSomthing(clientSocket));
                     // добавить новое соединенние в список
-
                 } catch (IOException e) {
                     // Если завершится неудачей, закрывается сокет,
                     // в противном случае, нить закроет его при завершении работы:

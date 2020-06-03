@@ -19,7 +19,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Selenium {
-     private static final String FILENAME = "Repository.xml";
+    private static final String FILENAME = "Labs3_url.xml";
     public WebDriver driver=null;
     private String result ="";
     public  String Repository;// Ссылка на репозитори
