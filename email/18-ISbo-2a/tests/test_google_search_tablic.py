@@ -1,7 +1,5 @@
-import sys
-sys.path.append('..')
 import unittest
-from mainp import crypto
+from ..mainp import crypto
 
 
 class TestGoogle(unittest.TestCase):
