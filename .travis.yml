@@ -4,7 +4,8 @@ branches:
   - 18-ISbo-2a
   - dev
 language: python
-python: "3.7"
+python:
+  - "3.7"
 dist: trusty
 os: linux
 cache: pip
