@@ -13,14 +13,14 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
-from config import (
+from .config import (
     SPREAD_SHEET_ID,
     CREDENTIALS_FILE,
     SPREAD_SHEET_ID_INIT,
     CREDENTIALS_FILE_SERVICE
 )
-from log_method import *
-from pattern import *
+from .log_method import *
+from .pattern import *
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
           'https://www.googleapis.com/auth/gmail.send',
@@ -329,7 +329,7 @@ def error_in_work(some_errors: dict):
 @log_method_info
 def search_group(email_id):
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-        CREDENTIALS_FILE,
+        r'mainp/' + CREDENTIALS_FILE,
         ['https://www.googleapis.com/auth/spreadsheets',
          'https://www.googleapis.com/auth/drive'])
     httpAuth = credentials.authorize(httplib2.Http())

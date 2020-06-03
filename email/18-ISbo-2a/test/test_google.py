@@ -1,27 +1,27 @@
 import unittest
 import httplib2
-from ..mainp import crypto
+from mainp import crypto
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
 
 class TestGoogle(unittest.TestCase):
     
-    def setUp(self):
-        crypto.decrypt_file('Example.json.bin')
-        crypto.decrypt_file('config.py.bin')
-        crypto.decrypt_file('token.pickle.bin')
-
-    def tearDown(self):
-        crypto.crypt_file('Example.json')
-        crypto.crypt_file('config.py')
-        crypto.crypt_file('token.pickle')
+    # def setUp(self):
+    #     crypto.decrypt_file('Example.json.bin')
+    #     crypto.decrypt_file('config.py.bin')
+    #     crypto.decrypt_file('token.pickle.bin')
+    #
+    # def tearDown(self):
+    #     crypto.crypt_file('Example.json')
+    #     crypto.crypt_file('config.py')
+    #     crypto.crypt_file('token.pickle')
 
     def test_add_mark(self):
-        from ..mainp.config import SPREAD_SHEET_ID
-        from ..mainp.config import CREDENTIALS_FILE
-        from ..mainp.APIgoogle import add_mark_in_table
+        from mainp.config import SPREAD_SHEET_ID
+        from mainp.config import CREDENTIALS_FILE
+        from mainp.APIgoogle import add_str_in_table
         add_mark_in_table('(ТРПО) 18-ИСбо-2а', 'M8', '2')
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(r'mainp/' + CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
         httpAuth = credentials.authorize(httplib2.Http())
         service = apiclient.discovery.build('sheets', 'v4', http = httpAuth)
 
@@ -32,11 +32,11 @@ class TestGoogle(unittest.TestCase):
         self.assertEqual(new_one, '2')
 
     def test_search_group(self):
-        from ..mainp.config import SPREAD_SHEET_ID_INIT
-        from ..mainp.config import CREDENTIALS_FILE
-        from ..mainp.APIgoogle import search_group
+        from mainp.config import SPREAD_SHEET_ID_INIT
+        from mainp.config import CREDENTIALS_FILE
+        from mainp.APIgoogle import search_group
 
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets',  'https://www.googleapis.com/auth/drive'])
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(r'mainp/' + CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets',  'https://www.googleapis.com/auth/drive'])
         httpAuth = credentials.authorize(httplib2.Http())
         service = apiclient.discovery.build('sheets', 'v4', http = httpAuth)
         spreadsheetId = SPREAD_SHEET_ID_INIT
@@ -56,14 +56,14 @@ class TestGoogle(unittest.TestCase):
 
     def test_cleaning_email(self):
 
-        from ..mainp.APIgoogle import cleaning_email
+        from mainp.APIgoogle import cleaning_email
 
         email = cleaning_email('VOLODYA KOTLYAROV <httprequests.is.good@gmail.com>')
         self.assertEqual(email, 'httprequests.is.good@gmail.com')
 
     def test_name_surname(self):
 
-        from ..mainp.APIgoogle import name_surname
+        from mainp.APIgoogle import name_surname
 
         not_a_email = name_surname('VOLODYA KOTLYAROV <httprequests.is.good@gmail.com>')
         self.assertEqual(not_a_email, 'VOLODYA KOTLYAROV ')
@@ -73,12 +73,12 @@ class TestGoogle(unittest.TestCase):
         # from APIgoogle import search_email
 
     def test_get_service(self):
-        from ..mainp.config import SPREAD_SHEET_ID
-        from ..mainp.config import CREDENTIALS_FILE
-        from ..mainp.APIgoogle import get_service
+        from mainp.config import SPREAD_SHEET_ID
+        from mainp.config import CREDENTIALS_FILE
+        from mainp.APIgoogle import get_service
         service = get_service();
 
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(r'mainp/' + CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
         httpAuth = credentials.authorize(httplib2.Http())
         service = apiclient.discovery.build('sheets', 'v4', http = httpAuth)
 
@@ -99,8 +99,8 @@ class TestGoogle(unittest.TestCase):
 
     def test_get_message(self):
         
-        from ..mainp.APIgoogle import get_message
-        from ..mainp.APIgoogle import get_service
+        from mainp.APIgoogle import get_message
+        from mainp.APIgoogle import get_service
 
         service = get_service()
         user_id = 'sanyabl.atchtozah.inya@gmail.com'
@@ -126,7 +126,7 @@ class TestGoogle(unittest.TestCase):
 
     def test_error_in_word(self):
 
-        from ..mainp.APIgoogle import error_in_work
+        from mainp.APIgoogle import error_in_work
 
         Errors_list=[]
         Errors_list.append('неверно указано название предмета')
@@ -146,9 +146,9 @@ class TestGoogle(unittest.TestCase):
 
     def test_send_message(self):
 
-        from ..mainp.APIgoogle import send_message
-        from ..mainp.APIgoogle import get_service
-        from ..mainp.APIgoogle import get_message
+        from mainp.APIgoogle import send_message
+        from mainp.APIgoogle import get_service
+        from mainp.APIgoogle import get_message
 
         service = get_service()
 

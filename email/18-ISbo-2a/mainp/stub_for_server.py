@@ -2,7 +2,7 @@ import json
 import random
 import socket
 
-import log_method
+import .log_method
 
 
 @log_method.log_method_info

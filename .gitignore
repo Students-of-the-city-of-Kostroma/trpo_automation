@@ -6,6 +6,7 @@
 # My ignor
 *.json
 *.pickle
+config.py
 
 # Virtual Environment & workspace index files
 .idea

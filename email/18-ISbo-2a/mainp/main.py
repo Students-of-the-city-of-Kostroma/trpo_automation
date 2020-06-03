@@ -2,7 +2,7 @@ import random
 import time
 from APIgoogle import *
 from Validation import validation
-from log_method import *
+from .log_method import *
 
 # Id почты
 USER_ID = 'me'

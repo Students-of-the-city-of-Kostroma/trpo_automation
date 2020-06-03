@@ -2,7 +2,7 @@ import configparser
 import logging
 
 config = configparser.RawConfigParser()
-config.read('logging_config.conf')
+config.read('mainp/logging_config.conf')
 levels = {
     'DEBUG': logging.DEBUG,
     'INFO': logging.INFO,

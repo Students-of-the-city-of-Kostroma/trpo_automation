@@ -1,5 +1,5 @@
-import log_method
-from pattern import *
+from . import log_method
+from .pattern import *
 
 
 @log_method.log_method_info
