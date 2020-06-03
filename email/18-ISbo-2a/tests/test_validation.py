@@ -1,5 +1,7 @@
+import sys
+sys.path.append('..')
 import unittest
-from ..mainp.Validation import validation, url_cheack
+from mainp.Validation import validation, url_cheack
 
 class TestValidation(unittest.TestCase):
 
