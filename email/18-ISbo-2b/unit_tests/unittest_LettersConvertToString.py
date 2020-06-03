@@ -96,7 +96,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(letters[0].Body, letters_true[0].Body)
 
     def test_S_4_t5(self):
-        """Тест на ситуацию: Проверка письма с пустым полем Body или в Body ссылка некорректна"""
+        """Тест на ситуацию: Проверка письма в Body ссылка некорректна"""
 
         # Входные данные
         student = User.User("Валерий Бублин", "18-ИСбо-2", None, None)
@@ -110,6 +110,25 @@ class MyTestCase(unittest.TestCase):
         student_true = User.User("Валерий Бублин", "18-ИСбо-2", None, None)
         letter_true = Letter.Letter(student_true, "ЛР01", "https://www.youtube.com/watch?v=b5hM5nydmXU&t=2566s", None,
                                     4)
+        letter_true.Body = ""
+        letter_true.CodeStatus = "08"
+        letters_true = [letter_true]
+        self.assertEqual(letters[0].CodeStatus, letters_true[0].CodeStatus)
+
+    def test_S_4_t6(self):
+        """Тест на ситуацию: Проверка письма с пустым полем Body"""
+
+        # Входные данные
+        student = User.User("Валерий Бублин", "18-ИСбо-2", None, None)
+        letters = []
+        letter = Letter.Letter(student, "ЛР01", "", None, 4)
+        letter.CodeStatus = "20"
+        letters.append(letter)
+        letters = LettersConvertToString(letters)
+
+        # Правильные данные
+        student_true = User.User("Валерий Бублин", "18-ИСбо-2", None, None)
+        letter_true = Letter.Letter(student_true, "ЛР01", "", None, 4)
         letter_true.Body = ""
         letter_true.CodeStatus = "08"
         letters_true = [letter_true]
