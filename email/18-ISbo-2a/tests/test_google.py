@@ -1,6 +1,8 @@
+import sys
+sys.path.append('..')
 import unittest
 import httplib2
-from ..mainp import crypto
+from mainp import crypto
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
 
