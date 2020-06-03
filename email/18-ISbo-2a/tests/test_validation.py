@@ -1,11 +1,9 @@
 import unittest
+from ..mainp.Validation import validation, url_cheack
 
-class Test_validation(unittest.TestCase):
+class TestValidation(unittest.TestCase):
 
     def test_urlcheack1(self):
-
-        from Validation import url_cheack
-
         body_of_msg = 'Добрый день! http://github.com.'
         number = '8'
 
@@ -14,9 +12,6 @@ class Test_validation(unittest.TestCase):
         self.assertEqual(URL, 'http://github.com')
 
     def test_urlcheack2(self):
-
-        from  Validation import url_cheack
-
         body_of_msg = 'Добрый день! http://github.com.'
         number = '6'
 
@@ -25,9 +20,6 @@ class Test_validation(unittest.TestCase):
         self.assertIsNone(URL)
 
     def test_urlcheack3(self):
-
-        from Validation import url_cheack
-
         body_of_msg = 'Добрый день! http://github.com - ссылка на репозиторий.'
         number = '8'
 
@@ -36,9 +28,6 @@ class Test_validation(unittest.TestCase):
         self.assertEqual(URL, 'http://github.com')
 
     def test_urlcheack4(self):
-
-        from Validation import url_cheack
-
         body_of_msg = 'Добрый день! htp://github.com.'
         number = '8'
 
@@ -47,9 +36,6 @@ class Test_validation(unittest.TestCase):
         self.assertIsNone(URL)
     
     def test_validation1(self):
-
-        from Validation import validation
-
         head_of_msg = 'ТРПО ЛР№1'
         body_of_msg = 'Добрый день! Вот ссылка на гитхаб - http://github.com. --подпись типа'       
         validation_dictionary={ 
@@ -63,9 +49,6 @@ class Test_validation(unittest.TestCase):
         self.assertEqual(answer, validation_dictionary)
     
     def test_validation2(self):
-
-        from Validation import validation
-
         head_of_msg = 'ТИПИС ЛР 1'
         body_of_msg = 'Салют! Вот ссылка на гитхаб - http://github.com. Кандидат на отчисление'
         Errors_list = []
@@ -84,9 +67,6 @@ class Test_validation(unittest.TestCase):
         self.assertEqual(answer, validation_dictionary)
     
     def test_validation3(self):
-
-        from Validation import validation
-
         head_of_msg = 'ТРПО ЛР№8'
         body_of_msg = 'Салют! Вот ссылка на гитхаб - http://github.com.'
         Errors_list = []

@@ -1,11 +1,10 @@
 import unittest
 import httplib2
-import requests
-import crypto
+from ..mainp import crypto
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
 
-class Test_google(unittest.TestCase):
+class TestGoogle(unittest.TestCase):
     
     def setUp(self):
         crypto.decrypt_file('Example.json.bin')
@@ -18,9 +17,9 @@ class Test_google(unittest.TestCase):
         crypto.crypt_file('token.pickle')
 
     def test_add_mark(self):
-        from main.config import SPREAD_SHEET_ID
-        from main.config import CREDENTIALS_FILE
-        from main.APIgoogle import add_mark_in_table
+        from ..mainp.config import SPREAD_SHEET_ID
+        from ..mainp.config import CREDENTIALS_FILE
+        from ..mainp.APIgoogle import add_mark_in_table
         add_mark_in_table('(ТРПО) 18-ИСбо-2а', 'M8', '2')
         credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
         httpAuth = credentials.authorize(httplib2.Http())
@@ -33,9 +32,9 @@ class Test_google(unittest.TestCase):
         self.assertEqual(new_one, '2')
 
     def test_search_group(self):
-        from main.config import SPREAD_SHEET_ID_INIT
-        from main.config import CREDENTIALS_FILE
-        from main.APIgoogle import search_group
+        from ..mainp.config import SPREAD_SHEET_ID_INIT
+        from ..mainp.config import CREDENTIALS_FILE
+        from ..mainp.APIgoogle import search_group
 
         credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets',  'https://www.googleapis.com/auth/drive'])
         httpAuth = credentials.authorize(httplib2.Http())
@@ -57,14 +56,14 @@ class Test_google(unittest.TestCase):
 
     def test_cleaning_email(self):
 
-        from main.APIgoogle import cleaning_email
+        from ..mainp.APIgoogle import cleaning_email
 
         email = cleaning_email('VOLODYA KOTLYAROV <httprequests.is.good@gmail.com>')
         self.assertEqual(email, 'httprequests.is.good@gmail.com')
 
     def test_name_surname(self):
 
-        from main.APIgoogle import name_surname
+        from ..mainp.APIgoogle import name_surname
 
         not_a_email = name_surname('VOLODYA KOTLYAROV <httprequests.is.good@gmail.com>')
         self.assertEqual(not_a_email, 'VOLODYA KOTLYAROV ')
@@ -74,9 +73,9 @@ class Test_google(unittest.TestCase):
         # from APIgoogle import search_email
 
     def test_get_service(self):
-        from main.config import SPREAD_SHEET_ID
-        from main.config import CREDENTIALS_FILE
-        from main.APIgoogle import get_service
+        from ..mainp.config import SPREAD_SHEET_ID
+        from ..mainp.config import CREDENTIALS_FILE
+        from ..mainp.APIgoogle import get_service
         service = get_service();
 
         credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
@@ -100,8 +99,8 @@ class Test_google(unittest.TestCase):
 
     def test_get_message(self):
         
-        from main.APIgoogle import get_message
-        from main.APIgoogle import get_service
+        from ..mainp.APIgoogle import get_message
+        from ..mainp.APIgoogle import get_service
 
         service = get_service()
         user_id = 'sanyabl.atchtozah.inya@gmail.com'
@@ -127,7 +126,7 @@ class Test_google(unittest.TestCase):
 
     def test_error_in_word(self):
 
-        from main.APIgoogle import error_in_work
+        from ..mainp.APIgoogle import error_in_work
 
         Errors_list=[]
         Errors_list.append('неверно указано название предмета')
@@ -147,9 +146,9 @@ class Test_google(unittest.TestCase):
 
     def test_send_message(self):
 
-        from main.APIgoogle import send_message
-        from main.APIgoogle import get_service
-        from main.APIgoogle import get_message
+        from ..mainp.APIgoogle import send_message
+        from ..mainp.APIgoogle import get_service
+        from ..mainp.APIgoogle import get_message
 
         service = get_service()
 
