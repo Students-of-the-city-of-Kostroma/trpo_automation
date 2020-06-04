@@ -28,6 +28,8 @@ jobs:
       script:
         - sudo qmake src.pro && make
     - stage: Unit Tests
+      allow_failures: true
+      fast_finish: true
       before_script: cd LR/07/tests
       script:
         - sudo qmake tests.pro && make
