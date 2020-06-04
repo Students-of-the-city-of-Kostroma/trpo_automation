@@ -1,5 +1,6 @@
 import logging
 import configparser
+from logging import Logger
 
 config = configparser.RawConfigParser()
 config.read('logging_config.conf')
@@ -15,7 +16,7 @@ logging.basicConfig(
     level=levels[config['DEFAULT']['level']],
     format=config['DEFAULT']['format'])
 
-logger = logging.getLogger(__name__) 
+logger: Logger = logging.getLogger(__name__)
 
 def log_method_info(method):
     """
@@ -45,7 +46,10 @@ def log_method_info(method):
             logger.error(f'Method has crashed - {method.__name__}')
     return write_logs
 
-#Пример использования декоратора. Если он не нужен, то все, что ниже, можно просто удалить. Не будет выполняться при имортировании модуля
+
+# Пример использования декоратора.
+# Если он не нужен, то все, что ниже, можно просто удалить.
+# Не будет выполняться при имортировании модуля
 if __name__ == '__main__':
     @log_method_info
     def ananas():

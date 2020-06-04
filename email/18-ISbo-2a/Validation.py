@@ -1,8 +1,8 @@
-import log_method
+from utils.log_method import log_method_info, logger
 from pattern import *
 
 
-@log_method.log_method_info
+@log_method_info
 def validation(head_of_msg,body_of_msg):
     """
     Проверка полученного письма на все возможные ошибки
@@ -16,7 +16,7 @@ def validation(head_of_msg,body_of_msg):
         if a != -1:
             break
     if a == -1:
-        log_method.logger.warning('validation: The name of \
+        logger.warning('validation: The name of \
                                    item is incorrect.')
         Errors_list.append('неверно указано название предмета')
     for x in SUBJECTNUMBER_LIST: # Проверка на номер лабораторной
@@ -26,7 +26,7 @@ def validation(head_of_msg,body_of_msg):
             Number=head_of_msg[a+1]
             break
     if a == -1:
-        log_method.logger.warning('validation: The lab number \
+        logger.warning('validation: The lab number \
                                    is incorrect.')
         Errors_list.append('неверно указан номер ЛР')
         Number = None
@@ -35,12 +35,12 @@ def validation(head_of_msg,body_of_msg):
         if a != -1:
             break
     if a == -1:
-        log_method.logger.warning('validation: Missing greeting.')
+        logger.warning('validation: Missing greeting.')
         Errors_list.append('отсутствует приветствие')
     URL=url_cheack(Number,body_of_msg) # Проверка на URL
     a = body_of_msg.find('--') # Проверка на подпись
     if a == -1:
-        log_method.logger.warning('validation: Missing signature.')
+        logger.warning('validation: Missing signature.')
         Errors_list.append('отсутствует подпись')
     validation_dictionary={ # Словарь
      'Number':Number,
@@ -49,7 +49,7 @@ def validation(head_of_msg,body_of_msg):
     }
     return(validation_dictionary)
     
-@log_method.log_method_info
+@log_method_info
 def url_cheack(Number,body_of_msg): # Проверка на наличие URL. Возврат ссылки.
     """
     Проверка на наличие URL
@@ -76,7 +76,7 @@ def url_cheack(Number,body_of_msg): # Проверка на наличие URL. 
             while a + counter >= a:
                 if body_of_msg[a + counter] == '.':
                     URL = body_of_msg[a:a + counter]
-                    logging.debug('url = %s' % URL)
+                    debug('url = %s' % URL)
                     return (URL)                  
                 if body_of_msg[a + counter] != '.':
                     counter = counter - 1  

@@ -3,8 +3,7 @@ import json
 import traceback
 import xml.etree.ElementTree as etree
 from enum import Enum
-
-from log_method import log_method_info, logger
+from utils.log_method import log_method_info, logger
 
 CONFIG_PORTS_URL = "../../labs.xml"
 LOCALHOST_ADDRESS = '127.0.0.1'

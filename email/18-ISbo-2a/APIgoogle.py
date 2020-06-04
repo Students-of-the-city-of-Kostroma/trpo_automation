@@ -1,4 +1,4 @@
-﻿#coding: utf-8
+﻿# coding: utf-8
 import pickle
 import os.path
 import httplib2
@@ -6,7 +6,7 @@ import apiclient.discovery
 import re
 import email
 import base64
-import log_method
+from utils.log_method import *
 from oauth2client.service_account import ServiceAccountCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -15,12 +15,7 @@ from googleapiclient.discovery import build
 from email.mime.text import MIMEText
 from datetime import datetime
 from pprint import pprint
-from config import (
-    SPREAD_SHEET_ID,
-    CREDENTIALS_FILE,
-    SPREAD_SHEET_ID_INIT,
-    CREDENTIALS_FILE_SERVICE,
-)
+from configs.config import *
 from pattern import *
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 
@@ -28,7 +23,8 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
           'https://www.googleapis.com/auth/gmail.labels',
           'https://www.googleapis.com/auth/gmail.modify']
 
-@log_method.log_method_info
+
+@log_method_info
 def get_service():
     """
     Описание: Подключение к почте.
@@ -51,12 +47,8 @@ def get_service():
     service = build('gmail', 'v1', credentials=creds)
     return service
 
-#Костыль для работы c gmailAPI.
-#service = get_service()
-#user_id = 'me'
 
-
-@log_method.log_method_info
+@log_method_info
 def add_str_in_table(table: str, cell: str, mark: str):
     """
     Добавление символа\предложения в таблице.
@@ -65,7 +57,7 @@ def add_str_in_table(table: str, cell: str, mark: str):
     :param cell: Ячейка.
     :param mark: Символ\предложение.
     """
-    log_method.logger.debug(f'add_mark_in_table: table - {table}, \
+    logger.debug(f'add_mark_in_table: table - {table}, \
                             cell - {cell}, mark - {mark}')
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
                     CREDENTIALS_FILE,
@@ -90,7 +82,7 @@ def add_str_in_table(table: str, cell: str, mark: str):
     }).execute()
 
         
-@log_method.log_method_info
+@log_method_info
 def cleaning_email(email_id: str):
     """
     Метод для выделения почты из передаваемой строки email.
@@ -107,7 +99,7 @@ def cleaning_email(email_id: str):
     return z
 
 
-@log_method.log_method_info
+@log_method_info
 def name_surname(email_id: str):
     """ 
     Метод для выделения и передачи имени и фамилии.
@@ -119,7 +111,7 @@ def name_surname(email_id: str):
     return y.group(0)
 
 
-@log_method.log_method_info
+@log_method_info
 def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
     """
     Метод поиска электронной почты в таблице.
@@ -148,7 +140,7 @@ def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
         return None
 
 
-@log_method.log_method_info
+@log_method_info
 def get_message(service, user_id):
     """ 
     Метод получения полезной информации из письма студента.
@@ -194,7 +186,7 @@ def get_message(service, user_id):
     return message_info
 
 
-@log_method.log_method_info
+@log_method_info
 def email_archiving(service, user_id, message_info):
     """
     Архивация сообщения.
@@ -212,7 +204,7 @@ def email_archiving(service, user_id, message_info):
                                                 body=msg_labels).execute()
 
 
-@log_method.log_method_info
+@log_method_info
 def send_message(service, user_id, email_of_student, name_of_student,
                  number_of_templates, validation_dictionary, 
                  error_dictionary, message_info):
@@ -263,7 +255,7 @@ def send_message(service, user_id, email_of_student, name_of_student,
                                                body=body).execute()
     
 
-@log_method.log_method_info
+@log_method_info
 def send_message_to_techsub(service, user_id, email_of_student, 
                             name_of_student, validation_dictionary, 
                             error_dictionary, number_of_templates):
@@ -314,7 +306,7 @@ def send_message_to_techsub(service, user_id, email_of_student,
     send_msg = service.users().messages().send(userId=user_id, body=body).execute()
     
 
-@log_method.log_method_info
+@log_method_info
 def error_in_work(some_errors: dict):
     """
     Метод преобразования массива с ошибками в строку
@@ -330,7 +322,7 @@ def error_in_work(some_errors: dict):
     return error
 
 
-@log_method.log_method_info
+@log_method_info
 def search_group(email_id):
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
                 CREDENTIALS_FILE,
@@ -359,7 +351,7 @@ def search_group(email_id):
         return tuple(values_finish)
 
 
-@log_method.log_method_info
+@log_method_info
 def search_tablic(group, laba, surname):
     group = f'(ТРПО) {group}'
     c = 2
@@ -473,7 +465,7 @@ def add_table(group, name):
 def get_log():
     from collections import deque
     try:
-        file_name = 'product_logs.log'
+        file_name = '..utils/product_logs.log'
         with open(file_name) as f:
             date = list(deque(f, 5))
         return date
