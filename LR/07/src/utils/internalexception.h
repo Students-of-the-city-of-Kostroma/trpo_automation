@@ -61,11 +61,13 @@ class WrongRequestException : public InternalException
 {
 private:
     QString key;
+    int rejectCode;
 
 public:
-    WrongRequestException(QString key, QString explanation, QString systemMessage = "")
+    WrongRequestException(QString key, QString explanation, int _rejectCode, QString systemMessage = "")
         : InternalException(explanation, systemMessage),
-          key(key)
+          key(key),
+          rejectCode(_rejectCode)
     {}
 
     ~WrongRequestException() {}
@@ -73,6 +75,11 @@ public:
     const QString jsonKey()
     {
         return key;
+    }
+
+    int getRejectCode()
+    {
+        return rejectCode;
     }
 };
 
