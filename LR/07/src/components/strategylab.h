@@ -2,7 +2,7 @@
 #define STARTEGYLAB_H
 
 #include "utils/internalexception.h"
-#include "logfile.h"
+#include "utils/logfile.h"
 
 #include <QObject>
 #include <QtXml>
