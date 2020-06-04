@@ -34,7 +34,7 @@ public class Server {
 
     private static void SetPort(){
         try {
-            final File xmlFile = new File(System.getProperty("user.dir") + File.separator + FILENAME);
+              final File xmlFile = new File(System.getProperty("user.dir") +File.separator +".." + File.separator+ File.separator +".." + File.separator + FILENAME);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(xmlFile);
