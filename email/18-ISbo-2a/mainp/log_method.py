@@ -1,8 +1,6 @@
-import configparser
+import logging_config as config
 import logging
 
-config = configparser.RawConfigParser()
-config.read('mainp/logging_config.conf')
 levels = {
     'DEBUG': logging.DEBUG,
     'INFO': logging.INFO,
@@ -11,9 +9,9 @@ levels = {
     'CRITICAL': logging.CRITICAL
 }
 logging.basicConfig(
-    filename=config['DEFAULT']['file'],
-    level=levels[config['DEFAULT']['level']],
-    format=config['DEFAULT']['format'])
+    filename=config.filename,
+    level=levels[config.level],
+    format=config.format)
 
 logger = logging.getLogger(__name__)
 
