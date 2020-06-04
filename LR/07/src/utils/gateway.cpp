@@ -184,13 +184,14 @@ void Gateway::checkKeyNonExistance()
  * @param jsonKey - ключ, где обнаружена ошибка
  * @param text - текст ошибки
  */
-void Gateway::wrongRequestFormat(QString jsonKey, QString text)
+void Gateway::wrongRequestFormat(QString jsonKey, int rejectCode, QString text)
 {
     QJsonObject jsonObj;
 
     jsonObj["messageType"] = messageType::WRONG_REQUEST;
     jsonObj["key"] = jsonKey;
     jsonObj["text"] = text;
+    jsonObj["rejectCode"] = rejectCode;
 
     emit sendToClient(jsonObj);
 }
