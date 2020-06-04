@@ -3,5 +3,6 @@
         <file>config/jsonSpecificationForClientRequest.xml</file>
         <file>config/answerStructure.xml</file>
         <file alias="config/labs.xml">../../../labs.xml</file>
+        <file>config/testSuites.xlsx</file>
     </qresource>
 </RCC>
