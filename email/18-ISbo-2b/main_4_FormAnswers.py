@@ -75,19 +75,19 @@ def MakeAnswersForUsers(letterResult):
 
         elif i.CodeStatus == "30":
             try:
-                pattern = work_PatternsOfLetter.WorkVerified(i.IsOK)
+                pattern = work_PatternsOfLetter.WorkVerified(i.IsOK, i.CodeStatusComment)
                 par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
-                forTeacher.add(par)
-                teacher = True
-                
-            except expression:
+                if i.IsOK:
+                    teacher = True
+                    forTeacher.add(par)
+            except:
                 continue
 
         else:
-             continue
+            continue
 
-            answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
-            answers.append(answer)
+        answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
+        answers.append(answer)
 
     if teacher == True:
         answer = AnswersForUsers(cfg.teacher_email, forTeacher.return_theme(), forTeacher.return_body())

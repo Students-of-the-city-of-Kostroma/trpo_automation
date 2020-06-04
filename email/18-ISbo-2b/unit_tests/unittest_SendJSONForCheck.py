@@ -202,7 +202,7 @@ class TestSendJSONForCheck(unittest.TestCase):
         student = User.User("Максим Расторгуев", "18-ИСбо-2", None, None)
 
         # Создание письма
-        letter = Letter.Letter(student, "ЛР01", "Max", 1, 1)
+        letter = Letter.Letter(student, "ЛР01", "Max", 1, 3)
 
         # Заполнение полей письма
         letter.CodeStatus = "20"
