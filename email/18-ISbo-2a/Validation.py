@@ -23,7 +23,7 @@ def validation(head_of_msg,body_of_msg,name):
             count += 1
     if count == 0:
         Error.append('Нет приветствия')
-    if re.search(r'№\w+', head_of_msg) != None:    # лаба
+    if re.search(r'№\d*', head_of_msg) != None and re.search(r'Лаб\S+', head_of_msg) != None:    # лаба
         hek=re.search(r'№\w+', head_of_msg)[0]
         hek=hek.replace('№','')
         if(int(hek)<=13 and int(hek)>0):
