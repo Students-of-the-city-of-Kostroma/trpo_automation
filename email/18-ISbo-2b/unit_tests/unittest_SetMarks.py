@@ -1,7 +1,6 @@
-from main_3_send_SetResults import SetMarks
+from main_3_SetResults import SetMarks
 from global_User import User
 from global_LetterResult import LetterResult
-import google_Sheet
 import unittest
 
 
@@ -9,7 +8,7 @@ class test_SetMarks(unittest.TestCase):
     """Перед запуском теста нужно стереть оценку за 10 лабораторную у Калининой Екатерины
     в журнале https://docs.google.com/spreadsheets/d/1MPkVTspH5MCtCvUXNTduhgQl90N3LIjzLjqfjYTDPdc/edit#gid=867705603"""
 
-    def test_S_7_t3(self):
+    def test_S_7_t1(self):
         """В журнал выставляется ноль"""
 
         # Создание ожидаемого результата
@@ -30,6 +29,7 @@ class test_SetMarks(unittest.TestCase):
         self.assertEqual(letters[0].CodeStatus, '30')
 
     def test_S_7_t4(self):
+        """Данные не изменяются в результате выполнения функции"""
         # Создание ожидаемого результата
         letters = []
         let = LetterResult()
@@ -40,7 +40,7 @@ class test_SetMarks(unittest.TestCase):
 
         self.assertEqual(letters[0].CodeStatus, '05')
 
-    def test_S_7_t1(self):
+    def test_S_7_t2(self):
         """В журнал выставляется единица"""
 
         # Создание ожидаемого результата
@@ -61,7 +61,7 @@ class test_SetMarks(unittest.TestCase):
         # Метод ничего не возвращает, но отрабатывает верно
         self.assertEqual(letters[0].CodeStatus, '30')
 
-    def test_S_7_t2(self):
+    def test_S_7_t3(self):
         """Оценка в журнале не обновляется, т.к. работа была сдана ранее"""
 
         # Создание ожидаемого результата

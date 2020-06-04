@@ -2,7 +2,7 @@
 import unittest
 import global_User as User
 import global_Letter as Letter
-from main_2_base_WorkWithLetters import LettersConvertToString
+from main_2_WorkWithLetters import LettersConvertToString
 
 
 class MyTestCase(unittest.TestCase):

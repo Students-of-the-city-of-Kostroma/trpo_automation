@@ -1,5 +1,5 @@
 import unittest
-import main_5_send_InformUsers as InformUsers
+import main_5_InformUsers as InformUsers
 import global_AnswersForUsers as AnswersForUsers
 import work_EmailLibrary as EmailLibrary
 

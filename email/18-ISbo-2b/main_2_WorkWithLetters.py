@@ -181,21 +181,21 @@ def SendJSONForCheck(jsonDates, letters):
                         if otvetServ["grade"] == 1:
                             IsOk = True
                         letter.Comment = otvetServ["comment"]
+                        letter.CodeStatusComment = "Работа проверена"
                         letter.CodeStatus = "30"
-                        letter.Comment = ""
                         sock.close()
 
                     else:
                         if otvetServ["messageType"] == 3:
                             letter.CodeStatus = "07"
-                            letter.CodeStatusComment = ""
+                            letter.CodeStatusComment = otvetServ["key"], otvetServ["text"], otvetServ["rejectCode"]
                             letter.Comment = otv_serv.decode()
                             sock.close()
 
                         else:
                             if otvetServ["messageType"] == 4:
                                 letter.CodeStatus = "06"
-                                letter.CodeStatusComment = ""
+                                letter.CodeStatusComment = otvetServ["errorMessage"]
                                 letter.Comment = otv_serv.decode()
                                 sock.close()
 
@@ -205,11 +205,13 @@ def SendJSONForCheck(jsonDates, letters):
                     letter.CodeStatusComment = "ERROR. Длительное ожидание ответа от сервера"
 
             except:
+
                 # Для того, чтобы знать что случилось
                 letter.CodeStatusComment = "Сервер был не доступен"
                 letter.CodeStatus = "06"
-
+                sock.close()
         else:
+
             # Заполнение полей letterResult
             letter.CodeStatus = i.CodeStatus
         letter.Student = i.Student
