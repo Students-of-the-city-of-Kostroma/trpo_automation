@@ -1,12 +1,11 @@
 import os
-
-import log_method
+from .log_method import log_method_info
 from cryptography.fernet import Fernet
 
 cripher = Fernet(b'D7Zh4RcKcxIRDOrxB68u98_WT_31qlMhXwFTMByCAYc=')
 
 
-@log_method.log_method_info
+@log_method_info
 def crypt_file(filename):
     '''
     Шифрует любой файл.
@@ -23,7 +22,7 @@ def crypt_file(filename):
             encrypted.write(encrypted_data)
 
 
-@log_method.log_method_info
+@log_method_info
 def decrypt_file(filename):
     '''
     Выполняет расшифровку файла.
@@ -43,10 +42,11 @@ def decrypt_file(filename):
 
 
 if __name__ == '__main__':
-    crypt_file('credentials.json')
-    crypt_file('Example.json')
-    crypt_file('config.py')
-    crypt_file('token.pickle')
-    # decrypt_file('Example.json.bin')
-    # decrypt_file('credentials.json.bin')
-    # decrypt_file('config.py.bin')
+    # crypt_file(r'../configs/credentials.json')
+    # crypt_file(r'../configs/Example.json')
+    # crypt_file(r'../configs/config.py')
+    # crypt_file(r'../configs/token.pickle')
+    decrypt_file(r'../configs/credentials.json.bin')
+    decrypt_file(r'../configs/Example.json.bin')
+    decrypt_file(r'../configs/config.py.bin')
+    decrypt_file(r'../configs/token.pickle.bin')

@@ -1,4 +1,4 @@
-import logging_config as config
+from . import logging_config as config
 import logging
 
 levels = {
@@ -14,7 +14,6 @@ logging.basicConfig(
     format=config.format)
 
 logger = logging.getLogger(__name__)
-
 
 def log_method_info(method):
     """
@@ -47,7 +46,9 @@ def log_method_info(method):
     return write_logs
 
 
-# Пример использования декоратора. Если он не нужен, то все, что ниже, можно просто удалить. Не будет выполняться при имортировании модуля
+# Пример использования декоратора.
+# Если он не нужен, то все, что ниже, можно просто удалить.
+# Не будет выполняться при имортировании модуля
 if __name__ == '__main__':
     @log_method_info
     def ananas():

@@ -1,5 +1,6 @@
 import unittest
-import crypto
+import utils.crypto
+
 class Test_google(unittest.TestCase):
     def setUp(self):
         crypto.decrypt_file('Example.json.bin')

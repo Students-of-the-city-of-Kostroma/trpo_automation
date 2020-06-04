@@ -3,23 +3,25 @@ import base64
 import os.path
 import pickle
 import re
+import email
+from utils.log_method import *
+from oauth2client.service_account import ServiceAccountCredentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from configs.config import *
 import apiclient.discovery
 import httplib2
-from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from oauth2client.service_account import ServiceAccountCredentials
 
-from config import (
+from configs.config import (
     SPREAD_SHEET_ID,
     CREDENTIALS_FILE,
     SPREAD_SHEET_ID_INIT,
     CREDENTIALS_FILE_SERVICE
 )
-from log_method import *
+from utils.log_method import *
 from pattern import *
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
@@ -34,8 +36,8 @@ def get_service():
     Описание: Подключение к почте.
     """
     creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists(r'configs/token.pickle'):
+        with open(r'configs/token.pickle', 'rb') as token:
             creds = pickle.load(token)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -73,18 +75,17 @@ def add_str_in_table(table: str, cell: str, mark: str):
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
     rangeTab = f"(ТРПО) {table}!{cell}"
-    service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID,
-                                                body={
-                                                    "valueInputOption": "USER_ENTERED",
-                                                    "data": [
-                                                        {
-                                                            "range": rangeTab,
-                                                            "majorDimension": "ROWS",
-                                                            "values": [[mark]]
-                                                        }
-                                                    ]
-                                                }).execute()
-
+    service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, 
+        body={
+            "valueInputOption": "USER_ENTERED",
+            "data": [
+                {
+                    "range": rangeTab,
+                    "majorDimension": "ROWS",     
+                    "values": [ [mark] ]
+                }
+        ]
+    }).execute()
 
 @log_method_info
 def cleaning_email(email_id: str):
@@ -129,7 +130,7 @@ def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
         CREDENTIALS_FILE,
         [
             'https://www.googleapis.com/auth/spreadsheets',
-            'https://www.googleapis.com/auth/drive'
+            'https://www.googleapis.com/auth/drive',
         ]
     )
     httpAuth = credentials.authorize(httplib2.Http())
@@ -376,7 +377,7 @@ def search_tablic(group, laba, surname):
                 c = c + 1
             else:
                 break
-        position = str(chr(count)) + str(c)
+        position = str(chr(count)) + str(c-1)
     except:
         return None
     else:
@@ -468,7 +469,7 @@ def add_table(group, name):
 def get_log():
     from collections import deque
     try:
-        file_name = 'product_logs.log'
+        file_name = '..utils/product_logs.log'
         with open(file_name) as f:
             date = list(deque(f, 5))
         return date
