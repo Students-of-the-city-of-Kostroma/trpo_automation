@@ -35,10 +35,10 @@ public:
     void checkParentChildrenRelations();
     void checkContext();
     void checkMainFunction();
+    void checkChildren();
 
 private:
     void checkAbstractMethodModifier(QString, QString, QString modifier = "public");
-    void checkChildren();
 };
 
 #endif // STARTEGYLAB_H
