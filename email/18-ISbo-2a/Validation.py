@@ -24,9 +24,14 @@ def validation(head_of_msg,body_of_msg,name):
     if count == 0:
         Error.append('Нет приветствия')
     if re.search(r'№\w+', head_of_msg) != None:    # лаба
-        number = re.search(r'№\w+', head_of_msg)[0]
+        hek=re.search(r'№\w+', head_of_msg)[0]
+        hek=hek.replace('№','')
+        if(int(hek)<=13 and int(hek)>0):
+            number = re.search(r'№\w+', head_of_msg)[0]
+        else:
+            Error.append('Неверно указан номер лабораторной')
     else:
-        Error.append('Неверно указан номер лабораторной')
+        Error.append('Нет номера лабораторной работы')
     if re.search(r'(ТРПО)', head_of_msg) == None:    # дисциплина
         Error.append('Неверно указана дисциплина')
     url.append(re.findall("(?P<url>https?://[^\s]+)",body_of_msg)) # ссылка
