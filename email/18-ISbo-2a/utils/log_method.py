@@ -1,10 +1,7 @@
+import logging_config as config
 import logging
-import configparser
-from logging import Logger
 
-config = configparser.RawConfigParser()
-config.read('logging_config.conf')
-levels ={
+levels = {
     'DEBUG': logging.DEBUG,
     'INFO': logging.INFO,
     'WARNING': logging.WARNING,
@@ -12,11 +9,11 @@ levels ={
     'CRITICAL': logging.CRITICAL
 }
 logging.basicConfig(
-    filename=config['DEFAULT']['file'],
-    level=levels[config['DEFAULT']['level']],
-    format=config['DEFAULT']['format'])
+    filename=config.filename,
+    level=levels[config.level],
+    format=config.format)
 
-logger: Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 def log_method_info(method):
     """
@@ -24,6 +21,7 @@ def log_method_info(method):
 
     method - метод, который нужно залогировать
     """
+
     def write_logs(*args, **kwargs):
         """
         Выполняет логирование
@@ -31,19 +29,20 @@ def log_method_info(method):
         args, kwargs - параметры, которые нужно передать в метод
         """
         try:
-            #Записываем вход в метод
+            # Записываем вход в метод
             logger.info(f'Got into - {method.__name__}')
-            #Выполняем метод, помещаем результат работы метода в result
+            # Выполняем метод, помещаем результат работы метода в result
             result = method(*args, **kwargs)
-            #Записываем результат выполнения метода
+            # Записываем результат выполнения метода
             logger.debug(f'Method {method.__name__} has returned - {result}')
             logger.info(f'Method has completed - {method.__name__}')
-            #Возвращаем значение, которое было получено из метода
+            # Возвращаем значение, которое было получено из метода
             return result
         except Exception as ex:
-            #Записываем в логи ошибку, если такая была
+            # Записываем в логи ошибку, если такая была
             logger.exception(ex)
             logger.error(f'Method has crashed - {method.__name__}')
+
     return write_logs
 
 
@@ -53,7 +52,8 @@ def log_method_info(method):
 if __name__ == '__main__':
     @log_method_info
     def ananas():
-        print ('ananas')
-        print(1/0)
+        print('ananas')
+        print(1 / 0)
+
 
     ananas()

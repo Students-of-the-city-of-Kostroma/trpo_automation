@@ -21,6 +21,7 @@ class Test_google(unittest.TestCase):
         from config import SPREAD_SHEET_ID
         from config import CREDENTIALS_FILE
         from APIgoogle import add_mark_in_table
+
         add_mark_in_table('(ТРПО) 18-ИСбо-2а', 'M8', '2')
         credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
         httpAuth = credentials.authorize(httplib2.Http())
@@ -56,15 +57,14 @@ class Test_google(unittest.TestCase):
         self.assertEqual(set_group, values_for_test)
 
     def test_cleaning_email(self):
-
         from APIgoogle import cleaning_email
 
         email = cleaning_email('VOLODYA KOTLYAROV <httprequests.is.good@gmail.com>')
         self.assertEqual(email, 'httprequests.is.good@gmail.com')
 
     def test_name_surname(self):
-
         from APIgoogle import name_surname
+
 
         not_a_email = name_surname('VOLODYA KOTLYAROV <httprequests.is.good@gmail.com>')
         self.assertEqual(not_a_email, 'VOLODYA KOTLYAROV ')
@@ -77,6 +77,7 @@ class Test_google(unittest.TestCase):
         from config import SPREAD_SHEET_ID
         from config import CREDENTIALS_FILE
         from APIgoogle import get_service       
+
         service = get_service();
 
         credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
@@ -99,9 +100,9 @@ class Test_google(unittest.TestCase):
         self.assertEqual(new_one, '4')
 
     def test_get_message(self):
-        
         from APIgoogle import get_message
         from APIgoogle import get_service
+
 
         service = get_service()
         user_id = 'sanyabl.atchtozah.inya@gmail.com'
@@ -126,7 +127,6 @@ class Test_google(unittest.TestCase):
         self.assertEqual(message_info, our_info)
 
     def test_error_in_word(self):
-
         from APIgoogle import error_in_work
 
         Errors_list=[]
@@ -146,10 +146,9 @@ class Test_google(unittest.TestCase):
         self.assertEqual(get_error, answer)
 
     def test_send_message(self):
-
-        from APIgoogle import send_message
-        from APIgoogle import get_service
-        from APIgoogle import get_message
+        from main.APIgoogle import send_message
+        from main.APIgoogle import get_service
+        from main.APIgoogle import get_message
 
         service = get_service()
 

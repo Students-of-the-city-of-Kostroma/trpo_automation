@@ -1,24 +1,30 @@
 ﻿# coding: utf-8
-import pickle
+import base64
 import os.path
-import httplib2
-import apiclient.discovery
+import pickle
 import re
 import email
-import base64
 from utils.log_method import *
 from oauth2client.service_account import ServiceAccountCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from email.mime.multipart import MIMEMultipart
-from googleapiclient.discovery import build
 from email.mime.text import MIMEText
-from datetime import datetime
-from pprint import pprint
 from configs.config import *
+import apiclient.discovery
+import httplib2
+from googleapiclient.discovery import build
+
+from config import (
+    SPREAD_SHEET_ID,
+    CREDENTIALS_FILE,
+    SPREAD_SHEET_ID_INIT,
+    CREDENTIALS_FILE_SERVICE
+)
+from log_method import *
 from pattern import *
 
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
           'https://www.googleapis.com/auth/gmail.send',
           'https://www.googleapis.com/auth/gmail.labels',
           'https://www.googleapis.com/auth/gmail.modify']
@@ -38,7 +44,7 @@ def get_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-            	CREDENTIALS_FILE_SERVICE,
+                CREDENTIALS_FILE_SERVICE,
                 SCOPES)
             creds = flow.run_local_server(port=0)
         with open('token.pickle', 'wb') as token:
@@ -60,14 +66,14 @@ def add_str_in_table(table: str, cell: str, mark: str):
     logger.debug(f'add_mark_in_table: table - {table}, \
                             cell - {cell}, mark - {mark}')
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                    CREDENTIALS_FILE,
-                    [
-                        'https://www.googleapis.com/auth/spreadsheets',
-                        'https://www.googleapis.com/auth/drive'
-                    ]
+        CREDENTIALS_FILE,
+        [
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/drive'
+        ]
     )
     httpAuth = credentials.authorize(httplib2.Http())
-    service = apiclient.discovery.build('sheets', 'v4', http = httpAuth) 
+    service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
     rangeTab = f"(ТРПО) {table}!{cell}"
     service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, 
         body={
@@ -81,7 +87,6 @@ def add_str_in_table(table: str, cell: str, mark: str):
         ]
     }).execute()
 
-        
 @log_method_info
 def cleaning_email(email_id: str):
     """
@@ -106,7 +111,7 @@ def name_surname(email_id: str):
     :param email_id: Строка по типу <Иван Иванович>
     :return: Возвращает строку по типу "Иван Иванович"
     """
-    comp = re.compile('(\S*?) '+'(\S*?) ')
+    comp = re.compile('(\S*?) ' + '(\S*?) ')
     y = comp.search(email_id)
     return y.group(0)
 
@@ -122,18 +127,18 @@ def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
     """
     mail_str = cleaning_email(email_id)
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                CREDENTIALS_FILE,
-                [
-                    'https://www.googleapis.com/auth/spreadsheets',
-                    'https://www.googleapis.com/auth/drive'
-                ]
-            )
+        CREDENTIALS_FILE,
+        [
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/drive'
+        ]
+    )
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
     range_name = 'List1!B1:B1000'
     table = service.spreadsheets().values().get(
-          spreadsheetId=spreadsheetid,
-          range=range_name).execute()
+        spreadsheetId=spreadsheetid,
+        range=range_name).execute()
     if re.search(mail_str, str(table)):
         return mail_str
     else:
@@ -156,12 +161,12 @@ def get_message(service, user_id):
     message_id = search_id['messages']
     alone_msg = message_id[0]
     id_of_msg = alone_msg['id']
-    change_label = {'removeLabelIds':['UNREAD'], 'addLabelIds':[]}
+    change_label = {'removeLabelIds': ['UNREAD'], 'addLabelIds': []}
     change_msg_label = service.users().messages().modify(userId=user_id,
                                                          id=id_of_msg,
                                                          body=change_label
-                                                        ).execute()
-    message_list = service.users().messages().get(userId=user_id, 
+                                                         ).execute()
+    message_list = service.users().messages().get(userId=user_id,
                                                   id=id_of_msg,
                                                   format='full').execute()
     info_of_msg = message_list.get('payload')['headers']
@@ -169,19 +174,19 @@ def get_message(service, user_id):
     head_of_msg = ''
     body_of_msg = ''
     date_of_msg = ''
-    for head in info_of_msg :
-        if head['name'] == 'From' :
+    for head in info_of_msg:
+        if head['name'] == 'From':
             email_id = head['value']
-        if head['name'] == 'Subject' :
+        if head['name'] == 'Subject':
             head_of_msg = head['value']
-        if head['name'] == 'Date' :
+        if head['name'] == 'Date':
             date_of_msg = head['value']
     body_of_msg = message_list['snippet']
 
-    message_info = {'id_of_msg':id_of_msg,
-                    'email_id':email_id,
-                    'head_of_msg':head_of_msg,
-                    'body_of_msg':body_of_msg,
+    message_info = {'id_of_msg': id_of_msg,
+                    'email_id': email_id,
+                    'head_of_msg': head_of_msg,
+                    'body_of_msg': body_of_msg,
                     'date_of_msg': date_of_msg}
     return message_info
 
@@ -206,7 +211,7 @@ def email_archiving(service, user_id, message_info):
 
 @log_method_info
 def send_message(service, user_id, email_of_student, name_of_student,
-                 number_of_templates, validation_dictionary, 
+                 number_of_templates, validation_dictionary,
                  error_dictionary, message_info):
     """
     Метод по отправке сообщения студенту.  
@@ -222,7 +227,7 @@ def send_message(service, user_id, email_of_student, name_of_student,
     """
 
     str_of_val_er = ""
-    str_of_er = "" 
+    str_of_er = ""
     if number_of_templates == 1:
         str_of_val_er = error_in_work(validation_dictionary)
     elif number_of_templates == 2:
@@ -251,13 +256,13 @@ def send_message(service, user_id, email_of_student, name_of_student,
     raw = raw.decode()
     body = {'raw': raw}
 
-    send_msg = service.users().messages().send(userId=user_id, 
+    send_msg = service.users().messages().send(userId=user_id,
                                                body=body).execute()
-    
+
 
 @log_method_info
-def send_message_to_techsub(service, user_id, email_of_student, 
-                            name_of_student, validation_dictionary, 
+def send_message_to_techsub(service, user_id, email_of_student,
+                            name_of_student, validation_dictionary,
                             error_dictionary, number_of_templates):
     """
     Рассылка писем ТП.
@@ -284,8 +289,8 @@ def send_message_to_techsub(service, user_id, email_of_student,
     sending_msg['From'] = GMAIL_OF_TRPO
 
     sending_msg = MIMEMultipart('alternative')
-    sending_msg = MIMEText(message_templates[number_of_templates]['hello'] + 
-                           message_templates[number_of_templates]['our_msg'] + 
+    sending_msg = MIMEText(message_templates[number_of_templates]['hello'] +
+                           message_templates[number_of_templates]['our_msg'] +
                            SIGNATURE)
     sending_msg['Subject'] = message_templates[number_of_templates]['title']
     # Косяк!!!
@@ -304,7 +309,7 @@ def send_message_to_techsub(service, user_id, email_of_student,
         body = {'raw': raw}
 
     send_msg = service.users().messages().send(userId=user_id, body=body).execute()
-    
+
 
 @log_method_info
 def error_in_work(some_errors: dict):
@@ -325,28 +330,28 @@ def error_in_work(some_errors: dict):
 @log_method_info
 def search_group(email_id):
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                CREDENTIALS_FILE,
-                ['https://www.googleapis.com/auth/spreadsheets',
-                 'https://www.googleapis.com/auth/drive'])
+        CREDENTIALS_FILE,
+        ['https://www.googleapis.com/auth/spreadsheets',
+         'https://www.googleapis.com/auth/drive'])
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
     spreadsheetId = SPREAD_SHEET_ID_INIT
     range_name = 'List1!B1:B1000'
     table = service.spreadsheets().values().get(
-            spreadsheetId=spreadsheetId,
-            range=range_name).execute()
+        spreadsheetId=spreadsheetId,
+        range=range_name).execute()
     c = 1
     for val in table.get('values'):
         if val[0] != email_id:
             c += 1
         else:
             break
-    if c == len(table.get('values'))+1:
+    if c == len(table.get('values')) + 1:
         return None
     else:
         nomer = f'List1!F{c}:G{c}'
         table1 = service.spreadsheets().values().get(
-               spreadsheetId=spreadsheetId, range=nomer).execute()
+            spreadsheetId=spreadsheetId, range=nomer).execute()
         values_finish = table1.get('values')[0]
         return tuple(values_finish)
 
@@ -356,21 +361,20 @@ def search_tablic(group, laba, surname):
     group = f'(ТРПО) {group}'
     c = 2
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                CREDENTIALS_FILE,
-                ['https://www.googleapis.com/auth/spreadsheets',
-                 'https://www.googleapis.com/auth/drive'])
+        CREDENTIALS_FILE,
+        ['https://www.googleapis.com/auth/spreadsheets',
+         'https://www.googleapis.com/auth/drive'])
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
-    spreadsheetId = SPREAD_SHEET_ID
     range_name = f'{group}!A1:A100'
     table = service.spreadsheets().values().get(
-            spreadsheetId=spreadsheetId, range=range_name).execute()
-    count = ord('D') + int(laba)-1
+        spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
+    count = ord('D') + int(laba) - 1
     nomer_stolbca = chr(count)
     try:
         for name in table.get('values'):
             if name[0] != surname:
-                c = c+1
+                c = c + 1
             else:
                 break
         position = str(chr(count)) + str(c)
@@ -379,7 +383,7 @@ def search_tablic(group, laba, surname):
     else:
         return position
 
-    
+
 def search_dolgi(group, position):
     """
     Метод для поиска долгов 
@@ -395,12 +399,12 @@ def search_dolgi(group, position):
     )
     http_auth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
-    dolg=[]
-    number_laboratorn=-1
+    dolg = []
+    number_laboratorn = -1
     range_name = f'{group}!D{position[1]}:P{position[1]}'
     table = service.spreadsheets().values().get(spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
     for p in table.get('values')[0]:
-        number_laboratorn=number_laboratorn+1 
+        number_laboratorn = number_laboratorn + 1
         try:
             if p[0] == '0':
                 dolg.append(number_laboratorn)
@@ -419,43 +423,43 @@ def add_table(group, name):
     :param name: ФИО студента
     """
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                CREDENTIALS_FILE,
-                [
-                    'https://www.googleapis.com/auth/spreadsheets',
-                    'https://www.googleapis.com/auth/drive'
-                ]
+        CREDENTIALS_FILE,
+        [
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/drive'
+        ]
     )
     http_auth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
-    range_name=f'{group}!A1:A100'
+    range_name = f'(ТРПО) {group}!A1:A100'
     table = service.spreadsheets().values().get(
-                spreadsheetId=SPREAD_SHEET_ID,
-                range=range_name).execute()
+        spreadsheetId=SPREAD_SHEET_ID,
+        range=range_name).execute()
     column = 1
     for i in table.get('values'):
-        if(i[0] == name):
-            status=('available',)
-            count=0
+        if i[0] == name:
+            status = ('available',)
+            count = 0
             break
         else:
-            column =column  + 1
-            range_name = f'{group}!A{column}:A{column}'
+            column = column + 1
+            range_name = f'(ТРПО) {group}!A{column}:A{column}'
             count = 1
-            
+
     if count == 1:
         try:
             service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, body={
-                        "valueInputOption": "USER_ENTERED",
-                        "data": [
-                                {
-                                    "range":range_name ,
-                                    "majorDimension": "ROWS",
-                                    "values": [
-                                        [name]
-                                    ]
-                                }
+                "valueInputOption": "USER_ENTERED",
+                "data": [
+                    {
+                        "range": range_name,
+                        "majorDimension": "ROWS",
+                        "values": [
+                            [name]
                         ]
-                }).execute()
+                    }
+                ]
+            }).execute()
             status = ('accepted',)
         except:
             status = ('error',)

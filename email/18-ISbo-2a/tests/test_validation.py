@@ -14,7 +14,6 @@ class Test_validation(unittest.TestCase):
         self.assertEqual(URL, 'http://github.com')
 
     def test_urlcheack2(self):
-
         from Validation import url_cheack
 
         body_of_msg = 'Добрый день! http://github.com.'

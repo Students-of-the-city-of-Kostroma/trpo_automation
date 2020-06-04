@@ -1,7 +1,6 @@
 import os
-from cryptography.fernet import Fernet
-#from . import log_method
 import log_method
+from cryptography.fernet import Fernet
 
 cripher = Fernet(b'D7Zh4RcKcxIRDOrxB68u98_WT_31qlMhXwFTMByCAYc=')
 
@@ -48,6 +47,6 @@ if __name__ == '__main__':
     # crypt_file(r'../configs/config.py')
     # crypt_file(r'../configs/token.pickle')
     decrypt_file(r'../configs/credentials.json.bin')
-    # decrypt_file(r'../configs/Example.json.bin')
-    # decrypt_file(r'../configs/config.py.bin')
-    # decrypt_file(r'../configs/token.pickle.bin')
+    decrypt_file(r'../configs/Example.json.bin')
+    decrypt_file(r'../configs/config.py.bin')
+    decrypt_file(r'../configs/token.pickle.bin')
