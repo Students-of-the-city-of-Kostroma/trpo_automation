@@ -1,25 +1,25 @@
 import unittest
 import httplib2
 import requests
-import crypto
 import apiclient.discovery
+from ..utils import crypto
 from oauth2client.service_account import ServiceAccountCredentials
 
+
 class Test_google(unittest.TestCase):
-    
     def setUp(self):
-        crypto.decrypt_file('Example.json.bin')
-        crypto.decrypt_file('config.py.bin')
-        crypto.decrypt_file('token.pickle.bin')
+        decrypt_file('Example.json.bin')
+        decrypt_file('config.py.bin')
+        decrypt_file('token.pickle.bin')
 
     def tearDown(self):
-        crypto.crypt_file('Example.json')
-        crypto.crypt_file('config.py')
-        crypto.crypt_file('token.pickle')
+        crypt_file('Example.json')
+        crypt_file('config.py')
+        crypt_file('token.pickle')
 
     def test_add_mark(self):
-        from config import SPREAD_SHEET_ID
-        from config import CREDENTIALS_FILE
+        from configs.config import SPREAD_SHEET_ID
+        from configs.config import CREDENTIALS_FILE
         from APIgoogle import add_mark_in_table
 
         add_mark_in_table('(ТРПО) 18-ИСбо-2а', 'M8', '2')
@@ -34,8 +34,8 @@ class Test_google(unittest.TestCase):
         self.assertEqual(new_one, '2')
 
     def test_search_group(self):
-        from config import SPREAD_SHEET_ID_INIT
-        from config import CREDENTIALS_FILE
+        from configs.config import SPREAD_SHEET_ID_INIT
+        from configs.config import CREDENTIALS_FILE
         from APIgoogle import search_group
 
         credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets',  'https://www.googleapis.com/auth/drive'])
@@ -74,9 +74,9 @@ class Test_google(unittest.TestCase):
         # from APIgoogle import search_email
 
     def test_get_service(self):
-        from config import SPREAD_SHEET_ID
-        from config import CREDENTIALS_FILE
-        from APIgoogle import get_service       
+        from configs.config import SPREAD_SHEET_ID
+        from configs.config import CREDENTIALS_FILE
+        from APIgoogle import get_service
 
         service = get_service();
 
@@ -103,7 +103,6 @@ class Test_google(unittest.TestCase):
         from APIgoogle import get_message
         from APIgoogle import get_service
 
-
         service = get_service()
         user_id = 'sanyabl.atchtozah.inya@gmail.com'
         message_info = get_message(service, user_id)
@@ -129,7 +128,7 @@ class Test_google(unittest.TestCase):
     def test_error_in_word(self):
         from APIgoogle import error_in_work
 
-        Errors_list=[]
+        Errors_list = []
         Errors_list.append('неверно указано название предмета')
         Errors_list.append('неверно указан номер ЛР')
 
@@ -146,9 +145,9 @@ class Test_google(unittest.TestCase):
         self.assertEqual(get_error, answer)
 
     def test_send_message(self):
-        from main.APIgoogle import send_message
-        from main.APIgoogle import get_service
-        from main.APIgoogle import get_message
+        from APIgoogle import send_message
+        from APIgoogle import get_service
+        from APIgoogle import get_message
 
         service = get_service()
 
@@ -157,9 +156,9 @@ class Test_google(unittest.TestCase):
         name_of_student = 'человек, который делает всё невовремя'
         number_of_templates = 1;
 
-        Errors_list=[]
+        Errors_list = []
         Errors_list.append('неверно указан номер ЛР')
-        validation_dictionary={ 
+        validation_dictionary = {
             'Number':1,
             'URL': "someurl.what",
             "errorDescription": Errors_list
@@ -178,12 +177,13 @@ class Test_google(unittest.TestCase):
         body_of_msg = hello_student + our_msg + signature
 
         our_info = {
-            'id_of_msg':id_of_msg,
-            'email_id':user_id,
-            'head_of_msg':'Обнаружены ошибки в работе',
+            'id_of_msg': id_of_msg,
+            'email_id': user_id,
+            'head_of_msg': 'Обнаружены ошибки в работе',
             'body_of_msg': body_of_msg
             }
         self.assertEqual(message_info, our_info)
+
 
 if __name__ == '__main__':
     unittest.main()

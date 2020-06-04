@@ -1,4 +1,4 @@
-import logging_config as config
+from . import logging_config as config
 import logging
 
 levels = {

@@ -15,13 +15,13 @@ import apiclient.discovery
 import httplib2
 from googleapiclient.discovery import build
 
-from config import (
+from configs.config import (
     SPREAD_SHEET_ID,
     CREDENTIALS_FILE,
     SPREAD_SHEET_ID_INIT,
     CREDENTIALS_FILE_SERVICE
 )
-from log_method import *
+from utils.log_method import *
 from pattern import *
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
@@ -36,8 +36,8 @@ def get_service():
     Описание: Подключение к почте.
     """
     creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists(r'configs/token.pickle'):
+        with open(r'configs/token.pickle', 'rb') as token:
             creds = pickle.load(token)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -130,7 +130,7 @@ def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
         CREDENTIALS_FILE,
         [
             'https://www.googleapis.com/auth/spreadsheets',
-            'https://www.googleapis.com/auth/drive'
+            'https://www.googleapis.com/auth/drive',
         ]
     )
     httpAuth = credentials.authorize(httplib2.Http())
@@ -377,7 +377,7 @@ def search_tablic(group, laba, surname):
                 c = c + 1
             else:
                 break
-        position = str(chr(count)) + str(c)
+        position = str(chr(count)) + str(c-1)
     except:
         return None
     else:

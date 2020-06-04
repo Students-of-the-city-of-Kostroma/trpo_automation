@@ -1,11 +1,11 @@
 import os
-import log_method
+from .log_method import log_method_info
 from cryptography.fernet import Fernet
 
 cripher = Fernet(b'D7Zh4RcKcxIRDOrxB68u98_WT_31qlMhXwFTMByCAYc=')
 
 
-@log_method.log_method_info
+@log_method_info
 def crypt_file(filename):
     '''
     Шифрует любой файл.
@@ -22,7 +22,7 @@ def crypt_file(filename):
             encrypted.write(encrypted_data)
 
 
-@log_method.log_method_info
+@log_method_info
 def decrypt_file(filename):
     '''
     Выполняет расшифровку файла.

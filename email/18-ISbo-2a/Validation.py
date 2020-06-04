@@ -2,7 +2,7 @@ from utils.log_method import log_method_info, logger
 from pattern import *
 
 
-@log_method.log_method_info
+@log_method_info
 def validation(head_of_msg, body_of_msg):
     """
     Проверка полученного письма на все возможные ошибки
@@ -76,7 +76,7 @@ def url_cheack(Number,body_of_msg): # Проверка на наличие URL. 
             while a + counter >= a:
                 if body_of_msg[a + counter] == '.':
                     URL = body_of_msg[a:a + counter]
-                    logging.debug('url = %s' % URL)
+                    logger.debug('url = %s' % URL)
                     return (URL)
                 if body_of_msg[a + counter] != '.':
                     counter = counter - 1
