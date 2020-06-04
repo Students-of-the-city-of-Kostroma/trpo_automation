@@ -67,7 +67,7 @@ void StrategyLab::divideIntoClasses(QList<QString> code)
  */
 void StrategyLab::checkByConfig(int variant, QList<QString> code)
 {
-    log.logInfo("Сhek code by XML Config");
+    log.logInfo("Сheсk code by XML Config");
     //Делим присланный код на классы для удобства работы с ними
     divideIntoClasses(code);
 
