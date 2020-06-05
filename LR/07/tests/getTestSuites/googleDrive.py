@@ -44,10 +44,11 @@ def main():
 
     testCases = Element('testCases')
     for testCase in allCases:
-        case = SubElement(testCases, 'case', { 'id': testCase[0] })
-        input = SubElement(case, 'input', { 'text': testCase[2] })
-        description = SubElement(case, 'description', { 'text': testCase[1] })
-        expected = SubElement(case, 'expected', { 'text': testCase[5] })
+        if testCase[6] in ['Y', 'A']:
+            case = SubElement(testCases, 'case', { 'id': testCase[0] })
+            input = SubElement(case, 'input', { 'text': testCase[2] })
+            description = SubElement(case, 'description', { 'text': testCase[1] })
+            expected = SubElement(case, 'expected', { 'text': testCase[5] })
 
     tree = ElementTree(testCases)
     tree.write("../../src/config/testSuites.xml")
