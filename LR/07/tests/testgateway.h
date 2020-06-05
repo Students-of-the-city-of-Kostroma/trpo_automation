@@ -7,10 +7,6 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-static const int COLUMN_INDEX_FOR_TEST_DATA = 3;
-static const int COLUMN_INDEX_FOR_EXPECTED_DATA = 6;
-static const int COLUMN_INDEX_FOR_CASE_DESCRIPTION = 2;
-
 /**
  * @brief Класс тестирования сервиса Gateway
  */
