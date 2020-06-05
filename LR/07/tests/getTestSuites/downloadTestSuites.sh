@@ -8,5 +8,7 @@ cd LR/07/tests/getTestSuites
 sudo python3 -m venv env
 sudo pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 sudo pip install openpyxl
+sudo chmod -R travis:travis env
 ls -la
+ls -la env
 sudo python3 googleDrive.py
