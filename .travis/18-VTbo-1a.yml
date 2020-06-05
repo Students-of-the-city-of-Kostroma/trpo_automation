@@ -24,6 +24,7 @@ after_script:
 jobs:
   include:
     - stage: Compile
+      python: "3.7"
       before_script:
         - chmod ugo+x LR/07/tests/getTestSuites/downloadTestSuites.sh
         - LR/07/tests/getTestSuites/downloadTestSuites.sh
