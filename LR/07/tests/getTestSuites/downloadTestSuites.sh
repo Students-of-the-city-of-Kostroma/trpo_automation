@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Upgrade Python to 3.7
-sudo add-apt-repository ppa:deadsnakes/ppa
+sudo add-apt-repository -y ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get install python3.7
 sudo apt install python3-pip
