@@ -28,7 +28,9 @@ jobs:
       script:
         - sudo qmake src.pro && make
     - stage: Unit Tests
-      before_script: cd LR/07/tests
+      before_script:
+        - LR/07/tests/getTestSuites/downloadTestSuites.sh
+        - cd LR/07/tests
       script:
         - sudo qmake tests.pro && make
         - sudo ./tests
