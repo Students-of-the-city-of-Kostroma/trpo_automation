@@ -1,6 +1,7 @@
 if: branch IN (dev, master, 18-VTbo-1a)
 language: cpp
 os: linux
+sudo: required
 compiler: gcc
 dist: trusty
 if: type = pull_request
@@ -25,6 +26,7 @@ jobs:
   include:
     - stage: Compile
       before_script:
+        - chmod ugo+x LR/07/tests/getTestSuites/downloadTestSuites.sh
         - LR/07/tests/getTestSuites/downloadTestSuites.sh
         - cd LR/07/src
       script:
