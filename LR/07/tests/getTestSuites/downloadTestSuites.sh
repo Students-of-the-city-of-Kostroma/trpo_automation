@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo apt-get install python3
-pip install --upgrade pip
+sudo pip install --upgrade pip
 
 # Run dowload script and create testSuites.xml file with test cases
 cd LR/07/tests/getTestSuites
