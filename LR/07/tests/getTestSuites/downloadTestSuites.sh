@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get install python3
+sudo apt-get install python3-venv
 sudo pip install --upgrade pip
 
 # Run dowload script and create testSuites.xml file with test cases
