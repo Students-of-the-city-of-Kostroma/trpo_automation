@@ -3,8 +3,6 @@ QT -= gui
 
 CONFIG += c++11
 
-include(../../../../qtxlsx/src/xlsx/qtxlsx.pri)
-
 SOURCES += \
     testgateway.cpp \
     ../src/utils/gateway.cpp \

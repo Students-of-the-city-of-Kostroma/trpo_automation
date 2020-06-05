@@ -6,10 +6,17 @@
  * @param parent
  */
 TestGateway::TestGateway(QObject *parent)
-    : QObject(parent),
-      xlsx(":/config/testSuites.xlsx")
+    : QObject(parent)
 {
     testObj = new Gateway(nullptr);
+    QDomDocument config;
+    QFile file(":/config/testSuites.xml");
+    if (file.open(QIODevice::ReadOnly)) {
+        if (config.setContent(&file)) {
+            suites = config.documentElement();
+        }
+        file.close();
+    }
 }
 
 /**
@@ -32,24 +39,23 @@ void TestGateway::testTrueJson()
  */
 void TestGateway::testSuite_data()
 {
-    int row = 1;
-    Cell* cell = xlsx.cellAt(row, 1);
     QRegExp re("issue-393-[0-9]{1,3}");
 
     QTest::addColumn<QByteArray>("testData");
     QTest::addColumn<QString>("description");
     QTest::addColumn<QString>("expected");
 
-    while (cell) {
-        QString caseId = cell->value().toString();
+    for (QDomElement key = suites.firstChildElement();
+         !key.isNull(); key = key.nextSibling().toElement())
+    {
+        QString caseId = key.attribute("id");
         if (re.exactMatch(caseId)) {
-            QByteArray inputData = xlsx.cellAt(row, COLUMN_INDEX_FOR_TEST_DATA)->value().toByteArray();
-            QString description = xlsx.cellAt(row, COLUMN_INDEX_FOR_CASE_DESCRIPTION)->value().toString();
-            QString expected = xlsx.cellAt(row, COLUMN_INDEX_FOR_EXPECTED_DATA)->value().toString();
+            QString inputData = key.elementsByTagName("input").at(0).toElement().attribute("text");
+            QString description = key.elementsByTagName("description").at(0).toElement().attribute("text");
+            QString expected = key.elementsByTagName("expected").at(0).toElement().attribute("text");
 
-            QTest::newRow(caseId.toLatin1().constData()) << inputData << description << expected;
+            QTest::newRow(caseId.toLatin1().constData()) << QByteArray(inputData.toStdString().c_str()) << description << expected;
         }
-        cell = xlsx.cellAt(++row, 1);
     }
 }
 
@@ -65,7 +71,7 @@ void TestGateway::testSuite()
 
     try {
       testObj->validateData(testData);
-      QFAIL(("Тест" + description + "не пройден. ID: " + QTest::currentDataTag()).toStdString().c_str());
+      QFAIL("Test worked like input data is valid, but it is invalid (at least it should be)");
     } catch (WrongRequestException error) {
 //        TODO: заменить после задачи https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/issues/51
 //        Добавить reject коды
