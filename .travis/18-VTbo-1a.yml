@@ -24,13 +24,13 @@ after_script:
 jobs:
   include:
     - stage: Compile
-      before_script: cd LR/07/src
+      before_script:
+        - LR/07/tests/getTestSuites/downloadTestSuites.sh
+        - cd LR/07/src
       script:
         - sudo qmake src.pro && make
     - stage: Unit Tests
-      before_script:
-        - LR/07/tests/getTestSuites/downloadTestSuites.sh
-        - cd LR/07/tests
+      before_script: cd LR/07/tests
       script:
         - sudo qmake tests.pro && make
         - sudo ./tests
