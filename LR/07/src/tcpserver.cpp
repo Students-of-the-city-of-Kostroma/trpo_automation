@@ -176,6 +176,7 @@ void TcpServer::processData(QString link, QList<QString> *code, int variant)
 
         lab->checkByConfig(variant, *code);
         lab->checkParentChildrenRelations();
+        lab->checkChildren();
         lab->checkContext();
         lab->checkMainFunction();
 
