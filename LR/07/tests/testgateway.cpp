@@ -9,6 +9,14 @@ TestGateway::TestGateway(QObject *parent)
     : QObject(parent)
 {
     testObj = new Gateway(nullptr);
+    QDomDocument config;
+    QFile file(":/config/testSuites.xml");
+    if (file.open(QIODevice::ReadOnly)) {
+        if (config.setContent(&file)) {
+            suites = config.documentElement();
+        }
+        file.close();
+    }
 }
 
 /**
@@ -16,10 +24,10 @@ TestGateway::TestGateway(QObject *parent)
  */
 void TestGateway::testTrueJson()
 {
-    inputData.append("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
+    QByteArray inputRightData("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
 
     try {
-        testObj->validateData(inputData);
+        testObj->validateData(inputRightData);
     } catch (WrongRequestException error) {
         qCritical() << error.text();
         QFAIL("Эти тесты должны быть пройдены!");
@@ -27,46 +35,49 @@ void TestGateway::testTrueJson()
 }
 /**
  * @brief Метод, аккумулирующий некорректные Json для далнейшей проверки
- * описания кейсов есть в сценариях https://vk.cc/auCgZM
+ * описания кейсов есть в сценариях (см testsSuites.xlsx)
  */
-void TestGateway::badJsons_data()
-{   QTest::addColumn<QByteArray>("jsons");
-    QTest::newRow("issue-393-1") << QByteArray("");
-    QTest::newRow("issue-393-2") << QByteArray("{}");
-    QTest::newRow("issue-393-3") << QByteArray("");
-    QTest::newRow("issue-393-4") << QByteArray("S");
-    QTest::newRow("issue-393-5") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"yandex.ru\"}");
-    QTest::newRow("issue-393-6") << QByteArray("{\"messageType\": 1, \"lab\": 8, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-7") << QByteArray("{\"messageType\": \"1\", \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-8") << QByteArray("{\"messageType\": 1, \"lab\": \"7\", \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-9") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": \"1\", \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-10") << QByteArray("{\"messageType\": \"1\", \"lab\": 7, \"variant\": 1, \"link\": \"7\"}");
-    QTest::newRow("issue-393-11") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"code\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-12") << QByteArray("{\"messageType\": 3, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-13") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 2, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-14") << QByteArray("{\"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-15") << QByteArray("{\"messageType\": 1, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-16") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"link\": \"https://github.com/leshastern/strategy4\"}");
-    QTest::newRow("issue-393-17") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1}");
-    QTest::newRow("issue-393-18") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\", \"code\": []}");
-    QTest::newRow("issue-393-19") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"link\": \"https://github.com/leshastern/strategy4\", \"TRPOTHEBEST\": true}");
-    QTest::newRow("issue-393-20") << QByteArray("{\"messageType\": 1}");
-    QTest::newRow("issue-393-21") << QByteArray("{\"messageType\": 1, \"lab\": 7}");
-    QTest::newRow("issue-393-22") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1}");
-    QTest::newRow("issue-393-11") << QByteArray("{\"messageType\": 1, \"lab\": 7, \"variant\": 1, \"code\": [yandex.ru]}");
+void TestGateway::testSuite_data()
+{
+    QRegExp re("issue-393-[0-9]{1,3}");
+
+    QTest::addColumn<QByteArray>("testData");
+    QTest::addColumn<QString>("description");
+    QTest::addColumn<QString>("expected");
+
+    for (QDomElement key = suites.firstChildElement();
+         !key.isNull(); key = key.nextSibling().toElement())
+    {
+        QString caseId = key.attribute("id");
+        if (re.exactMatch(caseId)) {
+            QString inputData = key.elementsByTagName("input").at(0).toElement().attribute("text");
+            QString description = key.elementsByTagName("description").at(0).toElement().attribute("text");
+            QString expected = key.elementsByTagName("expected").at(0).toElement().attribute("text");
+
+            QTest::newRow(caseId.toLatin1().constData()) << QByteArray(inputData.toStdString().c_str()) << description << expected;
+        }
+    }
 }
 
 /**
  * @brief Тестовая функция извлекает из заранее подготовленной таблицы
  * некорректные Json и отдает их на проверку методу validateData()
  */
-void TestGateway::badJsons()
+void TestGateway::testSuite()
 {
-    QFETCH(QByteArray, jsons);
+    QFETCH(QByteArray, testData);
+    QFETCH(QString, description);
+    QFETCH(QString, expected);
+
     try {
-      testObj->validateData(jsons);
-      QFAIL("Недопустимые данные");
+      testObj->validateData(testData);
+      QFAIL("Test worked like input data is valid, but it is invalid (at least it should be)");
     } catch (WrongRequestException error) {
+//        TODO: заменить после задачи https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/issues/51
+//        Добавить reject коды
+        QString gatewayResult = "{\"messageType\": " + QString::number(3) + ", \"key\": \""
+                + error.jsonKey() + "\", \"text\": \"" + error.text() + "\"}";
+        QCOMPARE(gatewayResult, expected);
     }
 }
 
