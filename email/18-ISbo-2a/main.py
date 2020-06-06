@@ -1,8 +1,8 @@
-from APIgoogle import *
-from log_method import *
-from client import check_lab
-import Validation
+import random
 import time
+from APIgoogle import *
+from Validation import validation
+from utils.log_method import *
 
 # Id почты
 USER_ID = 'me'
@@ -38,15 +38,17 @@ try:
 
                 if result_add_table == 'available' or result_add_table == 'accepted':
                     # Проверка валидации письма
-                    valid_dict = Validation.validation(message_info['head_of_msg'], message_info['body_of_msg'])
+                    valid_dict = validation(message_info['head_of_msg'], message_info['body_of_msg'])
                     if len(valid_dict["errorDescription"]) > 0:
-                        send_message(service, USER_ID, email_name, email_name_surname, 2, None, valid_dict, message_info)
+                        send_message(service, USER_ID, email_name, email_name_surname, 2, valid_dict,
+                                     valid_dict, message_info)
                         logger.warning(r"main: Message failed validation. Email_id :%s" % email_id)
                         print(f"main: Message failed validation. Email_id :{email_id}")
                     else:
                         # Получение результата из модуля проверки
-                        answer = check_lab(valid_dict['URL'], valid_dict['Number'])['grade']
-                        logger.info(r"main: Receiving a response from the verification module. Mark in table :%s" % answer)
+                        answer = 1 # check_lab(valid_dict['URL'], valid_dict['Number'])['grade']
+                        logger.info(
+                            r"main: Receiving a response from the verification module. Mark in table :%s" % answer)
                         print(f"main: Receiving a response from the verification module. Mark in table :{answer}")
 
                         # Получение ячейчки для выставления
@@ -56,13 +58,14 @@ try:
 
                         # Лабораторная неправильно сделана
                         if answer == 0:
-                            send_message(service, USER_ID, email_name, email_name_surname, 1, answer, None, message_info)
+                            send_message(service, USER_ID, email_name, email_name_surname, 1, answer, None,
+                                         message_info)
                             logger.warning(f'main: Lab done wrong from {email_id}')
                             print('main: Lab done wrong from %s' % email_id)
                         # Лабораторная сделана правильно
                         else:
                             add_str_in_table(group_user, table_cell, 1)
-                            send_message(service, USER_ID, email, email_name_surname, 0, None, None, message_info)
+                            send_message(service, USER_ID, email, email_name_surname, 0, valid_dict, None, message_info)
                             logger.info('main: Lab done right from %s' % email_id)
                             print(f'main: Lab done wrong from {email_id}')
                 else:

@@ -1,5 +1,7 @@
+
 import log_method
 import re
+from utils.log_method import log_method_info, logger
 from pattern import *
 
 
@@ -9,7 +11,7 @@ def validation(head_of_msg,body_of_msg,name):
     Проверка полученного письма на все возможные ошибки
     :param head_of_msg: тема письма (заголовок)
     :param body_of_msg: тело письма, основной текст
-    name= Фамилия и имя студента
+    :param name: Фамилия и имя студента
     :return: { 'Number', 'URL', "errorDescription" }
     """
     url = []
@@ -43,3 +45,4 @@ def validation(head_of_msg,body_of_msg,name):
         'Error': Error
         }
     return validation
+
