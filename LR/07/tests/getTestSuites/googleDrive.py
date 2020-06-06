@@ -43,7 +43,7 @@ def main():
 
     testCases = Element('testCases')
     for testCase in allCases:
-        if testCase[6] in ['Y', 'A']:
+        if testCase[6] and testCase[6] in ['Y', 'A']:
             case = SubElement(testCases, 'case', { 'id': testCase[0] })
             input = SubElement(case, 'input', { 'text': testCase[2] })
             description = SubElement(case, 'description', { 'text': testCase[1] })
