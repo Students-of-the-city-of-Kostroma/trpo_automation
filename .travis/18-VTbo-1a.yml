@@ -1,5 +1,9 @@
-if: branch IN (dev, master, 18-VTbo-1a)
 language: cpp
+branches:
+  only:
+    - master
+    - 18-VTbo-1b
+    - dev
 os: linux
 compiler: gcc
 dist: trusty
