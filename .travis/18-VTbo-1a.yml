@@ -38,12 +38,4 @@ jobs:
       script:
         - sudo qmake tests.pro && make
         - sudo ./tests
-    # - stage: Github Release
-    #   if: branch = dev
-    #   script: skip
-    #   deploy:
-    #     provider: releases
-    #     token: "$GITHUB_OAUTH_TOKEN"
-    #     on:
-    #       branch: dev
-    #       tags: true
+ 
