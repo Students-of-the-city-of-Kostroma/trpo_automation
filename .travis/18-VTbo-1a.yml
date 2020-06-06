@@ -19,15 +19,14 @@ install:
   - sudo apt-get install -y qt5-default qttools5-dev-tools
   - sudo apt-get install mesa-common-dev
   - sudo apt-get install libgl1-mesa-dev
+  - chmod ugo+x LR/07/tests/getTestSuites/downloadTestSuites.sh
+  - LR/07/tests/getTestSuites/downloadTestSuites.sh
 after_script:
   - make clean
 jobs:
   include:
     - stage: Compile
-      before_script:
-        - chmod ugo+x LR/07/tests/getTestSuites/downloadTestSuites.sh
-        - LR/07/tests/getTestSuites/downloadTestSuites.sh
-        - cd LR/07/src
+      before_script: cd LR/07/src
       script:
         - sudo qmake src.pro && make
     - stage: Unit Tests
