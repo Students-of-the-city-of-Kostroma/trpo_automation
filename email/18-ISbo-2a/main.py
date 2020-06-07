@@ -3,7 +3,7 @@ from utils.crypto import crypt_file, decrypt_file
 decrypt_file('configs/credentials.json.bin')
 decrypt_file('configs/Example.json.bin')
 decrypt_file('configs/config.py.bin')
-decrypt_file('configs/token.pickle.bin')
+#decrypt_file('configs/token.pickle.bin')
 
 from APIgoogle import *
 from Validation import validation
@@ -88,7 +88,7 @@ try:
 except:
     send_message_to_techsub(service, USER_ID, email_name, email_name_surname, None, {'message': 'все сломалось!'}, 0)
 
-crypt_file(r'configs/token.pickle')
+#crypt_file(r'configs/token.pickle')
 crypt_file(r'configs/Example.json')
 crypt_file(r'configs/credentials.json')
 crypt_file(r'configs/config.py')

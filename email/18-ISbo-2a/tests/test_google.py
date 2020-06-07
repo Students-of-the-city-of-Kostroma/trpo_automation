@@ -8,18 +8,15 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 class TestGoogle(unittest.TestCase):
     def setUp(self):
-        pass
-        #crp.decrypt_file('configs/Example.json.bin')
-        #crp.decrypt_file('configs/credentials.json.bin')
-        #crp.decrypt_file('configs/config.py.bin')
+        crp.decrypt_file('configs/Example.json.bin')
+        crp.decrypt_file('configs/credentials.json.bin')
+        crp.decrypt_file('configs/config.py.bin')
         #crp.decrypt_file('configs/token.pickle.bin')
 
     def tearDown(self):
-        pass
-        #add_str_in_table(table='ТeстовыйЛист', cell='N3', line='', id_table=SPREAD_SHEET_ID_TEST)
-        #crp.crypt_file('configs/Example.json')
-        #crp.crypt_file('configs/credentials.json')
-        #crp.crypt_file('configs/config.py')
+        crp.crypt_file('configs/Example.json')
+        crp.crypt_file('configs/credentials.json')
+        crp.crypt_file('configs/config.py')
         #crp.crypt_file('configs/token.pickle')
 
     def test_get_service(self):
