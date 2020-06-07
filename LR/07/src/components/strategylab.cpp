@@ -153,7 +153,6 @@ void StrategyLab::checkParentChildrenRelations()
 
     /***** Проверки на наследников абстрактного класса *****/
 
-    checkChildren();
 }
 
 /**
