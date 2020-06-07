@@ -44,7 +44,7 @@ void StrategyLab::divideIntoClasses(QList<QString> code)
     log.logInfo("Divide the code sent to classes");
     for (int i = 0; i < code.size(); i++) {
         if (code[i].contains("Context") && code[i].contains("class")) {
-            classes.insert("Context", code[i]);
+            classes.insert("context", code[i]);
         }
         else if (code[i].contains("virtual") && code[i].contains("class")) {
             classes.insert("parent", code[i]);
@@ -62,12 +62,12 @@ void StrategyLab::divideIntoClasses(QList<QString> code)
  *        а также разделение кода на классы (divideIntoClasses)
  * @param variant - вариант лабораторной работы
  * @param code - присланное решение
- * TODO переписать это!!
  * @return
  */
 void StrategyLab::checkByConfig(int variant, QList<QString> code)
 {
-    log.logInfo("Сhek code by XML Config");
+    log.logInfo("Сheсk code by XML Config");
+
     //Делим присланный код на классы для удобства работы с ними
     divideIntoClasses(code);
 
@@ -79,67 +79,48 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
         if (elem.attribute("number").toInt() == variant) break;
     }
 
+    /* Достаем значения из конфига */
     for (int i = 0; i < elem.elementsByTagName("class").size(); i++) {
-    className.append(elem.elementsByTagName("class").at(i).toElement().attribute("name"));
+        className.append(elem.elementsByTagName("class").at(i).toElement().attribute("name"));
     }
 
     QDomElement abstract = elem.elementsByTagName("abstract").at(0).toElement();
-       abstractClassName = abstract.attribute("name");
-       abstractMethodName = abstract.elementsByTagName("method").at(0).toElement().attribute("name");
-       heirsAmount = elem.elementsByTagName("heirs").at(0).toElement().attribute("amount").toInt();
+    QDomElement heirs = elem.elementsByTagName("heirs").at(0).toElement();
 
-    QDomNode temp;
-    QString child;
-    QString tempString;
+    abstractClassName = abstract.attribute("name");
+    abstractMethodName = abstract.elementsByTagName("method").at(0).toElement().attribute("name");
+    heirsAmount = heirs.attribute("amount").toInt();
 
-    temp = elem.firstChild();
-    tempString = classes.value("parent");
+    QString parentClass;
+    parentClass = classes.value("parent");
 
     /* Проверяем имя абстрактного класса */
-    if (!tempString.contains(abstractClassName)) {
+    if (!parentClass.contains(abstractClassName)) {
         throw UnexpectedResultException("Invalid parent class name");
     }
-        temp = temp.firstChild();
 
     /* Проверяем имя метода абстрактного метода */
-    if (!tempString.contains(abstractMethodName)) {
+    if (!parentClass.contains(abstractMethodName)) {
         throw UnexpectedResultException("Invalid abstract method name");
     }
 
-    child = classes.value("children");
-
-    /* Проверяем колличество параметров абстрактного метода */
-    child = child.simplified();
-    if (!child.contains(temp.toElement().attribute("hasParams") + "()") ||
-            !child.contains(temp.toElement().attribute("hasParams") + " ()") ||
-            !child.contains(temp.toElement().attribute("hasParams") + "( )") ||
-            !child.contains(temp.toElement().attribute("hasParams") + " ( )")) {
-        throw UnexpectedResultException("An abstract method must have 0 parameters");
+    /* Проверка количества наследников */
+    if (heirsAmount != children.size()) {
+       throw UnexpectedResultException("Incorrect number of classes for strategies' implementations");
     }
-
-    /* Проверяем возвращаемое занчение метода */
-    if (!child.contains("return")) {
-        throw UnexpectedResultException("An abstract method should return a value");
-    }
+    
 
     /* Проверка имен наследников */
-    temp = elem.lastChild();
-    int amountChild = 0;
-
-    temp = temp.firstChild();
-    child = classes.value("children");
-
-    while (!temp.isNull()) {
-        if (!child.contains(temp.toElement().attribute("name"))) {
-            throw UnexpectedResultException("Invalid heir name");
+    foreach (QString childName, className) {
+        bool childNameFound = false;
+        foreach (QString child, children) {
+            if (child.left(child.indexOf(abstractClassName)).contains(childName)) {
+                childNameFound = true;
+            }
         }
-        temp = temp.nextSibling();
-    }
-
-     /* Проверка количества наследников */
-    amountChild = child.count("class");
-    if (heirsAmount != amountChild) {
-        throw UnexpectedResultException("Incorrect number of heirs");
+        if (!childNameFound) {
+            throw UnexpectedResultException("Class name '" + childName + "' for stratregy implementation not found");
+        }
     }
 }
 
@@ -250,65 +231,65 @@ void StrategyLab::checkAbstractMethodModifier(QString className, QString classBo
 void StrategyLab::checkContext()
 {
     log.logInfo("Check Context");
+
     /* Убираем лишние элементы в строке */
-       QString context = classes.value("context");
-       for (int i = 0; i < context.size(); i++) {
-           context.remove(" ");
-           context.remove("\n");
-           context.remove("\t");
-           context.remove("\r");
-       }
+    QString context = classes.value("context");
+    for (int i = 0; i < context.size(); i++) {
+        context.remove(" ");
+        context.remove("\n");
+        context.remove("\t");
+        context.remove("\r");
+    }
 
-       /* Получаем имя класса */
-       nameClassContext = "";
-       QString nameClassField = "";
-       for (int i = 0; context[i] != '{'; i++) {
-           nameClassContext.append(context[i]);
-       }
-       nameClassContext.remove(QChar('class'), Qt::CaseInsensitive);
-       nameClassContext.remove(QChar('{'), Qt::CaseInsensitive);
+    /* Получаем имя класса */
+    nameClassContext = "";
+    QString nameClassField = "";
+    for (int i = 0; context[i] != '{'; i++) {
+        nameClassContext.append(context[i]);
+    }
+    nameClassContext.remove("class");
+    nameClassContext.remove(QChar('{'), Qt::CaseInsensitive);
 
-       /* Проверка приватного поля */
-       if (!context.contains("private:" + abstractClassName + "*")) {
-           throw UnexpectedResultException(nameClassContext + " must contain a private field such as an abstract class");
-       }
+    /* Проверка приватного поля */
+    if (!context.contains("private:" + abstractClassName + "*")) {
+        throw UnexpectedResultException(nameClassContext + " must contain a private field such as an abstract class");
+    }
 
-       /* Имя приватного поля */
-       for (int i = context.indexOf("private:"); i != context.indexOf(";"); i++) {
-           nameClassField.append(context[i]);
-       }
-       for (int i = 0; i < nameClassField.size(); i++) {
-                 nameClassField.remove("private:");
-                 nameClassField.remove(abstractClassName);
-       }
-       nameClassField.remove(QChar('*'), Qt::CaseInsensitive);
-       nameClassField.remove(QChar(';'), Qt::CaseInsensitive);
+    /* Имя приватного поля */
+    for (int i = context.indexOf("private:"); i != context.indexOf(";"); i++) {
+        nameClassField.append(context[i]);
+    }
 
-       /* Методы не должны возвращать */
-       if (context.contains("return")) {
-           throw UnexpectedResultException("Class " + nameClassContext + " 1 methods should not return");
-       }
+    nameClassField.remove("private:");
+    nameClassField.remove(abstractClassName);
+    nameClassField.remove(QChar('*'), Qt::CaseInsensitive);
+    nameClassField.remove(QChar(';'), Qt::CaseInsensitive);
 
-       /* Оставляем модификатор public */
-       for (int i = 0; i < context.indexOf("public"); i++) {
-           context[i] = ' ';
-       }
-       context.remove(" ");
-       for (int i = context.indexOf(nameClassContext); i < context.indexOf("}"); i++) {
-           context[i] = ' ';
-       }
-       context.remove(" ");
+    /* Методы не должны возвращать */
+    if (context.contains("return")) {
+        throw UnexpectedResultException("Methods of class '" + nameClassContext + "' should not return");
+    }
 
-       /* Проверка необходимых вызовов в методах */
-       if ((!context.contains("this->" + nameClassField + "->")) && (!context.contains("this." + nameClassField + "."))) {
-           throw UnexpectedResultException("Class " + nameClassContext + " should call a strategy method");
-       }
-       if (!context.contains( abstractClassName + "*")) {
-           throw UnexpectedResultException("One of the methods of class " + nameClassContext + "1 must accept an argument of the type of an abstract class.");
-       }
-       if ((!context.contains("this->" + nameClassField + "=")) && (!context.contains("this." + nameClassField + "="))) {
-           throw UnexpectedResultException("One of the methods of class " + nameClassContext + " must assign an argument to a property of a class such as an abstract class");
-       }
+    /* Оставляем модификатор public */
+    for (int i = 0; i < context.indexOf("public"); i++) {
+        context[i] = ' ';
+    }
+    context.remove(" ");
+    for (int i = context.indexOf(nameClassContext); i < context.indexOf("}"); i++) {
+        context[i] = ' ';
+    }
+    context.remove(" ");
+
+    /* Проверка необходимых вызовов в методах */
+    if (!context.contains("this->" + nameClassField + "->")) {
+        throw UnexpectedResultException("Class " + nameClassContext + " should call a strategy method");
+    }
+    if (!context.contains( abstractClassName + "*")) {
+        throw UnexpectedResultException("One of the methods of class " + nameClassContext + "1 must accept an argument of the type of an abstract class.");
+    }
+    if (!context.contains("this->" + nameClassField + "=")) {
+        throw UnexpectedResultException("One of the methods of class " + nameClassContext + " must assign an argument to a property of a class such as an abstract class");
+    }
 }
 
 /**
@@ -321,11 +302,13 @@ void StrategyLab::checkMainFunction()
     QString mainFunction = classes.value("main"), methodName;
     //Проверка на создание объекта класса context
     if (!mainFunction.contains("new " + nameClassContext)) {
-       throw UnexpectedResultException("Object of class context is not created");
+       throw UnexpectedResultException("Object of class '" + nameClassContext + "' is not created");
     }
-    if (mainFunction.lastIndexOf(nameClassContext + "->") != -1) {
+
+    QString contextObject = mainFunction.left(mainFunction.indexOf(" = new " + nameClassContext)).split("* ").last();
+    if (mainFunction.lastIndexOf(contextObject + "->") != -1) {
         QString arrow = "->";
-        int index = mainFunction.lastIndexOf(nameClassContext + "->") + nameClassContext.size() + arrow.size(), i = 0;
+        int index = mainFunction.lastIndexOf(contextObject + "->") + contextObject.size() + arrow.size(), i = 0;
         while (mainFunction[index] != '(') {
             methodName[i] = mainFunction[index];
             i++;
@@ -351,5 +334,7 @@ void StrategyLab::checkMainFunction()
  */
 StrategyLab::~StrategyLab()
 {
-    // TODO дописать
+    className.clear();
+    classes.clear();
+    children.clear();
 }

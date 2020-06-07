@@ -65,7 +65,7 @@ QJsonDocument Functional::handleReply(QNetworkReply *reply)
     }
 
     QString reason = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
-    throw SystemException("Not successful request on Github.\nStatus code: " + QString::number(statusCode), reason);
+    throw SystemException("Not successful request on Github. Status code: " + QString::number(statusCode), reason);
 }
 
 /**
