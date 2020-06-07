@@ -1,23 +1,19 @@
-import random
-import time
+from utils.crypto import crypt_file, decrypt_file
+
+decrypt_file('configs/credentials.json.bin')
+decrypt_file('configs/Example.json.bin')
+decrypt_file('configs/config.py.bin')
+decrypt_file('configs/token.pickle.bin')
+
 from APIgoogle import *
 from Validation import validation
 from utils.log_method import *
-from configs.config import SPREAD_SHEET_ID_TEST
 
 # Id почты
 USER_ID = 'me'
 # Получение сервиса
+# Если не работает get_service, то token закинуть новый.
 service = get_service()
-
-message_info = {
-            'email_id': r'"Иван Иванович" <test@gmail.com>',
-            'body_of_msg': r'Добрый день, вот лабораторная http://github.com -- С уважением, Иван Иванович 18-ИСбо-2а',
-            'head_of_msg': r'Лаба',
-        }
-
-valid_dict = validation(message_info['head_of_msg'], message_info['body_of_msg'], '"Иван Иванович"')
-
 
 try:
     while True:
@@ -91,3 +87,8 @@ try:
             time.sleep(1)
 except:
     send_message_to_techsub(service, USER_ID, email_name, email_name_surname, None, {'message': 'все сломалось!'}, 0)
+
+crypt_file(r'configs/token.pickle')
+crypt_file(r'configs/Example.json')
+crypt_file(r'configs/credentials.json')
+crypt_file(r'configs/config.py')

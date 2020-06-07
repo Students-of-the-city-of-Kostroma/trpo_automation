@@ -6,6 +6,7 @@
 # My ignor
 *.json
 *.pickle
+*.log
 
 # Virtual Environment & workspace index files
 .idea
