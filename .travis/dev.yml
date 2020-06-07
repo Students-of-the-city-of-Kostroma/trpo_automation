@@ -9,7 +9,7 @@ matrix:
         - 18-VTbo-1b
         - dev
       jdk: oraclejdk11
-      before_install:
+      before_install: 
         - cd LR/03
       addons:
         chrome: stable
@@ -30,7 +30,7 @@ matrix:
         directories:
           - "$HOME/.m2"
       after_success:
-         - bash <(curl -s https://codecov.io/bash)
+         - bash <(curl -s https://codecov.io/bash) 
       before_deploy:
          # Set up git user name and tag this commit
          - git config --local user.name "YOUR GIT USER NAME"
@@ -43,9 +43,9 @@ matrix:
            secure: dep_key
         skip_cleanup: true
         provider: releases
-        prerelease: true
+        prerelease: true	
         name: 18-VTbo-1b
-        file:
+        file: 
           - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/target/Selen-0.1-jar-with-dependencies.jar
           - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/Labs3_url.xml
           - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/labs.xml
