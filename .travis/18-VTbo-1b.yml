@@ -39,7 +39,7 @@ deploy:
     secure: dep_key
   skip_cleanup: true
   provider: releases
-  prerelease: true
+  prerelease: true	
   name: 18-VTbo-1b
   file:
      - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/target/Selen-0.1-jar-with-dependencies.jar
