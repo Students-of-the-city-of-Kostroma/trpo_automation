@@ -1,11 +1,9 @@
-
-import log_method
 import re
 from utils.log_method import log_method_info, logger
 from pattern import *
 
 
-@log_method.log_method_info
+@log_method_info
 def validation(head_of_msg,body_of_msg,name):
     """
     Проверка полученного письма на все возможные ошибки

@@ -3,16 +3,15 @@ import base64
 import os.path
 import pickle
 import re
-import email
-from utils.log_method import *
+import apiclient.discovery
+import httplib2
+
+from utils.log_method import log_method_info, logger
 from oauth2client.service_account import ServiceAccountCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from configs.config import *
-import apiclient.discovery
-import httplib2
 from googleapiclient.discovery import build
 
 from configs.config import (
@@ -21,7 +20,6 @@ from configs.config import (
     SPREAD_SHEET_ID_INIT,
     CREDENTIALS_FILE_SERVICE
 )
-from utils.log_method import *
 from pattern import *
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
@@ -55,16 +53,17 @@ def get_service():
 
 
 @log_method_info
-def add_str_in_table(table: str, cell: str, mark: str):
+def add_str_in_table(table: str, cell: str, line: str, id_table: str = CREDENTIALS_FILE):
     """
     Добавление символа\предложения в таблице.
 
     :param table: Название таблицы.
     :param cell: Ячейка.
-    :param mark: Символ\предложение.
+    :param line: Символ\предложение.
+    :param id_table: id таблицы
     """
     logger.debug(f'add_mark_in_table: table - {table}, \
-                            cell - {cell}, mark - {mark}')
+                            cell - {cell}, mark - {line}')
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
         CREDENTIALS_FILE,
         [
@@ -74,18 +73,20 @@ def add_str_in_table(table: str, cell: str, mark: str):
     )
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
-    rangeTab = f"(ТРПО) {table}!{cell}"
-    service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, 
-        body={
+    service.spreadsheets().values().batchUpdate(
+        spreadsheetId=id_table,
+        body=
+        {
             "valueInputOption": "USER_ENTERED",
             "data": [
                 {
-                    "range": rangeTab,
-                    "majorDimension": "ROWS",     
-                    "values": [ [mark] ]
+                    "range": f"{table}!{cell}",
+                    "majorDimension": "ROWS",
+                    "values": [[line]]
                 }
-        ]
-    }).execute()
+            ]
+        }).execute()
+
 
 @log_method_info
 def cleaning_email(email_id: str):
@@ -94,7 +95,7 @@ def cleaning_email(email_id: str):
     Name Surname <1234@gmail.com> ← пример email который мне передают
     1234@gmail.com это будет запоминаться после метода очистки
 
-    :param email: Передаваемая строка с почтой
+    :param email_id: Передаваемая строка с почтой
     :return: email без спец.знаков
     """
     comp = re.compile(r'<(\S*?)>')
@@ -328,17 +329,16 @@ def error_in_work(some_errors: dict):
 
 
 @log_method_info
-def search_group(email_id):
+def search_group(email_id, id_table=SPREAD_SHEET_ID_INIT):
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
         CREDENTIALS_FILE,
         ['https://www.googleapis.com/auth/spreadsheets',
          'https://www.googleapis.com/auth/drive'])
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
-    spreadsheetId = SPREAD_SHEET_ID_INIT
     range_name = 'List1!B1:B1000'
     table = service.spreadsheets().values().get(
-        spreadsheetId=spreadsheetId,
+        spreadsheetId=id_table,
         range=range_name).execute()
     c = 1
     for val in table.get('values'):
@@ -351,13 +351,13 @@ def search_group(email_id):
     else:
         nomer = f'List1!F{c}:G{c}'
         table1 = service.spreadsheets().values().get(
-            spreadsheetId=spreadsheetId, range=nomer).execute()
+            spreadsheetId=id_table, range=nomer).execute()
         values_finish = table1.get('values')[0]
         return tuple(values_finish)
 
 
 @log_method_info
-def search_tablic(group, laba, surname):
+def search_tablic(group, laba, surname, id_table=SPREAD_SHEET_ID):
     group = f'(ТРПО) {group}'
     c = 2
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
@@ -368,7 +368,7 @@ def search_tablic(group, laba, surname):
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
     range_name = f'{group}!A1:A100'
     table = service.spreadsheets().values().get(
-        spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
+        spreadsheetId=id_table, range=range_name).execute()
     count = ord('D') + int(laba) - 1
     nomer_stolbca = chr(count)
     try:
@@ -377,14 +377,14 @@ def search_tablic(group, laba, surname):
                 c = c + 1
             else:
                 break
-        position = str(chr(count)) + str(c-1)
+        position = str(chr(count)) + str(c - 1)
     except:
         return None
     else:
         return position
 
 
-def search_dolgi(group, position):
+def search_dolgi(group, position, id_table=SPREAD_SHEET_ID):
     """
     Метод для поиска долгов 
     :param group: (ТРПО) название группы
@@ -402,7 +402,7 @@ def search_dolgi(group, position):
     dolg = []
     number_laboratorn = -1
     range_name = f'{group}!D{position[1]}:P{position[1]}'
-    table = service.spreadsheets().values().get(spreadsheetId=SPREAD_SHEET_ID, range=range_name).execute()
+    table = service.spreadsheets().values().get(spreadsheetId=id_table, range=range_name).execute()
     for p in table.get('values')[0]:
         number_laboratorn = number_laboratorn + 1
         try:
@@ -416,7 +416,7 @@ def search_dolgi(group, position):
         return dolg
 
 
-def add_table(group, name):
+def add_table(group, name, id_table=SPREAD_SHEET_ID):
     """
     Метод для добавления студента
     :param group: (ТРПО) название группы
@@ -433,7 +433,7 @@ def add_table(group, name):
     service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
     range_name = f'(ТРПО) {group}!A1:A100'
     table = service.spreadsheets().values().get(
-        spreadsheetId=SPREAD_SHEET_ID,
+        spreadsheetId=id_table,
         range=range_name).execute()
     column = 1
     for i in table.get('values'):
@@ -448,7 +448,7 @@ def add_table(group, name):
 
     if count == 1:
         try:
-            service.spreadsheets().values().batchUpdate(spreadsheetId=SPREAD_SHEET_ID, body={
+            service.spreadsheets().values().batchUpdate(spreadsheetId=id_table, body={
                 "valueInputOption": "USER_ENTERED",
                 "data": [
                     {

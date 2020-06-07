@@ -3,11 +3,13 @@ import time
 from APIgoogle import *
 from Validation import validation
 from utils.log_method import *
+from configs.config import SPREAD_SHEET_ID_TEST
 
 # Id почты
 USER_ID = 'me'
 # Получение сервиса
 service = get_service()
+
 
 try:
     while True:
