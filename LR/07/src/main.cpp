@@ -1,5 +1,5 @@
 #include <QCoreApplication>
-#include "tcpserver.h"
+#include "components/tcpserver.h"
 
 static const int LAB_NUMBER = 7;
 

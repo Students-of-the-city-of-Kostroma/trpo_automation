@@ -9,7 +9,6 @@ TcpServer::TcpServer(int labNumber, QObject *parent)
 {
     mTcpServer = new QTcpServer(this);
     gateWay = new Gateway();
-    lab = new StrategyLab();
     github = new Functional();
 
     connect(gateWay, SIGNAL(sendToClient(QJsonObject)), this, SLOT(slotSendToClient(QJsonObject)));
@@ -172,11 +171,13 @@ void TcpServer::processData(QString link, QList<QString> *code, int variant)
             });
         }
 
+        lab = new StrategyLab();
         lab->checkByConfig(variant, *code);
         lab->checkParentChildrenRelations();
         lab->checkChildren();
         lab->checkContext();
         lab->checkMainFunction();
+        delete lab;
 
         gateWay->prepareDataToSend(true);
     } catch (UnexpectedResultException error) {

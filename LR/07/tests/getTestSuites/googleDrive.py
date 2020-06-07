@@ -2,7 +2,6 @@
 from __future__ import print_function
 import pickle
 import os.path
-import openpyxl
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -44,7 +43,7 @@ def main():
 
     testCases = Element('testCases')
     for testCase in allCases:
-        if testCase[6] in ['Y', 'A']:
+        if len(testCase) > 6 and testCase[6] in ['Y', 'A']:
             case = SubElement(testCases, 'case', { 'id': testCase[0] })
             input = SubElement(case, 'input', { 'text': testCase[2] })
             description = SubElement(case, 'description', { 'text': testCase[1] })
