@@ -1,9 +1,5 @@
+if: branch IN (dev, master, 18-VTbo-1a)
 language: cpp
-branches:
-  only:
-    - master
-    - 18-VTbo-1b
-    - dev
 os: linux
 compiler: gcc
 dist: trusty
@@ -23,8 +19,6 @@ install:
   - sudo apt-get install -y qt5-default qttools5-dev-tools
   - sudo apt-get install mesa-common-dev
   - sudo apt-get install libgl1-mesa-dev
-  - chmod ugo+x LR/07/tests/getTestSuites/downloadTestSuites.sh
-  - LR/07/tests/getTestSuites/downloadTestSuites.sh
 after_script:
   - make clean
 jobs:
@@ -38,4 +32,12 @@ jobs:
       script:
         - sudo qmake tests.pro && make
         - sudo ./tests
- 
+    # - stage: Github Release
+    #   if: branch = dev
+    #   script: skip
+    #   deploy:
+    #     provider: releases
+    #     token: "$GITHUB_OAUTH_TOKEN"
+    #     on:
+    #       branch: dev
+    #       tags: true

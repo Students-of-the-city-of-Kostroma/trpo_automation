@@ -9,6 +9,6 @@ void InternalException::formatMessage(QString explanation, QString systemError)
 {
     errorMessage = explanation;
     if (!systemError.isEmpty()) {
-        errorMessage += ". System output: " + systemError;
+        errorMessage += "\n\n System output: \n " + systemError + "\n\n";
     }
 }

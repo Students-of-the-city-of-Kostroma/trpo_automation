@@ -16,13 +16,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        functional.cpp \
         main.cpp \
-        components/functional.cpp \
-        components/strategylab.cpp \
-        components/tcpserver.cpp \
+        strategylab.cpp \
+        tcpserver.cpp \
         utils/gateway.cpp \
-        utils/internalexception.cpp \
-        utils/logfile.cpp
+        utils/internalexception.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -30,12 +29,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    components/functional.h \
-    components/strategylab.h \
-    components/tcpserver.h \
+    functional.h \
+    strategylab.h \
+    tcpserver.h \
     utils/gateway.h \
-    utils/internalexception.h \
-    utils/logfile.h
+    utils/internalexception.h
 
 win32:CONFIG += console
 win32:TARGET  = ../XmlDOMRead
