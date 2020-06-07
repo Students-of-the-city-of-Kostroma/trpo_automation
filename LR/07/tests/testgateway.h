@@ -16,15 +16,15 @@ class TestGateway : public QObject
 
 private:
     Gateway *testObj;
-    QByteArray inputData;
+    QDomElement suites;
 
 public:
     explicit TestGateway(QObject *parent = nullptr);
 
 private slots:
     void testTrueJson();
-    void badJsons_data();
-    void badJsons();
+    void testSuite_data();
+    void testSuite();
     void cleanupTestCase();
 };
 

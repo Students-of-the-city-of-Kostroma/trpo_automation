@@ -172,7 +172,6 @@ void StrategyLab::checkParentChildrenRelations()
 
     /***** Проверки на наследников абстрактного класса *****/
 
-    checkChildren();
 }
 
 /**
@@ -263,7 +262,7 @@ void StrategyLab::checkContext()
        /* Получаем имя класса */
        nameClassContext = "";
        QString nameClassField = "";
-       for (int i = 0; context[i] != "{"; i++) {
+       for (int i = 0; context[i] != '{'; i++) {
            nameClassContext.append(context[i]);
        }
        nameClassContext.remove(QChar('class'), Qt::CaseInsensitive);
