@@ -23,19 +23,12 @@ private:
     QDomElement messageKeys;
     QJsonObject jsonObj;
     enum messageType { FROM_CLIENT = 1, DEFAULT_ANSWER, WRONG_REQUEST, SYSTEM_ERROR };
-    enum rejectCodes {
-        JSON_PARSE_FAILED = 1,
-        REQUIRED_KEY_MISSING,
-        UNEXPECTED_KEY,
-        WRONG_KEY_TYPE,
-        WRONG_KEY_VALUE
-    };
 
 public:
     explicit Gateway(QObject *parent = nullptr);
     QJsonDocument validateData(QByteArray);
 
-    void wrongRequestFormat(QString, int, QString);
+    void wrongRequestFormat(QString, QString);
     void processSystemError(QString);
     void prepareDataToSend(bool, QString comments = "");
 

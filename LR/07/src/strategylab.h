@@ -2,7 +2,6 @@
 #define STARTEGYLAB_H
 
 #include "utils/internalexception.h"
-#include "utils/logfile.h"
 
 #include <QObject>
 #include <QtXml>
@@ -16,29 +15,24 @@ class StrategyLab: public QObject
     Q_OBJECT
 
 private:
-    QList<QString> className;
     QDomElement rootAnswerStructure;
     QMap<QString, QString> classes;
     QList<QString> children;
-    QString nameClassContext;
     QString abstractClassName;
     QString abstractMethodName;
     int heirsAmount;
-    logfile log;
 
 public:
     explicit StrategyLab(QObject* parent = nullptr);
     ~StrategyLab();
-    bool findChildrenClasses(QString);
-    void divideIntoClasses(QList<QString>);
     void checkByConfig(int, QList<QString>);
     void checkParentChildrenRelations();
     void checkContext();
     void checkMainFunction();
-    void checkChildren();
 
 private:
     void checkAbstractMethodModifier(QString, QString, QString modifier = "public");
+    void checkChildren();
 };
 
 #endif // STARTEGYLAB_H
