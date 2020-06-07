@@ -10,6 +10,14 @@ USER_ID = 'me'
 # Получение сервиса
 service = get_service()
 
+message_info = {
+            'email_id': r'"Иван Иванович" <test@gmail.com>',
+            'body_of_msg': r'Добрый день, вот лабораторная http://github.com -- С уважением, Иван Иванович 18-ИСбо-2а',
+            'head_of_msg': r'Лаба',
+        }
+
+valid_dict = validation(message_info['head_of_msg'], message_info['body_of_msg'], '"Иван Иванович"')
+
 
 try:
     while True:

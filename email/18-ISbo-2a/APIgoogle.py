@@ -118,15 +118,14 @@ def name_surname(email_id: str):
 
 
 @log_method_info
-def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
+def get_something(range: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
     """
-    Метод поиска электронной почты в таблице.
+    Метод получения значений в таблице из определенной области
 
-    :param email_id: электронная почта
+    :param range: область взятия
     :param spreadsheetid: таблица для поиска
-    :return: возвращает электронную почту/None
+    :return: данные из таблицы
     """
-    mail_str = cleaning_email(email_id)
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
         CREDENTIALS_FILE,
         [
@@ -136,10 +135,20 @@ def search_email(email_id: str, spreadsheetid: str = SPREAD_SHEET_ID_INIT):
     )
     httpAuth = credentials.authorize(httplib2.Http())
     service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
-    range_name = 'List1!B1:B1000'
-    table = service.spreadsheets().values().get(
+    return service.spreadsheets().values().get(
         spreadsheetId=spreadsheetid,
-        range=range_name).execute()
+        range=range).execute()
+
+@log_method_info
+def search_email(email_id: str, list: str = 'List1', id_table: str = SPREAD_SHEET_ID_INIT):
+    """
+    Метод поиска электронной почты в таблице.
+
+    :params email_id: электроная почта
+    :return: возвращает электронную почту/None
+    """
+    mail_str = cleaning_email(email_id)
+    table = get_something(range=f'{list}!B1:B1000', spreadsheetid=id_table)
     if re.search(mail_str, str(table)):
         return mail_str
     else:
@@ -234,21 +243,32 @@ def send_message(service, user_id, email_of_student, name_of_student,
     elif number_of_templates == 2:
         str_of_er = error_in_work(error_dictionary)
 
-    message_templates = funcSt(str_of_val_er, str_of_er, validation_dictionary)
+    if number_of_templates != -1:
+        message_templates = funcSt(str_of_val_er, str_of_er, validation_dictionary)
+    else:
+        message_templates = 'test'
 
     sending_msg = {}
     hello_student = funcHello(name_of_student)
     sending_msg['from'] = GMAIL_OF_TRPO
-    our_msg = message_templates[number_of_templates]['our_msg']
-    title = message_templates[number_of_templates]['title']
-    date_of_msg = message_info['date_of_msg']
-    return_body = message_info['body_of_msg']
-    return_head = message_info['head_of_msg']
+    if number_of_templates == -1:
+        our_msg = 'test'
+        title = 'test'
+    else:
+        our_msg = message_templates[number_of_templates]['our_msg']
+        title = message_templates[number_of_templates]['title']
+        date_of_msg = message_info['date_of_msg']
+        return_body = message_info['body_of_msg']
+        return_head = message_info['head_of_msg']
 
     sending_msg = MIMEMultipart('alternative')
-    return_text = funcReturnMsg(hello_student, our_msg, SIGNATURE,
-                                date_of_msg, return_body,
-                                return_head)
+    if number_of_templates == -1:
+        return_text = 'test'
+    else:
+        return_text = funcReturnMsg(hello_student, our_msg, SIGNATURE,
+                                    date_of_msg, return_body,
+                                    return_head)
+
     sending_msg = MIMEText(return_text)
     sending_msg['To'] = email_of_student
     sending_msg['Subject'] = title
