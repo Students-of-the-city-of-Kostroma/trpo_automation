@@ -41,7 +41,7 @@ deploy:
   provider: releases
   prerelease: true	
   name: 18-VTbo-1b
-  file: 
+  file:
      - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/target/Selen-0.1-jar-with-dependencies.jar
      - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/Labs3_url.xml
      - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/labs.xml

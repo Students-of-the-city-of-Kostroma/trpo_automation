@@ -3,6 +3,7 @@
 
 #include "utils/gateway.h"
 #include "utils/internalexception.h"
+#include "utils/logfile.h"
 
 #include <QObject>
 #include <QtGlobal>
