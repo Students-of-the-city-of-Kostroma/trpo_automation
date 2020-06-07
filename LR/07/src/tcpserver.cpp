@@ -66,8 +66,6 @@ void TcpServer::slotNewConnection()
 
     connect(mTcpSocket, SIGNAL(readyRead()), this, SLOT(slotReadingDataJson()));
     connect(mTcpSocket, &QTcpSocket::disconnected, this, &TcpServer::slotClientDisconnected);
-
-    mTcpSocket->write("New connection!");
 }
 
 /**
