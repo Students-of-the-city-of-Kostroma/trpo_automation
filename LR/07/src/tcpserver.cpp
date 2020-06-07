@@ -9,6 +9,7 @@ TcpServer::TcpServer(int labNumber, QObject *parent)
 {
     mTcpServer = new QTcpServer(this);
     gateWay = new Gateway();
+    lab = new StrategyLab();
     github = new Functional();
 
     connect(gateWay, SIGNAL(sendToClient(QJsonObject)), this, SLOT(slotSendToClient(QJsonObject)));
@@ -112,7 +113,7 @@ void TcpServer::slotReadingDataJson()
             processData(labLink, &pureCode, labNumber);
         }
     } catch (WrongRequestException error) {
-        gateWay->wrongRequestFormat(error.jsonKey(), error.getRejectCode(), error.text());
+        gateWay->wrongRequestFormat(error.jsonKey(), error.text());
     } catch (SystemException error) {
         gateWay->processSystemError(error.text());
     }
@@ -173,13 +174,10 @@ void TcpServer::processData(QString link, QList<QString> *code, int variant)
             });
         }
 
-        lab = new StrategyLab();
         lab->checkByConfig(variant, *code);
         lab->checkParentChildrenRelations();
-        lab->checkChildren();
         lab->checkContext();
         lab->checkMainFunction();
-        delete lab;
 
         gateWay->prepareDataToSend(true);
     } catch (UnexpectedResultException error) {
