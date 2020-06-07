@@ -19,7 +19,7 @@ matrix:
         - sleep 3
       script:
         - mvn install
-      install: 
+      install:
          - wget -N http://chromedriver.storage.googleapis.com/2.24/chromedriver_linux64.zip
            -P ~/
          - unzip ~/chromedriver_linux64.zip -d ~/
@@ -75,18 +75,11 @@ matrix:
         - sudo apt-get install -y qt5-default qttools5-dev-tools
         - sudo apt-get install mesa-common-dev
         - sudo apt-get install libgl1-mesa-dev
+        - chmod ugo+x LR/07/tests/getTestSuites/downloadTestSuites.sh
+        - LR/07/tests/getTestSuites/downloadTestSuites.sh
       after_script:
         - make clean
       before_script: cd LR/07/tests
       script:
         - sudo qmake tests.pro && make
         - sudo ./tests
-          # - stage: Github Release
-          #   if: branch = dev
-          #   script: skip
-          #   deploy:
-          #     provider: releases
-          #     token: "$GITHUB_OAUTH_TOKEN"
-          #     on:
-          #       branch: dev
-          #       tags: true
