@@ -1,12 +1,10 @@
-
-import log_method
 import re
 from utils.log_method import log_method_info, logger
 from pattern import *
 
 
-@log_method.log_method_info
-def validation(head_of_msg,body_of_msg,name):
+@log_method_info
+def validation(head_of_msg, body_of_msg, name):
     """
     Проверка полученного письма на все возможные ошибки
     :param head_of_msg: тема письма (заголовок)
@@ -18,10 +16,10 @@ def validation(head_of_msg,body_of_msg,name):
     number = ''
     Error = []
     count = 0
-    if (re.search(name, body_of_msg) == None): # Подпись
+    if (re.search(name, body_of_msg) == None and not re.search('--', body_of_msg)): # Подпись
         Error.append('Отсутствует подпись')
     for i in GREATING_LIST: # Приветсвие
-        if re.search(i, body_of_msg) != None:
+        if re.search(i, body_of_msg.lower()) != None:
             count += 1
     if count == 0:
         Error.append('Нет приветствия')
@@ -29,7 +27,7 @@ def validation(head_of_msg,body_of_msg,name):
         hek=re.search(r'№\w+', head_of_msg)[0]
         hek=hek.replace('№','')
         if(int(hek)<=13 and int(hek)>0):
-            number = re.search(r'№\w+', head_of_msg)[0]
+            number = hek
         else:
             Error.append('Неверно указан номер лабораторной')
     else:
@@ -42,7 +40,7 @@ def validation(head_of_msg,body_of_msg,name):
     validation = {
         'Number': number,
         'URL': url[0],
-        'Error': Error
+        'errorDescription': Error
         }
     return validation
 

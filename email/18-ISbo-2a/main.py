@@ -1,5 +1,10 @@
-import random
-import time
+from utils.crypto import crypt_file, decrypt_file
+
+decrypt_file('configs/credentials.json.bin')
+decrypt_file('configs/Example.json.bin')
+decrypt_file('configs/config.py.bin')
+#decrypt_file('configs/token.pickle.bin')
+
 from APIgoogle import *
 from Validation import validation
 from utils.log_method import *
@@ -7,6 +12,7 @@ from utils.log_method import *
 # Id почты
 USER_ID = 'me'
 # Получение сервиса
+# Если не работает get_service, то token закинуть новый.
 service = get_service()
 
 try:
@@ -81,3 +87,8 @@ try:
             time.sleep(1)
 except:
     send_message_to_techsub(service, USER_ID, email_name, email_name_surname, None, {'message': 'все сломалось!'}, 0)
+
+#crypt_file(r'configs/token.pickle')
+crypt_file(r'configs/Example.json')
+crypt_file(r'configs/credentials.json')
+crypt_file(r'configs/config.py')

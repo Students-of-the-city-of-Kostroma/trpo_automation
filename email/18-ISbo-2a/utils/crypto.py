@@ -20,6 +20,7 @@ def crypt_file(filename):
             data = '\n'.join(decrypted.readlines())
             encrypted_data = cripher.encrypt(data.encode('utf-8'))
             encrypted.write(encrypted_data)
+    os.remove(filename)
 
 
 @log_method_info
@@ -39,6 +40,7 @@ def decrypt_file(filename):
             lines = decrypted_data.split(b'\n')
             for line in lines[::2]:
                 decrypted.writelines(line.decode('utf-8') + '\n')
+    os.remove(filename)
 
 
 if __name__ == '__main__':
