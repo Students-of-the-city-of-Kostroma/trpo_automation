@@ -1,5 +1,6 @@
 import log_config as cfg
 import datetime
+import traceback
 
 
 class Logger:
@@ -28,9 +29,17 @@ class Logger:
                    + str(func.__name__)
             info += '\n\n'
             self.d_file.write(info)
-            result = func(*args, **kwargs)
-            return result
+            try:
+                result = func(*args, **kwargs)
+                return result
+            except Exception as e:
+                tr = traceback.format_exc(10)
+                tr = str(tr)
+                res = Logger.logerror(func, tr, *args, **kwargs)
+                res = str(res)
+                self.d_file.write(res)
         return decorated
+
 
     def loginfo(self, func):
         """Логирование уровня INFO"""
@@ -40,15 +49,27 @@ class Logger:
                    + str(func.__name__) + '\n'
             info += '[Входные параметры\n'
             for i in args:
-                info += Logger.getobjectdata(i)
+                if str(type(i)) == "<class 'list'>" or str(type(i)) == "<class 'tuple'>":
+                    for x in i:
+                        info += Logger.getobjectdata(x)
+                else:
+                    info += Logger.getobjectdata(i)
             for i in kwargs:
                 info += Logger.getobjectdata(i)
             info = info[:-1]
             info += ']\n\n'
             self.d_file.write(info)
-            result = func(*args, **kwargs)
-            return result
+            try:
+                result = func(*args, **kwargs)
+                return result
+            except Exception as e:
+                tr = traceback.format_exc(10)
+                tr = str(tr)
+                res = Logger.logerror(func, tr, *args, **kwargs)
+                res = str(res)
+                self.d_file.write(res)
         return decorated
+
 
     def updatelogfiles(self):
         """Изменяет номер файла логов"""
@@ -75,3 +96,23 @@ class Logger:
         else:
             info += str(ob) + '\n'
         return info
+
+    @staticmethod
+    def logerror(func, tr, *args, **kwargs):
+        now = datetime.datetime.now()
+        info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[ERROR]:' \
+               + str(func.__name__) + '\n'
+        info += '[Входные параметры\n'
+        for i in args:
+            if str(type(i)) == "<class 'list'>" or str(type(i)) == "<class 'tuple'>":
+                for x in i:
+                    info += Logger.getobjectdata(x)
+            else:
+                info += Logger.getobjectdata(i)
+        for i in kwargs:
+            info += Logger.getobjectdata(i)
+        info = info[:-1]
+        info += '\n' + tr + '\n\n'
+        result = info
+        return result
+
