@@ -50,7 +50,7 @@ def main():
             expected = SubElement(case, 'expected', { 'text': testCase[5] })
 
     tree = ElementTree(testCases)
-    tree.write("../../src/config/testSuites.xml")
+    tree.write("testSuites.xml")
 
 
 
