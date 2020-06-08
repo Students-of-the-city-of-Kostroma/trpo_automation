@@ -9,6 +9,7 @@ import select
 import lxml
 import requests
 from bs4 import BeautifulSoup
+import xml.etree.ElementTree as ET
 
 
 def WorkWithLetters(letters):
@@ -142,13 +143,6 @@ def SendJSONForCheck(jsonDates, letters):
     HOST = configServ.readline()
     HOST = HOST.replace("\n", '')
 
-    # Словарь лабораторных и портов к ним
-    config_port = open("config_Port.json", "r")
-    configLab = config_port.read()
-
-    # Соответствие номера лабораторной и номера порта
-    dataLab = json.loads(configLab)
-
     # Счётчик для параллельного обращения в два списка
     count = 0
 
@@ -159,8 +153,11 @@ def SendJSONForCheck(jsonDates, letters):
         if i.CodeStatus == "20":
             sock = socket.socket()
 
-            # Подключение и отправка JSON на порт
-            port = dataLab[str(i.NumberOfLab)]
+            # Поиск порта в конфиге лабораторных и портов
+            tree = ET.parse("labs.xml")
+            for lab in tree.getroot():
+                if int(lab.attrib.get('number')) == i.NumberOfLab:
+                    port = int(lab.attrib.get('port'))
 
             # На случай если сервер не доступен
             try:
