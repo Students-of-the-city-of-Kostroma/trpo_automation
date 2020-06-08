@@ -24,11 +24,20 @@ class Logger:
     def logdebug(self, func):
         """Логирование уровня DEGUG"""
         def decorated(*args, **kwargs):
-
             now = datetime.datetime.now()
             info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[DEBUG]:' \
-                   + str(func.__name__)
-            info += '\n\n'
+                   + str(func.__name__) + '\n'
+            info += '[Входные параметры\n'
+            for i in args:
+                if str(type(i)) == "<class 'list'>" or str(type(i)) == "<class 'tuple'>":
+                    for x in i:
+                        info += Logger.getobjectdata(x)
+                else:
+                    info += Logger.getobjectdata(i)
+            for i in kwargs:
+                info += Logger.getobjectdata(i)
+            info = info[:-1]
+            info += ']\n\n'
             cfg.logfile.write(info)
             try:
                 result = func(*args, **kwargs)
@@ -45,20 +54,11 @@ class Logger:
     def loginfo(self, func):
         """Логирование уровня INFO"""
         def decorated(*args, **kwargs):
+
             now = datetime.datetime.now()
             info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[INFO]:' \
-                   + str(func.__name__) + '\n'
-            info += '[Входные параметры\n'
-            for i in args:
-                if str(type(i)) == "<class 'list'>" or str(type(i)) == "<class 'tuple'>":
-                    for x in i:
-                        info += Logger.getobjectdata(x)
-                else:
-                    info += Logger.getobjectdata(i)
-            for i in kwargs:
-                info += Logger.getobjectdata(i)
-            info = info[:-1]
-            info += ']\n\n'
+                   + str(func.__name__)
+            info += '\n\n'
             cfg.logfile.write(info)
             try:
                 result = func(*args, **kwargs)
@@ -86,7 +86,8 @@ class Logger:
     @staticmethod
     def getobjectdata(ob):
         info = ''
-        if str(ob).startswith('<') and str(ob)[-4:] != 'html':
+        ats = dir(ob)
+        if ats.count('__dict__') > 0:
             ats = ob.__dict__
             for i in ats.values():
                 if str(i).startswith('<'):
