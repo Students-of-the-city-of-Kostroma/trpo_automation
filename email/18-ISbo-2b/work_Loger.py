@@ -1,6 +1,9 @@
 import inspect 
-import logging
-# logging.basicConfig(filename="log.txt", level=logging.DEBUG)
+
+from logs import config_Log as l_cfg
+import logging 
+logging.basicConfig(filename="log.txt", level=logging.DEBUG)
+
 name = None
 arg = None
 arg1 = None
@@ -12,6 +15,7 @@ class Logs:
     def __init__(self):
         pass
 
+    @l_cfg.logger.loginfo
     def Infor (self,name, *args, **kwargs):
         self.name = name
         try:

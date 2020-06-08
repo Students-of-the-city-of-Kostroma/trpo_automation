@@ -1,4 +1,5 @@
 import re
+from logs import config_Log as l_cfg
 
 
 class ValidationMail():
@@ -9,6 +10,7 @@ class ValidationMail():
         self.success = False
 
     @staticmethod
+    @l_cfg.logger.loginfo
     def validation_subject(subject):
         """
         Проверяет соответствие структуре темы. Включается в общий метод валидации
@@ -38,6 +40,7 @@ class ValidationMail():
             return '20'
 
     @staticmethod
+    @l_cfg.logger.loginfo
     def validation_body(body):
         """
         Проверяет соответствие структуре тела письма. Включается в общий метод валидации
@@ -69,6 +72,7 @@ class ValidationMail():
             return '04'
         return '20'
 
+    @l_cfg.logger.loginfo
     def validation(self):
         """
         Проверяет тему и тело письма на соответствие структуре
@@ -84,6 +88,7 @@ class ValidationMail():
         else:
             return self.validation_subject(self.subject)
 
+    @l_cfg.logger.loginfo
     def get_num_and_var(self):
         if self.success is True:
             subject = self.subject.lower().replace(' ', '')
@@ -103,6 +108,7 @@ class ValidationMail():
         else:
             return None
 
+    @l_cfg.logger.loginfo
     def verify_name_and_group(self, main_name, main_group):
         strings = self.body.split('\n')
 

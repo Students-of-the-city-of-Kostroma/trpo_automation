@@ -1,3 +1,4 @@
+from logs import config_Log as l_cfg
 """
 Подключение класса
 """
@@ -59,6 +60,8 @@ class Sheet:
     !!!больше не используется, но полезен для понимания
     """
     #получение названия первого листа
+
+    @l_cfg.logger.loginfo
     def sheet_name(spreadsheetId):
         try:
             service = Sheet().service
@@ -103,6 +106,8 @@ class Sheet:
         !!! в случае исключения - возвращает bool
     """
     #чтение листа
+
+    @l_cfg.logger.loginfo
     def read_sheet(spreadsheetId, sheet_name, diapazon_start = "", diapazon_end = ""):
         try:
             service = Sheet().service
@@ -148,6 +153,8 @@ class Sheet:
             bool
     """
     #Запись в конец листа
+
+    @l_cfg.logger.loginfo
     def append_sheet(spreadsheetId, ranges, body):
         try:
             service = Sheet().service
@@ -172,6 +179,8 @@ class Sheet:
             bool 
     """    
     #заполнение ячейки
+
+    @l_cfg.logger.loginfo
     def update_sheet(spreadsheetId, ranges, value):
         try:
             service = Sheet().service
@@ -203,6 +212,8 @@ class Sheet:
             bool
     """
     #Формирование данных и добавления записи в конец листа (регистрация студента)
+
+    @l_cfg.logger.loginfo
     def new_student(spreadsheetId, email, group, first_name, surname, patronymic):
         today = datetime.datetime.today().strftime("%d.%m.%Y %H:%M:%S")
         
@@ -227,6 +238,8 @@ class Sheet:
             или bool (false), если email не найден
     """
     #проверка наличия email в базе
+
+    @l_cfg.logger.loginfo
     def check_email(email):
         #ID документа в гугл-таблицах (список студентов)
         Email_sheetId = '1gMZiZqSE89vk3ZeYbTGYGaMMy7j-iMrYRjn-ECUhaag'
@@ -261,6 +274,8 @@ class Sheet:
             название листа или bool
     """
     #поиск листа по группе студента
+
+    @l_cfg.logger.loginfo
     def sheet_name_list(spreadsheetId, group):
         try:
             service = Sheet().service
@@ -294,6 +309,8 @@ class Sheet:
             bool
     """
     # добавление оценки в журнал
+
+    @l_cfg.logger.loginfo
     def journal(group, first_name, surname, patronymic, lab_id, value):
         # ID документа в гугл-таблицах
         Journal_sheetId = '1MPkVTspH5MCtCvUXNTduhgQl90N3LIjzLjqfjYTDPdc'
@@ -333,6 +350,8 @@ class Sheet:
             return bool(0)
 
     # добавление в журнал ФИО студента
+
+    @l_cfg.logger.loginfo
     def update_journal(Journal_sheetId, sheet_name, first_name, surname, patronymic):
         """
         Добавление студента в журнал
@@ -385,6 +404,8 @@ class Sheet:
            имя столбца или bool 
     """    
     # поиск адреса столбца по id лабы
+
+    @l_cfg.logger.loginfo
     def search_for_id(Journal_sheetId, sheet_name, lab_id):
         d_start = "A1"  #начало диапазона
         d_end = "1" #конец диапазона
@@ -404,6 +425,8 @@ class Sheet:
            имя столбца или bool
     """    
     # поиск адреса столбца в строке по шаблону
+
+    @l_cfg.logger.loginfo
     def search_alfa(full_str, pattern):
         alfa = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                   
@@ -438,6 +461,8 @@ class Sheet:
             номер строки или bool 
     """
     # поиск номера строки в журнале по ФИО студента
+
+    @l_cfg.logger.loginfo
     def search_for_student(Journal_sheetId, sheet_name, first_name, surname, patronymic):
         d_start = "D1"  # начало диапазона
         d_end = "D"     # конец диапазона
@@ -461,6 +486,8 @@ class Sheet:
             bool (false), если шаблон не найден 
     """
     # поиск содержимого ячейки в столбце
+
+    @l_cfg.logger.loginfo
     def search_number_string(full_column, pattern):
         for i in range(len(full_column)):
             value = ' '.join(map(str, full_column[i]))
