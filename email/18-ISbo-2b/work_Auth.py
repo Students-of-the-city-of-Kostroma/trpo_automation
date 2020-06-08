@@ -1,5 +1,5 @@
 # Подключаем библиотеки
-from logs import log_config as l_cfg
+from logs import config_Log as l_cfg
 import httplib2 
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials

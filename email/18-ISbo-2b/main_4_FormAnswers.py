@@ -1,5 +1,5 @@
 # coding=utf-8
-from logs import log_config as l_cfg
+from logs import config_Log as l_cfg
 from work_Loger import Logs
 from global_AnswersForUsers import AnswersForUsers
 import config_Project as cfg
@@ -87,10 +87,10 @@ def MakeAnswersForUsers(letterResult):
                 continue
 
         else:
-             continue
+            continue
 
-            answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
-            answers.append(answer)
+        answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
+        answers.append(answer)
 
     if teacher == True:
         answer = AnswersForUsers(cfg.teacher_email, forTeacher.return_theme(), forTeacher.return_body())

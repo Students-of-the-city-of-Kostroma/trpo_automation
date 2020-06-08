@@ -1,5 +1,5 @@
 import re
-from logs import log_config as l_cfg
+from logs import config_Log as l_cfg
 
 
 class ValidationMail():

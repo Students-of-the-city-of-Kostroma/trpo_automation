@@ -1,5 +1,5 @@
 import inspect 
-from logs import log_config as l_cfg
+from logs import config_Log as l_cfg
 import logging 
 logging.basicConfig(filename="log.txt", level=logging.DEBUG)
 name = None

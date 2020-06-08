@@ -1,5 +1,5 @@
 # coding=utf-8
-from logs import log_config as l_cfg
+from logs import config_Log as l_cfg
 from work_Loger import Logs
 import work_EmailLibrary as EmailLibrary
 import config_Project as cfg

@@ -1,5 +1,5 @@
 import config_Mail
-from logs import log_config as l_cfg
+from logs import config_Log as l_cfg
 import imaplib
 from email.message import EmailMessage
 import base64
