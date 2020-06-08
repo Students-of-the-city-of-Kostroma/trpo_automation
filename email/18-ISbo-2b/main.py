@@ -1,25 +1,24 @@
 #!/usr/bin/python3
 # coding=utf-8
-from main_1_CheckEmail import CheckEmail
-from main_2_WorkWithLetters import WorkWithLetters
-from main_3_SetResults import SetResults
-from main_4_FormAnswers import FormAnswers
-from main_5_InformUsers import InformUsers
-import config_Project as cfg
-from work_Loger import Logs
-
-from time import sleep
-import inspect
 from cryptography.fernet import Fernet
+from global_Logging import Logger
+import config_Project as cfg
 cipher = ""
 
-
 def main():
+    from main_1_CheckEmail import CheckEmail
+    from main_2_WorkWithLetters import WorkWithLetters
+    from main_3_SetResults import SetResults
+    from main_4_FormAnswers import FormAnswers
+    from main_5_InformUsers import InformUsers
 
     # Запуск работы
     while True:
         print(next(cfg.gen_num_for_filename))
 
+        cfg.logger.createlogfile()
+        i = cfg.logger
+        print("ok")
         # main_1
         letters = CheckEmail()
 
@@ -48,6 +47,7 @@ def main():
         # main_5
         InformUsers(answers)
 
+        cfg.logger.closelogfile()
 
 # Вызов начальной функции
 if __name__ == '__main__':
@@ -72,5 +72,7 @@ if __name__ == '__main__':
             file2.write(config)
 
     import config_Mail
+
+    cfg.logger = Logger()
 
     main()

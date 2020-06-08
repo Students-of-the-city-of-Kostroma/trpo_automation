@@ -1,17 +1,17 @@
 ﻿# coding=utf-8
+import config_Project as l_cfg
 from global_LetterResult import LetterResult
-from work_Loger import Logs
 
-import inspect
+
 import socket
 import json
 import select
-import lxml
 import requests
 from bs4 import BeautifulSoup
 import xml.etree.ElementTree as ET
 
 
+@l_cfg.logger.logdebug
 def WorkWithLetters(letters):
     """
     Работа с письмами, формирование правильного формата данных,
@@ -33,6 +33,7 @@ def WorkWithLetters(letters):
     return letterResults
 
 
+@l_cfg.logger.logdebug
 def LettersConvertToString(letters):
     """
     Функционал:
@@ -66,6 +67,7 @@ def LettersConvertToString(letters):
     return letters
 
 
+@l_cfg.logger.logdebug
 def FormJSONDates(letters):
     """
     Функционал:
@@ -103,6 +105,7 @@ def FormJSONDates(letters):
     return jsons
 
 
+@l_cfg.logger.logdebug
 def SendJSONForCheck(jsonDates, letters):
     """
     Функционал:
@@ -222,6 +225,7 @@ def SendJSONForCheck(jsonDates, letters):
     return new_letters
 
 
+@l_cfg.logger.loginfo
 def get_html(url):
     """Достаю html с введённой ссылки и возвращаю в виде текста"""
 
@@ -233,16 +237,16 @@ def get_html(url):
     return r.text
 
 
+@l_cfg.logger.loginfo
 def csv_read(data):
     """Принятые данные принимает, проверяя: являются ли они строковыми данными
     Если да, записываю их в файл, в конце делаю перенос строки"""
 
     if isinstance(data, str):
-        with open("data.txt", 'a') as file:
-            file.write(data+'\n')
-            return data
+        return data
 
 
+@l_cfg.logger.loginfo
 def get_link(html):
     """Построчно ищу поля таблицы с id = LC1,LC2 и т.д., затем передаю их на запись в метод csv
     Если больше нет полей таблицы( то есть кода или текстовых данных), тогда метод закончит работу"""
@@ -269,6 +273,7 @@ def get_link(html):
     return data
 
 
+@l_cfg.logger.loginfo
 def finding_files(html, name):
     """Метод отвечает за поиск и открытие файлов или папок в репозитории Git'a;
     если ссылка, которую мы открыли не имеет ссылок на другие объекты(файлы или папки),
@@ -295,6 +300,7 @@ def finding_files(html, name):
     return main_data
 
 
+@l_cfg.logger.loginfo
 def finding_links(table):
     """Ищет ссылки, на которые можно перейти, то есть проверяет есть ли файлы или папки
     на этой странице или же это уже страница самого файла"""

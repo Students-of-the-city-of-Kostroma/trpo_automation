@@ -1,11 +1,10 @@
 # coding=utf-8
-from work_Loger import Logs
 from global_AnswersForUsers import AnswersForUsers
 import config_Project as cfg
 import work_PatternsOfLetter
 
-import inspect
 
+@cfg.logger.logdebug
 def FormAnswers(letterResult):
     """
     Формирование ответов пользователям
@@ -18,6 +17,7 @@ def FormAnswers(letterResult):
     return answers
 
 
+@cfg.logger.logdebug
 def MakeAnswersForUsers(letterResult):
     """
     Функционал:
@@ -62,10 +62,10 @@ def MakeAnswersForUsers(letterResult):
             pattern = work_PatternsOfLetter.HaveAttachments()
 
         elif i.CodeStatus == "06":
-            pattern = work_PatternsOfLetter.SystemFailure()
+            pattern = work_PatternsOfLetter.SystemFailure(i.CodeStatusComment)
 
         elif i.CodeStatus == "07":
-            pattern = work_PatternsOfLetter.SystemFailure()
+            pattern = work_PatternsOfLetter.SystemFailure(i.CodeStatusComment)
 
         elif i.CodeStatus == "08":
             pattern = work_PatternsOfLetter.UncorrectedLink()

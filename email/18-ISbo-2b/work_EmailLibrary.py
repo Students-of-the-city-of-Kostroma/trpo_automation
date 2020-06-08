@@ -1,9 +1,11 @@
+import config_Project as l_cfg
 import imaplib
 from email.message import EmailMessage
 import base64
 import smtplib
 import email
 
+@l_cfg.logger.loginfo
 def imap_login():
     """
     Авторизация в Gmail аккаунте.
@@ -17,6 +19,7 @@ def imap_login():
     return imap
 
 
+@l_cfg.logger.loginfo
 def quit_email_imap(imapObj):
     """
     Закрытие SMTP объекта.
@@ -27,6 +30,7 @@ def quit_email_imap(imapObj):
     imapObj.close()
 
 
+@l_cfg.logger.loginfo
 def count_unseen_mess(mail):
     """
     Возвращает кол-во непрочитанных сообщений
@@ -37,6 +41,7 @@ def count_unseen_mess(mail):
     return len(data[0].split())
 
 
+@l_cfg.logger.loginfo
 def get_from(email_message):
     try:
         from_mes = str(email.header.make_header(email.header.decode_header(email_message['From'])))
@@ -45,6 +50,7 @@ def get_from(email_message):
         return "UNKNOWN"
 
 
+@l_cfg.logger.loginfo
 def get_subject(email_message):
     try:
         subject_mes = str(email.header.make_header(email.header.decode_header(email_message['Subject'])))
@@ -53,6 +59,7 @@ def get_subject(email_message):
         return "UNKNOWN"
 
 
+@l_cfg.logger.loginfo
 def from_parse(from_mes):
     try:
         user_email = from_mes[from_mes.find("<", 0, len(from_mes))+1:from_mes.find(">", 0, len(from_mes))]
@@ -61,6 +68,7 @@ def from_parse(from_mes):
         return "UNKNOWN"
 
 
+@l_cfg.logger.loginfo
 def name_parse(from_mes):
     try:
         name = from_mes[0:from_mes.find("<", 0, len(from_mes))-1]
@@ -69,6 +77,7 @@ def name_parse(from_mes):
         return "UNKNOWN"
 
 
+@l_cfg.logger.loginfo
 def get_body(email_message_instance):
     try:
         maintype = email_message_instance.get_content_maintype()
@@ -82,6 +91,7 @@ def get_body(email_message_instance):
         return "UNKNOWN"
 
 
+@l_cfg.logger.loginfo
 def body_parse(mail):
     text = mail
     try:
@@ -92,6 +102,8 @@ def body_parse(mail):
     except:
         return mail
 
+
+@l_cfg.logger.loginfo
 def send_mes(message):
     try:
         smtp_obj = smtp_login()
@@ -121,6 +133,8 @@ def send_mes(message):
     except:
         message.Success = False
 
+
+@l_cfg.logger.loginfo
 def smtp_login():
     """
     Авторизация в Gmail аккаунте.
@@ -138,6 +152,8 @@ def smtp_login():
 
     return smtpObj
 
+
+@l_cfg.logger.loginfo
 def quit_email_smtp(smtpObj):
     """
     Закрытие SMTP объекта.
@@ -148,6 +164,8 @@ def quit_email_smtp(smtpObj):
 
     smtpObj.close()
 
+
+@l_cfg.logger.loginfo
 def check_attachments(mail):
     """
     Проверка на наличие вложений
