@@ -1,6 +1,7 @@
 import config_Project as cfg
 import datetime
 import traceback
+import sys
 
 
 class Logger:
@@ -48,6 +49,7 @@ class Logger:
                 res = Logger.logerror(func, tr, *args, **kwargs)
                 res = str(res)
                 cfg.logfile.write(res)
+                sys.exit()
         return decorated
 
 
@@ -69,6 +71,7 @@ class Logger:
                 res = Logger.logerror(func, tr, *args, **kwargs)
                 res = str(res)
                 cfg.logfile.write(res)
+                sys.exit()
         return decorated
 
 
