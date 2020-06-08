@@ -92,12 +92,14 @@ class Logger:
         ats = dir(ob)
         if ats.count('__dict__') > 0:
             ats = ob.__dict__
-            for i in ats.values():
+            for key, i in ats.items():
                 if str(i).startswith('<'):
                     info += '<Object attributes:\n'
+                    info += key + ' : '
                     info += Logger.getobjectdata(i)
                     info += '>\n'
                 else:
+                    info += key + ' : '
                     info += str(i) + '\n'
         else:
             info += str(ob) + '\n'
