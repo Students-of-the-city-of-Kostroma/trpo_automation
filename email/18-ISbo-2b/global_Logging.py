@@ -24,10 +24,12 @@ class Logger:
     def logdebug(self, func):
         """Логирование уровня DEGUG"""
         def decorated(*args, **kwargs):
+
             now = datetime.datetime.now()
             info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[DEBUG]:' \
                    + str(func.__name__)
             info += '\n\n'
+            # print(self.d_file)
             self.d_file.write(info)
             try:
                 result = func(*args, **kwargs)
@@ -80,6 +82,7 @@ class Logger:
         filename = 'log' + str(now.year) + '.' + str(now.month) + '.' + str(now.day) + '-' + \
                    str(now.hour) + '.' + min
         cfg.filename = filename
+
 
     @staticmethod
     def getobjectdata(ob):
