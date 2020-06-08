@@ -2,7 +2,6 @@
 from work_Loger import Logs
 import work_EmailLibrary as EmailLibrary
 import config_Project as cfg
-import config_Mail
 
 from datetime import datetime
 import inspect
@@ -14,20 +13,20 @@ def InformUsers(answersForUsers):
     """
 
     # Создание SMTP объекта
-    smtp_obj = EmailLibrary.smtp_login()
+    # smtp_obj = EmailLibrary.smtp_login()
 
     # Отправка ответов пользователям
     # Глобальная функция 9
-    SendLetters(smtp_obj, answersForUsers)
+    SendLetters(answersForUsers)
 
     # Закрытие SMTP объекта
-    EmailLibrary.quit_email_smtp(smtp_obj)
+    # EmailLibrary.quit_email_smtp(smtp_obj)
 
     # Формирование нового имени файла логов
     FormFilename()
 
 
-def SendLetters(smtp_obj, answersForUsers):
+def SendLetters(answersForUsers):
     """
      Функционал:
     - Разослать письма пользователям
@@ -47,7 +46,7 @@ def SendLetters(smtp_obj, answersForUsers):
 
     for i in answersForUsers:
         # Отправка ответа по экземпляру списка ответов
-        EmailLibrary.send_mes(smtp_obj, i)
+        EmailLibrary.send_mes(i)
 
 def FormFilename():
     """

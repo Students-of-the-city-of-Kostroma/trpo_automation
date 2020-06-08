@@ -8,18 +8,13 @@ from main_5_InformUsers import InformUsers
 import config_Project as cfg
 from work_Loger import Logs
 
+from time import sleep
 import inspect
-# from datetime import datetime
+from cryptography.fernet import Fernet
+cipher = ""
 
 
 def main():
-    # logs = Logs()
-    # name = inspect.currentframe().f_code.co_name
-    # logs.Infor(name)
-
-    # # Формирование имени файла лога
-    # cfg.filename = cfg.path_to_logs + "log_" + datetime.strftime(datetime.now(), "%Y.%m.%d") + "_" + str(
-    #     next(cfg.gen_num_for_filename)) + ".txt"
 
     # Запуск работы
     while True:
@@ -56,4 +51,26 @@ def main():
 
 # Вызов начальной функции
 if __name__ == '__main__':
+    with open("c_config2", "r") as file3:
+        key = file3.read()
+        key = key[:len(key) // 2]
+        cipher = Fernet(key)
+
+    with open("c_token", "rb") as file:
+        token = cipher.decrypt(file.read())
+        with open("token.pickle", "wb") as file2:
+            file2.write(token)
+
+    with open("c_json", "rb") as file:
+        json = cipher.decrypt(file.read())
+        with open("trpo-bot-1eb977889b18.json", "wb") as file2:
+            file2.write(json)
+
+    with open("c_config", "rb") as file:
+        config = cipher.decrypt(file.read())
+        with open("config_Mail.py", "wb") as file2:
+            file2.write(config)
+
+    import config_Mail
+
     main()
