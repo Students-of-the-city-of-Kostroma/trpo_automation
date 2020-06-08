@@ -1,4 +1,4 @@
-from global_logging import Logger
+from global_Logging import Logger
 
 
 filename = ""

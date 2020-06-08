@@ -1,5 +1,5 @@
 """
 Файл с необходимыми настройками
 """
-EMAIL_ADDRESS = ""
-EMAIL_PASSWORD = ""
+EMAIL_ADDRESS = "trpo.bot@gmail.com"
+EMAIL_PASSWORD = "trpo202020"

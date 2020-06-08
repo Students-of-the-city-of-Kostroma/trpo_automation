@@ -1,4 +1,4 @@
-import log_config as cfg
+import config_Log as cfg
 import datetime
 import traceback
 
