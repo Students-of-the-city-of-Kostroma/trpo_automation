@@ -1,4 +1,5 @@
 import re
+import config_Project as l_cfg
 
 
 class ValidationMail():
@@ -9,6 +10,7 @@ class ValidationMail():
         self.success = False
 
     @staticmethod
+    @l_cfg.logger.loginfo
     def validation_subject(subject):
         """
         Проверяет соответствие структуре темы. Включается в общий метод валидации
@@ -38,6 +40,7 @@ class ValidationMail():
             return '20'
 
     @staticmethod
+    @l_cfg.logger.loginfo
     def validation_body(body):
         """
         Проверяет соответствие структуре тела письма. Включается в общий метод валидации
@@ -69,24 +72,26 @@ class ValidationMail():
             return '04'
         return '20'
 
-    def validation(self, subject, body):
+    @l_cfg.logger.loginfo
+    def validation(self):
         """
         Проверяет тему и тело письма на соответствие структуре
         :param subject: Тема письма
         :param body: Тело письма
         :return: Устпех валидации
         """
-        if self.validation_subject(subject) == '20' and self.validation_body(body) == '20':
+        if self.validation_subject(self.subject) == '20' and self.validation_body(self.body) == '20':
             self.success = True
             return '20'
-        elif self.validation_subject(subject) == '20':
-            return self.validation_body(body)
+        elif self.validation_subject(self.subject) == '20':
+            return self.validation_body(self.body)
         else:
-            return self.validation_subject(subject)
+            return self.validation_subject(self.subject)
 
-    def get_num_and_var(self, subject):
+    @l_cfg.logger.loginfo
+    def get_num_and_var(self):
         if self.success is True:
-            subject = subject.lower().replace(' ', '')
+            subject = self.subject.lower().replace(' ', '')
             var = subject[-2:]
             if var.isdigit() is not True or var[0] == '0':
                 var = var[1]
@@ -103,6 +108,7 @@ class ValidationMail():
         else:
             return None
 
+    @l_cfg.logger.loginfo
     def verify_name_and_group(self, main_name, main_group):
         strings = self.body.split('\n')
 

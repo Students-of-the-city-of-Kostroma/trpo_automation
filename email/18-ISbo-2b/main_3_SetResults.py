@@ -1,10 +1,9 @@
 # coding=utf-8
-from work_Loger import Logs
+import config_Project as l_cfg
 from work_Sheet import Sheet
 
-import inspect
 
-
+@l_cfg.logger.logdebug
 def SetResults(letterResults):
     """
     Выставить необходимые оценки в журнал
@@ -17,6 +16,7 @@ def SetResults(letterResults):
     return letterResults
 
 
+@l_cfg.logger.logdebug
 def SetMarks(letterResults):
     """
      Функционал:

@@ -1,8 +1,16 @@
 import unittest
 import global_LetterResult
 import  global_User
-import main_4_moderate_FormAnswers
 import global_AnswersForUsers
+
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
+import main_4_FormAnswers
 
 class MyTestCase(unittest.TestCase):
     def test_S_8_t1(self):
@@ -20,7 +28,7 @@ class MyTestCase(unittest.TestCase):
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -48,7 +56,7 @@ class MyTestCase(unittest.TestCase):
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -75,7 +83,7 @@ class MyTestCase(unittest.TestCase):
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -103,7 +111,7 @@ class MyTestCase(unittest.TestCase):
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -129,7 +137,7 @@ class MyTestCase(unittest.TestCase):
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -155,7 +163,7 @@ class MyTestCase(unittest.TestCase):
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -175,13 +183,14 @@ class MyTestCase(unittest.TestCase):
         # Создание письма
         letterResult = global_LetterResult.LetterResult(student, False, None, None)
         letterResult.CodeStatus = "06"
+        letterResult.CodeStatusComment = ""
 
         # Список писем
         letter = []
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -201,13 +210,13 @@ class MyTestCase(unittest.TestCase):
         # Создание письма
         letterResult = global_LetterResult.LetterResult(student, False, None, None)
         letterResult.CodeStatus = "07"
-
+        letterResult.CodeStatusComment = ""
         # Список писем
         letter = []
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -233,7 +242,7 @@ class MyTestCase(unittest.TestCase):
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -259,7 +268,7 @@ class MyTestCase(unittest.TestCase):
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res = global_AnswersForUsers.AnswersForUsers()
@@ -270,21 +279,21 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(answer[0].Theme, answer_Res.Theme)
 
     def test_S_8_t11(self):
-        """В письме нерабочая ссылка, отсутствует файл или имеет неправильное имя"""
+        """Работа проверена и зачтена"""
 
         # Создание студента
         student = global_User.User("Артём Гусев", "18-ИСбо-2б", "artemgusev200071@yandex.ru", None)
 
         # Создание письма
-        letterResult = global_LetterResult.LetterResult(student, False, None, None)
+        letterResult = global_LetterResult.LetterResult(student, True, None, None)
         letterResult.CodeStatus = "30"
-
+        letterResult.CodeStatusComment = ""
         # Список писем
         letter = []
         letter.append(letterResult)
 
         # Список писем для отправки на почту
-        answer = main_4_moderate_FormAnswers.MakeAnswersForUsers(letter)
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
 
         # Ожидаемое письмо
         answer_Res1 = global_AnswersForUsers.AnswersForUsers()
@@ -301,5 +310,37 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(answer[0].Theme, answer_Res1.Theme)
         self.assertEqual(answer[1].Theme, answer_Res2.Theme)
 
+    def test_S_8_t12(self):
+        """Работа проверена и не зачтена"""
+
+        # Создание студента
+        student = global_User.User("Артём Гусев", "18-ИСбо-2б", "artemgusev200071@yandex.ru", None)
+
+        # Создание письма
+        letterResult = global_LetterResult.LetterResult(student, False, None, None)
+        letterResult.CodeStatus = "30"
+        letterResult.CodeStatusComment = ""
+        # Список писем
+        letter = []
+        letter.append(letterResult)
+
+        # Список писем для отправки на почту
+        answer = main_4_FormAnswers.MakeAnswersForUsers(letter)
+
+        # Ожидаемое письмо
+        answer_Res1 = global_AnswersForUsers.AnswersForUsers()
+        answer_Res1.Who = student.Email
+        answer_Res1.Theme = "Ваша работа проверена."
+        answer_Res1.Body = "Ваша работа проверена, оценка: не зачтено. Ответ от проверяющего модуля был таким: \n " \
+                            + "" + "\n" \
+                            "Если ваша работа не зачтена, вы можете отправить работу на проверку повторно, после исправлений ошибок. \n"
+
+        answer_Res2 = global_AnswersForUsers.AnswersForUsers()
+        answer_Res2.Who = "trpo.help@gmail.com"
+        answer_Res2.Theme = "Данные в журнале были изменены."
+        answer_Res2.Body = "Артём Гусев сдал Работу номер 1 2"
+
+        self.assertEqual(answer[0].Theme, answer_Res1.Theme)
 if __name__ == '__main__':
     unittest.main()
+    config_Project.logger.closelogfile()

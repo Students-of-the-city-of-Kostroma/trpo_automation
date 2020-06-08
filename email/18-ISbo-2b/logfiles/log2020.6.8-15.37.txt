@@ -1,0 +1,870 @@
+[15:37:46][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:46][INFO]:imap_login
+
+[15:37:47][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1ce3f0>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'ECPG'
+re.compile(b'(?P<tag>ECPG\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619867.5117571), 1: ("< b'* 118 EXISTS'", 1591619867.5117803), 2: ("< b'* 0 RECENT'", 1591619867.5118062), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619867.5118241), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619867.5118444), 5: ("< b'ECPG2 OK [READ-WRITE] inbox selected. (Success)'", 1591619867.5118644), 6: ("< b'ECPG1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619867.3533094), 7: ("> b'ECPG2 SELECT inbox'", 1591619867.3533602), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619867.5116668), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619867.5117302)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 g13mb43110064ltg'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:47][INFO]:count_unseen_mess
+
+[15:37:47][INFO]:quit_email_imap
+
+[15:37:47][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:47][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:47][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:47][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:47][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:47][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:47][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:47][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:47][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:47][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:47][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:47][INFO]:imap_login
+
+[15:37:49][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1cebc0>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'OIGA'
+re.compile(b'(?P<tag>OIGA\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619869.1145113), 1: ("< b'* 118 EXISTS'", 1591619869.1145387), 2: ("< b'* 0 RECENT'", 1591619869.1145587), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619869.1145756), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619869.1145954), 5: ("< b'OIGA2 OK [READ-WRITE] inbox selected. (Success)'", 1591619869.114613), 6: ("< b'OIGA1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619868.9518821), 7: ("> b'OIGA2 SELECT inbox'", 1591619868.9519322), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619869.114388), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619869.1144633)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 w24mb29186828lji'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:49][INFO]:count_unseen_mess
+
+[15:37:49][INFO]:quit_email_imap
+
+[15:37:49][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:49][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:49][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:49][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:49][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:49][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:49][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:49][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:49][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:49][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:49][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:49][INFO]:imap_login
+
+[15:37:50][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1cead0>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'HMCJ'
+re.compile(b'(?P<tag>HMCJ\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619870.7267284), 1: ("< b'* 118 EXISTS'", 1591619870.7267547), 2: ("< b'* 0 RECENT'", 1591619870.7267754), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619870.7267935), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619870.7268226), 5: ("< b'HMCJ2 OK [READ-WRITE] inbox selected. (Success)'", 1591619870.726852), 6: ("< b'HMCJ1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619870.566132), 7: ("> b'HMCJ2 SELECT inbox'", 1591619870.566178), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619870.726623), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619870.7266986)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 w8mb40361967ltp'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:50][INFO]:count_unseen_mess
+
+[15:37:50][INFO]:quit_email_imap
+
+[15:37:51][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:51][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:51][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:51][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:51][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:51][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:51][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:51][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:51][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:51][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:51][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:51][INFO]:imap_login
+
+[15:37:51][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1ceee0>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'JPJP'
+re.compile(b'(?P<tag>JPJP\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619871.7613332), 1: ("< b'* 118 EXISTS'", 1591619871.7613573), 2: ("< b'* 0 RECENT'", 1591619871.7613761), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619871.7613945), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619871.761416), 5: ("< b'JPJP2 OK [READ-WRITE] inbox selected. (Success)'", 1591619871.7614331), 6: ("< b'JPJP1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619871.6036675), 7: ("> b'JPJP2 SELECT inbox'", 1591619871.6037116), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619871.761243), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619871.7613058)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 e9mb103335986ltd'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:51][INFO]:count_unseen_mess
+
+[15:37:51][INFO]:quit_email_imap
+
+[15:37:52][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:52][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:52][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:52][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:52][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:52][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:52][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:52][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:52][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:52][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:52][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:52][INFO]:imap_login
+
+[15:37:53][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1da350>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'BJBM'
+re.compile(b'(?P<tag>BJBM\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619873.3445106), 1: ("< b'* 118 EXISTS'", 1591619873.3445365), 2: ("< b'* 0 RECENT'", 1591619873.344557), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619873.3445764), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619873.344599), 5: ("< b'BJBM2 OK [READ-WRITE] inbox selected. (Success)'", 1591619873.3446205), 6: ("< b'BJBM1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619873.1819417), 7: ("> b'BJBM2 SELECT inbox'", 1591619873.1819859), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619873.3444154), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619873.3444803)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 r197mb122315440lff'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:53][INFO]:count_unseen_mess
+
+[15:37:53][INFO]:quit_email_imap
+
+[15:37:53][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:53][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:53][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:53][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:53][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:53][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:53][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:53][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:53][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:53][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:53][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:53][INFO]:imap_login
+
+[15:37:54][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1da580>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'CLFO'
+re.compile(b'(?P<tag>CLFO\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619874.9492037), 1: ("< b'* 118 EXISTS'", 1591619874.9492276), 2: ("< b'* 0 RECENT'", 1591619874.9492466), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619874.949264), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619874.9492846), 5: ("< b'CLFO2 OK [READ-WRITE] inbox selected. (Success)'", 1591619874.9493022), 6: ("< b'CLFO1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619874.776555), 7: ("> b'CLFO2 SELECT inbox'", 1591619874.7765994), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619874.949114), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619874.949176)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 c12mb158078663lfp'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:54][INFO]:count_unseen_mess
+
+[15:37:55][INFO]:quit_email_imap
+
+[15:37:55][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:55][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:55][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:55][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:55][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:55][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:55][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:55][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:55][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:55][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:55][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:55][INFO]:imap_login
+
+[15:37:56][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1da3f0>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'PPLB'
+re.compile(b'(?P<tag>PPLB\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619876.62277), 1: ("< b'* 118 EXISTS'", 1591619876.622791), 2: ("< b'* 0 RECENT'", 1591619876.622821), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619876.6228366), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619876.622854), 5: ("< b'PPLB2 OK [READ-WRITE] inbox selected. (Success)'", 1591619876.6228707), 6: ("< b'PPLB1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619876.4582763), 7: ("> b'PPLB2 SELECT inbox'", 1591619876.4583209), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619876.62259), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619876.6227434)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 m9mb66977965lte'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:56][INFO]:count_unseen_mess
+
+[15:37:56][INFO]:quit_email_imap
+
+[15:37:56][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:56][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:56][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:56][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:56][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:56][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:56][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:56][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:56][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:56][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:56][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:56][INFO]:imap_login
+
+[15:37:58][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1da620>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'NGHD'
+re.compile(b'(?P<tag>NGHD\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619878.2582994), 1: ("< b'* 118 EXISTS'", 1591619878.2583237), 2: ("< b'* 0 RECENT'", 1591619878.258343), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619878.2583606), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619878.258382), 5: ("< b'NGHD2 OK [READ-WRITE] inbox selected. (Success)'", 1591619878.2584004), 6: ("< b'NGHD1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619878.0919979), 7: ("> b'NGHD2 SELECT inbox'", 1591619878.092037), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619878.258211), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619878.2582712)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 f3mb75249309ltq'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:58][INFO]:count_unseen_mess
+
+[15:37:58][INFO]:quit_email_imap
+
+[15:37:58][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:58][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:58][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:58][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:58][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:58][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:58][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:58][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:58][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:58][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:58][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:58][INFO]:imap_login
+
+[15:37:59][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1da8f0>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'MLLC'
+re.compile(b'(?P<tag>MLLC\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619879.2978334), 1: ("< b'* 118 EXISTS'", 1591619879.297858), 2: ("< b'* 0 RECENT'", 1591619879.297877), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619879.2978947), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619879.297931), 5: ("< b'MLLC2 OK [READ-WRITE] inbox selected. (Success)'", 1591619879.2979517), 6: ("< b'MLLC1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619879.141824), 7: ("> b'MLLC2 SELECT inbox'", 1591619879.1418667), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619879.297744), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619879.2978058)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 l9mb10761210lje'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:37:59][INFO]:count_unseen_mess
+
+[15:37:59][INFO]:quit_email_imap
+
+[15:37:59][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:37:59][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:37:59][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:37:59][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:37:59][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:37:59][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:37:59][DEBUG]:SetResults
+[Входные параметры]
+
+[15:37:59][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:37:59][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:37:59][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+
+[15:37:59][DEBUG]:CheckEmail
+[Входные параметры]
+
+[15:37:59][INFO]:imap_login
+
+[15:38:0][DEBUG]:GetLetters
+[Входные параметры
+None
+None
+<Object attributes:
+>
+0
+SELECTED
+None
+{}
+{'FLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing)'], 'OK': [b'[PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)] Flags permitted.', b'[UIDVALIDITY 1] UIDs valid.', b'[UIDNEXT 126] Predicted next UID.', b'[HIGHESTMODSEQ 65408]'], 'PERMANENTFLAGS': [b'(\\Answered \\Flagged \\Draft \\Deleted \\Seen $NotPhishing $Phishing \\*)'], 'UIDVALIDITY': [b'1'], 'EXISTS': [b'118'], 'RECENT': [b'0'], 'UIDNEXT': [b'126'], 'HIGHESTMODSEQ': [b'65408'], 'READ-WRITE': [b'']}
+
+False
+3
+False
+False
+ascii
+re.compile(b'.*{(?P<size>\\d+)}$', re.ASCII)
+re.compile(b'\\* (?P<data>\\d+) (?P<type>[A-Z-]+)( (?P<data2>.*))?', re.ASCII)
+imap.gmail.com
+993
+<Object attributes:
+<Object attributes:
+>
+None
+<Object attributes:
+<_ssl._SSLSocket object at 0x7f5ebf1da990>
+>
+False
+imap.gmail.com
+True
+True
+True
+>
+<Object attributes:
+>
+b'JCFC'
+re.compile(b'(?P<tag>JCFC\\d+) (?P<type>[A-Z]+) (?P<data>.*)', re.ASCII)
+10
+6
+{0: ("< b'* OK [UIDVALIDITY 1] UIDs valid.'", 1591619880.1952758), 1: ("< b'* 118 EXISTS'", 1591619880.1953006), 2: ("< b'* 0 RECENT'", 1591619880.19532), 3: ("< b'* OK [UIDNEXT 126] Predicted next UID.'", 1591619880.1953385), 4: ("< b'* OK [HIGHESTMODSEQ 65408]'", 1591619880.1953597), 5: ("< b'JCFC2 OK [READ-WRITE] inbox selected. (Success)'", 1591619880.1953797), 6: ("< b'JCFC1 OK trpo.bot@gmail.com authenticated (Success)'", 1591619880.038308), 7: ("> b'JCFC2 SELECT inbox'", 1591619880.0383513), 8: ("< b'* FLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing)'", 1591619880.195185), 9: ("< b'* OK [PERMANENTFLAGS (\\\\Answered \\\\Flagged \\\\Draft \\\\Deleted \\\\Seen $NotPhishing $Phishing \\\\*)] Flags permitted.'", 1591619880.1952477)}
+<Object attributes:
+<re.Match object; span=(0, 12), match=b'[READ-WRITE]'>
+>
+b'* OK Gimap ready for requests from 146.247.36.150 b5mb113051398lfp'
+('IMAP4REV1', 'UNSELECT', 'IDLE', 'NAMESPACE', 'QUOTA', 'ID', 'XLIST', 'CHILDREN', 'X-GM-EXT-1', 'XYZZY', 'SASL-IR', 'AUTH=XOAUTH2', 'AUTH=PLAIN', 'AUTH=PLAIN-CLIENTTOKEN', 'AUTH=OAUTHBEARER', 'AUTH=XOAUTH')
+IMAP4REV1]
+
+[15:38:0][INFO]:count_unseen_mess
+
+[15:38:0][INFO]:quit_email_imap
+
+[15:38:0][DEBUG]:CheckUsers
+[Входные параметры]
+
+[15:38:0][DEBUG]:ValidateLetters
+[Входные параметры]
+
+[15:38:0][DEBUG]:WorkWithLetters
+[Входные параметры]
+
+[15:38:0][DEBUG]:LettersConvertToString
+[Входные параметры]
+
+[15:38:0][DEBUG]:FormJSONDates
+[Входные параметры]
+
+[15:38:0][DEBUG]:SendJSONForCheck
+[Входные параметры]
+
+[15:38:0][DEBUG]:SetResults
+[Входные параметры]
+
+[15:38:0][DEBUG]:SetMarks
+[Входные параметры]
+
+[15:38:0][DEBUG]:FormAnswers
+[Входные параметры]
+
+[15:38:0][DEBUG]:MakeAnswersForUsers
+[Входные параметры]
+

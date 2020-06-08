@@ -1,7 +1,14 @@
 import unittest
 import global_User
 import global_Letter
-import main_1_google_CheckEmail
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
+import main_1_CheckEmail
 
 class MyTestCase(unittest.TestCase):
     def test_S_6_t1(self):
@@ -25,7 +32,7 @@ class MyTestCase(unittest.TestCase):
 
         letters = []
         letters.append(letter)
-        main_1_google_CheckEmail.CheckUsers(letters)
+        main_1_CheckEmail.CheckUsers(letters)
 
         # Ожидаемые данные:
         student_expectation = global_User.User
@@ -56,7 +63,7 @@ class MyTestCase(unittest.TestCase):
 
         letters = []
         letters.append(letter)
-        main_1_google_CheckEmail.CheckUsers(letters)
+        main_1_CheckEmail.CheckUsers(letters)
 
         # Ожидаемые данные:
         letter_expectation = global_Letter.Letter(student, "ЛР03",
@@ -91,7 +98,7 @@ class MyTestCase(unittest.TestCase):
 
         letters = []
         letters.append(letter)
-        main_1_google_CheckEmail.CheckUsers(letters)
+        main_1_CheckEmail.CheckUsers(letters)
 
         # Ожидаемые данные:
         letter_expectation = global_Letter.Letter(student, "ЛР03",
@@ -107,3 +114,4 @@ class MyTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    config_Project.logger.closelogfile()

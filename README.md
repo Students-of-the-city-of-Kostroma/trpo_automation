@@ -1,5 +1,4 @@
 # trpo_automation
-
 MAIL
 
 Модуль приёма писем
@@ -22,11 +21,3 @@ https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/tree/dev/ema
 Технические нюансы:
 - требуется ОС Linux
 - требуется python версии не ниже чем python 3.4, pip3
-- требуются установленные библиотеки:
-- - google-api-python-client
-- - google-auth-httplib2
-- - google-auth-oauthlib
-- - oauth2client
-- требуются ключи доступа к google, контакты для предоставления доступа - vk.com/urec_programmec
-- проект можно запустить как демон, используя утилиту start-stop-daemon с флагами -Sbvx
-

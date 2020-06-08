@@ -1,11 +1,10 @@
 # coding=utf-8
-from work_Loger import Logs
 from global_AnswersForUsers import AnswersForUsers
 import config_Project as cfg
 import work_PatternsOfLetter
 
-import inspect
 
+@cfg.logger.logdebug
 def FormAnswers(letterResult):
     """
     Формирование ответов пользователям
@@ -18,6 +17,7 @@ def FormAnswers(letterResult):
     return answers
 
 
+@cfg.logger.logdebug
 def MakeAnswersForUsers(letterResult):
     """
     Функционал:
@@ -62,10 +62,10 @@ def MakeAnswersForUsers(letterResult):
             pattern = work_PatternsOfLetter.HaveAttachments()
 
         elif i.CodeStatus == "06":
-            pattern = work_PatternsOfLetter.SystemFailure()
+            pattern = work_PatternsOfLetter.SystemFailure(i.CodeStatusComment)
 
         elif i.CodeStatus == "07":
-            pattern = work_PatternsOfLetter.SystemFailure()
+            pattern = work_PatternsOfLetter.SystemFailure(i.CodeStatusComment)
 
         elif i.CodeStatus == "08":
             pattern = work_PatternsOfLetter.UncorrectedLink()
@@ -75,19 +75,19 @@ def MakeAnswersForUsers(letterResult):
 
         elif i.CodeStatus == "30":
             try:
-                pattern = work_PatternsOfLetter.WorkVerified(i.IsOK)
+                pattern = work_PatternsOfLetter.WorkVerified(i.IsOK, i.CodeStatusComment)
                 par = (i.Student.NameOfStudent, i.NumberOfLab, i.VariantOfLab)
-                forTeacher.add(par)
-                teacher = True
-                
-            except expression:
+                if i.IsOK:
+                    teacher = True
+                    forTeacher.add(par)
+            except:
                 continue
 
         else:
-             continue
+            continue
 
-            answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
-            answers.append(answer)
+        answer = AnswersForUsers(i.Student.Email, pattern.return_theme(), pattern.return_body())
+        answers.append(answer)
 
     if teacher == True:
         answer = AnswersForUsers(cfg.teacher_email, forTeacher.return_theme(), forTeacher.return_body())
