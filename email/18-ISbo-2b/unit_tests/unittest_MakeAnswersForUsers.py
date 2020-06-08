@@ -1,8 +1,16 @@
 import unittest
 import global_LetterResult
 import  global_User
-import main_4_FormAnswers
 import global_AnswersForUsers
+
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
+import main_4_FormAnswers
 
 class MyTestCase(unittest.TestCase):
     def test_S_8_t1(self):
@@ -175,6 +183,7 @@ class MyTestCase(unittest.TestCase):
         # Создание письма
         letterResult = global_LetterResult.LetterResult(student, False, None, None)
         letterResult.CodeStatus = "06"
+        letterResult.CodeStatusComment = ""
 
         # Список писем
         letter = []
@@ -201,7 +210,7 @@ class MyTestCase(unittest.TestCase):
         # Создание письма
         letterResult = global_LetterResult.LetterResult(student, False, None, None)
         letterResult.CodeStatus = "07"
-
+        letterResult.CodeStatusComment = ""
         # Список писем
         letter = []
         letter.append(letterResult)
@@ -334,3 +343,4 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(answer[0].Theme, answer_Res1.Theme)
 if __name__ == '__main__':
     unittest.main()
+    config_Project.logger.closelogfile()

@@ -2,11 +2,16 @@ import unittest
 import global_User as User
 import global_Letter as Letter
 import global_LetterResult as LetterResult
-import main_2_WorkWithLetters
-import socket
-import global_LetterResult
 import json
-import select
+
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
+import main_2_WorkWithLetters
 
 
 class TestSendJSONForCheck(unittest.TestCase):
@@ -335,3 +340,4 @@ class TestSendJSONForCheck(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+    config_Project.logger.closelogfile()
