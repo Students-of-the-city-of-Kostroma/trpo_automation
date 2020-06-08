@@ -1,13 +1,11 @@
 ﻿# coding=utf-8
-from logs import config_Log as l_cfg
+import config_Project as l_cfg
 from global_LetterResult import LetterResult
-from work_Loger import Logs
 
-import inspect
+
 import socket
 import json
 import select
-import lxml
 import requests
 from bs4 import BeautifulSoup
 

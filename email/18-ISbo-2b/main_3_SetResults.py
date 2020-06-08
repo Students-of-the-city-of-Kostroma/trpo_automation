@@ -1,9 +1,6 @@
 # coding=utf-8
-from logs import config_Log as l_cfg
-from work_Loger import Logs
+import config_Project as l_cfg
 from work_Sheet import Sheet
-
-import inspect
 
 
 @l_cfg.logger.logdebug

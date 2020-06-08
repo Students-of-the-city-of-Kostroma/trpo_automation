@@ -1,19 +1,16 @@
 #!/usr/bin/python3
 # coding=utf-8
-from main_1_CheckEmail import CheckEmail
-from main_2_WorkWithLetters import WorkWithLetters
-from main_3_SetResults import SetResults
-from main_4_FormAnswers import FormAnswers
-from main_5_InformUsers import InformUsers
-import config_Project as cfg
-from global_Logging import Logger
-
-import inspect
 from cryptography.fernet import Fernet
+from global_Logging import Logger
+import config_Project as cfg
 cipher = ""
 
-
 def main():
+    from main_1_CheckEmail import CheckEmail
+    from main_2_WorkWithLetters import WorkWithLetters
+    from main_3_SetResults import SetResults
+    from main_4_FormAnswers import FormAnswers
+    from main_5_InformUsers import InformUsers
 
     # Запуск работы
     while True:

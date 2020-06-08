@@ -1,14 +1,11 @@
 # coding=utf-8
-from logs import config_Log as l_cfg
-from work_Loger import Logs
 import work_EmailLibrary as EmailLibrary
 import config_Project as cfg
 
 from datetime import datetime
-import inspect
 
 
-l_cfg.logger.logdebug
+@cfg.logger.logdebug
 def InformUsers(answersForUsers):
     """
     Разослать письма пользователям
@@ -28,7 +25,7 @@ def InformUsers(answersForUsers):
     FormFilename()
 
 
-l_cfg.logger.logdebug
+@cfg.logger.logdebug
 def SendLetters(answersForUsers):
     """
      Функционал:
@@ -52,7 +49,7 @@ def SendLetters(answersForUsers):
         EmailLibrary.send_mes(i)
 
 
-l_cfg.logger.logdebug
+@cfg.logger.logdebug
 def FormFilename():
     """
     Формирование имени файла логов

@@ -1,5 +1,4 @@
 import datetime
-from logs import config_Log as l_cfg
 import config_Project as cfg
 
 class BasePattern:
@@ -8,7 +7,7 @@ class BasePattern:
     MainPart = None
     BottomPart = "\nСпасибо за использование нашей системы.\n\nКонтакты тех. поддержки: " + cfg.teacher_email + "."
 
-    @l_cfg.logger.loginfo
+    @cfg.logger.loginfo
     def return_body(self):
         now = datetime.datetime.now()
         if now.hour > 5 & now.hour <= 10:
@@ -20,7 +19,7 @@ class BasePattern:
         else:
             return self.TopPart[3] + self.MainPart + self.BottomPart
 
-    @l_cfg.logger.loginfo
+    @cfg.logger.loginfo
     def return_theme(self):
         return self.Theme
 

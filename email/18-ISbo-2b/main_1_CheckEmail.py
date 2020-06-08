@@ -1,13 +1,11 @@
 # coding=utf-8
-from logs import config_Log as l_cfg
+import config_Project as l_cfg
 from work_Sheet import Sheet
 from global_Letter import Letter
 from global_User import User
 from work_ValidateRules import ValidationMail as Val
-from work_Loger import Logs
 import work_EmailLibrary as EmailLibrary
 
-import inspect
 import re
 import email
 

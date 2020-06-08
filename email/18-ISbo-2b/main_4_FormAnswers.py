@@ -1,13 +1,10 @@
 # coding=utf-8
-from logs import config_Log as l_cfg
-from work_Loger import Logs
 from global_AnswersForUsers import AnswersForUsers
 import config_Project as cfg
 import work_PatternsOfLetter
 
-import inspect
 
-@l_cfg.logger.logdebug
+@cfg.logger.logdebug
 def FormAnswers(letterResult):
     """
     Формирование ответов пользователям
@@ -20,7 +17,7 @@ def FormAnswers(letterResult):
     return answers
 
 
-@l_cfg.logger.logdebug
+@cfg.logger.logdebug
 def MakeAnswersForUsers(letterResult):
     """
     Функционал:
