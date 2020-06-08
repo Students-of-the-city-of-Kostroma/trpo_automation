@@ -33,7 +33,9 @@ public class ServerTest {
         this.expectedNomer=expectedNomer;
         this.expectedSilka=expectedSilka;
         server=new Server();
-        server.OsnovaDecoda(Gison);
+
+
+        server.OsnovaDecoda(Gison,false);
     }
 
     // name attribute is optional, provide an unique name for test
