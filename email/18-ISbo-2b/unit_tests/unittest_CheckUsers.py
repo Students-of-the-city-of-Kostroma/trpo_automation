@@ -1,6 +1,13 @@
 import unittest
 import global_User
 import global_Letter
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
 import main_1_CheckEmail
 
 class MyTestCase(unittest.TestCase):
@@ -107,3 +114,4 @@ class MyTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    config_Project.logger.closelogfile()

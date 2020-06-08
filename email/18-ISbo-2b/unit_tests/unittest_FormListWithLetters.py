@@ -1,4 +1,12 @@
 import unittest
+
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
 import main_1_CheckEmail as CheckEmail
 
 
@@ -72,3 +80,4 @@ class test_FormListWithLetters(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    config_Project.logger.closelogfile()

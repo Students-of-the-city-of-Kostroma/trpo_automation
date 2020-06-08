@@ -1,7 +1,15 @@
-from main_3_SetResults import SetMarks
+import unittest
 from global_User import User
 from global_LetterResult import LetterResult
-import unittest
+
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
+from main_3_SetResults import SetMarks
 
 
 class test_SetMarks(unittest.TestCase):
@@ -84,3 +92,4 @@ class test_SetMarks(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    config_Project.logger.closelogfile()

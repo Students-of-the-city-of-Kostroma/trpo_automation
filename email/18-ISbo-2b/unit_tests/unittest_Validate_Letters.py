@@ -1,7 +1,15 @@
 import unittest
-import main_1_CheckEmail
 import global_Letter
 import  global_User
+
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
+import main_1_CheckEmail
 
 class test_Validate_Letters(unittest.TestCase):
     def test_S_2_t1(self):
@@ -404,3 +412,4 @@ class test_Validate_Letters(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    config_Project.logger.closelogfile()

@@ -2,6 +2,14 @@
 import unittest
 import global_User as User
 import global_Letter as Letter
+
+import config_Project
+import global_Logging
+
+config_Project.logger = global_Logging.Logger()
+i = config_Project.logger
+config_Project.logger.createlogfile()
+
 from main_2_WorkWithLetters import LettersConvertToString
 
 
@@ -137,3 +145,4 @@ class MyTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    config_Project.logger.closelogfile()
