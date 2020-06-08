@@ -62,10 +62,10 @@ def MakeAnswersForUsers(letterResult):
             pattern = work_PatternsOfLetter.HaveAttachments()
 
         elif i.CodeStatus == "06":
-            pattern = work_PatternsOfLetter.SystemFailure()
+            pattern = work_PatternsOfLetter.SystemFailure(i.CodeStatusComment)
 
         elif i.CodeStatus == "07":
-            pattern = work_PatternsOfLetter.SystemFailure()
+            pattern = work_PatternsOfLetter.SystemFailure(i.CodeStatusComment)
 
         elif i.CodeStatus == "08":
             pattern = work_PatternsOfLetter.UncorrectedLink()

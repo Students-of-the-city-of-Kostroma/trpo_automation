@@ -47,7 +47,7 @@ def CheckEmail():
     return letters
 
 
-@l_cfg.logger.logdebug
+@l_cfg.logger.loginfo
 def GetLetters(mail):
     """
     Функционал:
