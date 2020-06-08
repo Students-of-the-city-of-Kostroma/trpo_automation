@@ -14,7 +14,7 @@ logfile::logfile()
  */
 void logfile::logInfo(QString msg) {
     QFile logFile("logFile.txt");
-    if(logFile.open(QIODevice::Append | QIODevice::Text)) {
+    if (logFile.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream writeStream(&logFile);
         writeStream << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
         writeStream << "INF ";
@@ -31,7 +31,7 @@ void logfile::logInfo(QString msg) {
  */
 void logfile::logDebug(QString msg) {
     QFile logFile("logFile.txt");
-    if(logFile.open(QIODevice::Append | QIODevice::Text)) {
+    if (logFile.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream writeStream(&logFile);
         writeStream << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
         writeStream << "DBG ";
@@ -48,7 +48,7 @@ void logfile::logDebug(QString msg) {
  */
 void logfile::logWarning(QString msg) {
     QFile logFile("logFile.txt");
-    if(logFile.open(QIODevice::Append | QIODevice::Text)) {
+    if (logFile.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream writeStream(&logFile);
         writeStream << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
         writeStream << "WRN ";
@@ -65,7 +65,7 @@ void logfile::logWarning(QString msg) {
  */
 void logfile::logCritical(QString msg) {
     QFile logFile("logFile.txt");
-    if(logFile.open(QIODevice::Append | QIODevice::Text)) {
+    if (logFile.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream writeStream(&logFile);
         writeStream << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
         writeStream << "CRT ";
@@ -82,7 +82,7 @@ void logfile::logCritical(QString msg) {
  */
 void logfile::logFatal(QString msg) {
     QFile logFile("logFile.txt");
-    if(logFile.open(QIODevice::Append | QIODevice::Text)) {
+    if (logFile.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream writeStream(&logFile);
         writeStream << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
         writeStream << "FTL ";
