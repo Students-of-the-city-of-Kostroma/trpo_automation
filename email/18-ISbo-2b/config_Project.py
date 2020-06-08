@@ -6,8 +6,8 @@ timeout = 10
 teacher_email = "trpo.help@gmail.com"
 access = 'https://forms.gle/DRxYQxeRn9z7jvD96'
 filename = ""
-logger = ""
-
+logger = None
+logfile = None
 
 def num_for_filename():
     n = 1

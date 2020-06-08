@@ -20,7 +20,8 @@ def main():
         print(next(cfg.gen_num_for_filename))
 
         cfg.logger.createlogfile()
-
+        i = cfg.logger
+        print("ok")
         # main_1
         letters = CheckEmail()
 

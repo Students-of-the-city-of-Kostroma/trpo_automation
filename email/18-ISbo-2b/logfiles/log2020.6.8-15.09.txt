@@ -1,0 +1,44 @@
+[15:9:1][DEBUG]:CheckEmail
+
+[15:9:1][INFO]:imap_login
+[Входные параметры]
+
+[15:9:2][DEBUG]:GetLetters
+
+[15:9:2][ERROR]:CheckEmail
+[Входные параметры
+Traceback (most recent call last):
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 34, in decorated
+    result = func(*args, **kwargs)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/main_1_CheckEmail.py", line 72, in GetLetters
+    count = EmailLibrary.count_unseen_mess(mail)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 57, in decorated
+    info += Logger.getobjectdata(i)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 94, in getobjectdata
+    info += Logger.getobjectdata(i)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 94, in getobjectdata
+    info += Logger.getobjectdata(i)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 90, in getobjectdata
+    ats = ob.__dict__
+AttributeError: '_ssl._SSLSocket' object has no attribute '__dict__'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 34, in decorated
+    result = func(*args, **kwargs)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/main_1_CheckEmail.py", line 29, in CheckEmail
+    raw_letters = GetLetters(imap_obj)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 39, in decorated
+    res = Logger.logerror(func, tr, *args, **kwargs)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 113, in logerror
+    info += Logger.getobjectdata(i)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 94, in getobjectdata
+    info += Logger.getobjectdata(i)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 94, in getobjectdata
+    info += Logger.getobjectdata(i)
+  File "/home/rurec/git/trpo_automation/email/18-ISbo-2b/global_Logging.py", line 90, in getobjectdata
+    ats = ob.__dict__
+AttributeError: '_ssl._SSLSocket' object has no attribute '__dict__'
+
+

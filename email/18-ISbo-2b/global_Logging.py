@@ -5,7 +5,7 @@ import traceback
 
 class Logger:
 
-    d_file = None
+    # d_file = None
 
     def __init__(self):
         pass
@@ -15,11 +15,11 @@ class Logger:
         self.updatelogfiles()
         filename = cfg.filename + '.txt'
         fullpath = 'logfiles/' + filename
-        self.d_file = open(fullpath, 'a', encoding='utf-8')
+        cfg.logfile = open(fullpath, 'a', encoding='utf-8')
 
     def closelogfile(self):
         """Закрывает дескриптор файла"""
-        self.d_file.close()
+        cfg.logfile.close()
 
     def logdebug(self, func):
         """Логирование уровня DEGUG"""
@@ -29,8 +29,7 @@ class Logger:
             info = '[' + str(now.hour) + ':' + str(now.minute) + ':' + str(now.second) + ']' + '[DEBUG]:' \
                    + str(func.__name__)
             info += '\n\n'
-            # print(self.d_file)
-            self.d_file.write(info)
+            cfg.logfile.write(info)
             try:
                 result = func(*args, **kwargs)
                 return result
@@ -39,7 +38,7 @@ class Logger:
                 tr = str(tr)
                 res = Logger.logerror(func, tr, *args, **kwargs)
                 res = str(res)
-                self.d_file.write(res)
+                cfg.logfile.write(res)
         return decorated
 
 
@@ -60,7 +59,7 @@ class Logger:
                 info += Logger.getobjectdata(i)
             info = info[:-1]
             info += ']\n\n'
-            self.d_file.write(info)
+            cfg.logfile.write(info)
             try:
                 result = func(*args, **kwargs)
                 return result
@@ -69,7 +68,7 @@ class Logger:
                 tr = str(tr)
                 res = Logger.logerror(func, tr, *args, **kwargs)
                 res = str(res)
-                self.d_file.write(res)
+                cfg.logfile.write(res)
         return decorated
 
 
