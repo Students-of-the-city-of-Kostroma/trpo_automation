@@ -21,8 +21,7 @@ SOURCES += \
         components/strategylab.cpp \
         components/tcpserver.cpp \
         utils/gateway.cpp \
-        utils/internalexception.cpp \
-        utils/logfile.cpp
+        utils/internalexception.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

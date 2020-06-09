@@ -8,7 +8,7 @@
 StrategyLab::StrategyLab(QObject* parent)
     : QObject(parent)
 {
-    log.logInfo("Include XML config");
+    logfile::logInfo(QString("Include XML config"));
     /* Подключаем answerStructure.xml для проверки лабораторной работы
        Храниться в rootAnswerStructure */
     QDomDocument config;
@@ -27,7 +27,7 @@ StrategyLab::StrategyLab(QObject* parent)
  */
 bool StrategyLab::findChildrenClasses(QString strOfCode)
 {
-    log.logInfo("Check string for inheritance");
+    logfile::logInfo(QString("Check string for inheritance"));
     if (strOfCode.indexOf("class") != -1) {
         if (strOfCode.indexOf(':', strOfCode.indexOf("class")) < strOfCode.indexOf('{', strOfCode.indexOf("class"))
                 && strOfCode.indexOf(':', strOfCode.indexOf("class")) != -1)
@@ -41,7 +41,7 @@ bool StrategyLab::findChildrenClasses(QString strOfCode)
  */
 void StrategyLab::divideIntoClasses(QList<QString> code)
 {
-    log.logInfo("Divide the code sent to classes");
+    logfile::logInfo("Divide the code sent to classes");
     for (int i = 0; i < code.size(); i++) {
         if (code[i].contains("Context") && code[i].contains("class")) {
             classes.insert("context", code[i]);
@@ -66,7 +66,7 @@ void StrategyLab::divideIntoClasses(QList<QString> code)
  */
 void StrategyLab::checkByConfig(int variant, QList<QString> code)
 {
-    log.logInfo("Сheсk code by XML Config");
+    logfile::logInfo("Сheсk code by XML Config");
 
     //Делим присланный код на классы для удобства работы с ними
     divideIntoClasses(code);
@@ -130,7 +130,7 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
  */
 void StrategyLab::checkParentChildrenRelations()
 {
-    log.logInfo("Testing for an abstract class");
+    logfile::logInfo("Testing for an abstract class");
     /***** Проверки на абстрактный класс *****/
 
     QString parent = classes.value("parent");
@@ -161,7 +161,7 @@ void StrategyLab::checkParentChildrenRelations()
  */
 void StrategyLab::checkChildren()
 {
-    log.logInfo("Chek children");
+    logfile::logInfo("Chek children");
     QSet<QString> childMethodBodies;
 
     foreach (QString child, children) {
@@ -215,7 +215,7 @@ void StrategyLab::checkChildren()
  */
 void StrategyLab::checkAbstractMethodModifier(QString className, QString classBody, QString modifier)
 {
-    log.logInfo("Check Abstract Method modifier");
+    logfile::logInfo("Check Abstract Method modifier");
     QString fromStartToAbstractMethod = classBody.left(classBody.indexOf(abstractMethodName));
     QString modifierForAbstractMethod = classBody.left(fromStartToAbstractMethod.lastIndexOf(":")).simplified();
     if (!modifierForAbstractMethod.split(" ", QString::SkipEmptyParts).endsWith(modifier)) {
@@ -230,7 +230,7 @@ void StrategyLab::checkAbstractMethodModifier(QString className, QString classBo
  */
 void StrategyLab::checkContext()
 {
-    log.logInfo("Check Context");
+    logfile::logInfo("Check Context");
 
     /* Убираем лишние элементы в строке */
     QString context = classes.value("context");
@@ -298,7 +298,7 @@ void StrategyLab::checkContext()
  */
 void StrategyLab::checkMainFunction()
 {
-    log.logInfo("Check Main Function");
+    logfile::logInfo("Check Main Function");
     QString mainFunction = classes.value("main"), methodName;
     //Проверка на создание объекта класса context
     if (!mainFunction.contains("new " + nameClassContext)) {
