@@ -19,11 +19,11 @@ Tests::Tests(QObject *parent)
     }
     QRegExp gatewayCases ("issue-393-[0-9]{1,3}");
     testSuite_data(suites, gatewayCases);
-    testSuite(suites);
+    testSuite(suites, 1);   // 1 - переменная типа int, указывает на то что прогоняются кейсы GW
     delete testObj;
     QRegExp checkChildrenCases ("issue-173-[0-9]{1,2}");
     testSuite_data(suites, checkChildrenCases);
-    testSuite(suites);
+    testSuite(suites,2);    // аналогично, только теперь кейсы StrategyLab
     delete testObjj;
 }
 
@@ -59,23 +59,37 @@ void Tests::testSuite_data(QDomElement suites, QRegExp re)
  * @brief Тестовая функция извлекает из заранее подготовленной таблицы
  * некорректные Json и отдает их на проверку методу validateData()
  */
-void Tests::testSuite(QDomElement suites)
+void Tests::testSuite(QDomElement suites, int type)
 {
     if (!suites.isNull()) {
         QFETCH(QByteArray, testData);
         QFETCH(QString, description);
         QFETCH(QString, expected);
 
-        try {
-         testObj->validateData(testData);
-          QFAIL("Test worked like input data is valid, but it is invalid (at least it should be)");
-        } catch (WrongRequestException error) {
-    //        TODO: заменить после задачи https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/issues/51
-    //        Добавить reject коды
-            QString gatewayResult = "{\"messageType\": " + QString::number(3) + ", \"key\": \""
-                    + error.jsonKey() + "\", \"text\": \"" + error.text() + "\"}";
-            QCOMPARE(gatewayResult, expected);
+        if (type==1)          // для Gateway
+        {
+            try {
+             testObj->validateData(testData);
+              QFAIL("Test worked like input data is valid, but it is invalid (at least it should be)");
+            } catch (WrongRequestException error) {
+        //        TODO: заменить после задачи https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/issues/51
+        //        Добавить reject коды
+                QString gatewayResult = "{\"messageType\": " + QString::number(3) + ", \"key\": \""
+                        + error.jsonKey() + "\", \"text\": \"" + error.text() + "\"}";
+                QCOMPARE(gatewayResult, expected);
+            }
+        if (type==2)                // для StrategyLab
+            testObjj->checkParentChildrenRelations();
+            testObjj->checkChildren();
+             QFAIL("Test worked like input data is valid, but it is invalid (at least it should be)");
+           } catch (WrongRequestException error) {
+       //        TODO: заменить после задачи https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/issues/51
+       //        Добавить reject коды
+               QString gatewayResult = "{\"messageType\": " + QString::number(3) + ", \"key\": \""
+                       + error.jsonKey() + "\", \"text\": \"" + error.text() + "\"}";
+               QCOMPARE(gatewayResult, expected);
         }
+
     } else {
         qDebug() << "Get test suites from Google Sheets first";
     }
