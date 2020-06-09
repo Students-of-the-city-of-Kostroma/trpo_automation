@@ -4,18 +4,17 @@ QT -= gui
 CONFIG += c++11
 
 SOURCES += \
-    testgateway.cpp \
     ../src/utils/gateway.cpp \
-    ../src/utils/internalexception.cpp \
-    testmain.cpp \
-    teststrategylab.cpp \
+    ../src/utils/internalexception.cpp \ \
+    tests.cpp
+
 
 
 HEADERS += \
-    testgateway.h \
     ../src/utils/gateway.h \
-    ../src/utils/internalexception.h \
-    teststrategylab.h
+    ../src/utils/internalexception.h \ \
+    tests.h
+
 
 RESOURCES += \
     ../src/resources.qrc

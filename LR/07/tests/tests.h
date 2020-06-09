@@ -2,6 +2,7 @@
 #define TESTGATEWAY_H
 
 #include "../src/utils/gateway.h"
+#include "../src/components/strategylab.h"
 #include "../src/utils/internalexception.h"
 
 #include <QObject>
@@ -21,11 +22,19 @@ private:
 public:
     explicit TestGateway(QObject *parent = nullptr);
 
-private slots:
-    void testTrueJson();
-    void testSuite_data();
-    void testSuite();
-    void cleanupTestCase();
+};
+
+class TestStrategyLab : public QObject
+{
+    Q_OBJECT
+
+private:
+    StrategyLab *testObj;
+    QDomElement suites;
+
+public:
+    explicit TestStrategyLab(QObject *parent = nullptr);
+
 };
 
 #endif // TESTGATEWAY_H
