@@ -23,7 +23,7 @@ Tests::Tests(QObject *parent)
     delete testObj;
     QRegExp checkChildrenCases ("issue-173-[0-9]{1,2}");
     testSuite_data(suites, checkChildrenCases);
-    testSuite(suites,2);    // аналогично, только теперь кейсы StrategyLab
+    testSuite(suites, 2);    // аналогично, только теперь кейсы StrategyLab
     delete testObjj;
 }
 

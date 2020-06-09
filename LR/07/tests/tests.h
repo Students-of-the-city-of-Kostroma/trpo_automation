@@ -25,7 +25,7 @@ public:
 
 private slots:
     void testSuite_data(QDomElement, QRegExp);
-    void testSuite(QDomElement);
+    void testSuite(QDomElement, int);
 };
 
 #endif // TESTGATEWAY_H
