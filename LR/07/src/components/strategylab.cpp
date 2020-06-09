@@ -300,9 +300,12 @@ void StrategyLab::checkMainFunction()
 {
     log.logInfo("Check Main Function");
     QString mainFunction = classes.value("main"), methodName;
+    if (mainFunction == "defaultValue") {
+        throw UnexpectedResultException("Main function not found");
+    }
     //Проверка на создание объекта класса context
     if (!mainFunction.contains("new " + nameClassContext)) {
-       throw UnexpectedResultException("Object of class '" + nameClassContext + "' is not created");
+       throw UnexpectedResultException("Object of class " + nameClassContext + " is not created");
     }
 
     QString contextObject = mainFunction.left(mainFunction.indexOf(" = new " + nameClassContext)).split("* ").last();
