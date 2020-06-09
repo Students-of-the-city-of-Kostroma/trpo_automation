@@ -151,8 +151,6 @@ void StrategyLab::checkParentChildrenRelations()
                                         "You should use '= 0' at the end of declaration");
     }
 
-    /***** Проверки на наследников абстрактного класса *****/
-
 }
 
 /**
