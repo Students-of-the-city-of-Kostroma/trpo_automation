@@ -1,6 +1,6 @@
-google-api-python-client
-google-auth-httplib2
-google-auth-oauthlib
-oauth2client
-cryptography
-PyGithub
+pip3 install google-api-python-client
+pip3 install google-auth-httplib2
+pip3 install google-auth-oauthlib
+pip3 install oauth2client
+pip3 install cryptography
+pip3 install PyGithub
