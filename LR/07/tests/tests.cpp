@@ -1,10 +1,37 @@
 #include "tests.h"
+/**
+ * @brief Констркутор класса TestGateway, в котором
+ * инициализируется объект тестируемого класса Gateway
+ * @param parent
+ */
+Tests::Tests(QObject *parent)
+    : QObject(parent)
+{
+    testObj = new Gateway(nullptr);
+    testObjj = new StrategyLab(nullptr);
+    QDomDocument config;
+    QFile file(QDir::currentPath() + "/../../07/tests/getTestSuites/testSuites.xml");
+    if (file.open(QIODevice::ReadOnly)) {
+        if (config.setContent(&file)) {
+            suites = config.documentElement();
+        }
+        file.close();
+    }
+    QRegExp gatewayCases ("issue-393-[0-9]{1,3}");
+    testSuite_data(suites, gatewayCases);
+    testSuite(suites);
+    delete testObj;
+    QRegExp checkChildrenCases ("issue-173-[0-9]{1,2}");
+    testSuite_data(suites, checkChildrenCases);
+    testSuite(suites);
+    delete testObjj;
+}
 
 /**
  * @brief Метод, аккумулирующий некорректные Json для далнейшей проверки
  * описания кейсов есть в сценариях (см testsSuites.xlsx)
  */
-void testSuite_data(QDomElement suites, QRegExp re)
+void Tests::testSuite_data(QDomElement suites, QRegExp re)
 {
     QTest::addColumn<QByteArray>("testData");
     QTest::addColumn<QString>("description");
@@ -32,7 +59,7 @@ void testSuite_data(QDomElement suites, QRegExp re)
  * @brief Тестовая функция извлекает из заранее подготовленной таблицы
  * некорректные Json и отдает их на проверку методу validateData()
  */
-void testSuite(QDomElement suites)
+void Tests::testSuite(QDomElement suites)
 {
     if (!suites.isNull()) {
         QFETCH(QByteArray, testData);
@@ -40,7 +67,7 @@ void testSuite(QDomElement suites)
         QFETCH(QString, expected);
 
         try {
-        //  testObj->validateData(testData);
+         testObj->validateData(testData);
           QFAIL("Test worked like input data is valid, but it is invalid (at least it should be)");
         } catch (WrongRequestException error) {
     //        TODO: заменить после задачи https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/issues/51
@@ -54,59 +81,4 @@ void testSuite(QDomElement suites)
     }
 }
 
-
-/**
- * @brief Констркутор класса TestGateway, в котором
- * инициализируется объект тестируемого класса Gateway
- * @param parent
- */
-TestGateway::TestGateway(QObject *parent)
-    : QObject(parent)
-{
-    testObj = new Gateway(nullptr);
-    QDomDocument config;
-    QFile file(QDir::currentPath() + "/../../07/tests/getTestSuites/testSuites.xml");
-    if (file.open(QIODevice::ReadOnly)) {
-        if (config.setContent(&file)) {
-            suites = config.documentElement();
-        }
-        file.close();
-    }
-    QRegExp re("issue-393-[0-9]{1,3}");
-    testSuite_data(suites, re);
-    testSuite(suites);
-    delete testObj;
-}
-
-TestStrategyLab::TestStrategyLab(QObject *parent)
-    : QObject(parent)
-{
-    testObj = new StrategyLab(nullptr);
-    QDomDocument config;
-    QFile file(QDir::currentPath() + "/../../07/tests/getTestSuites/testSuites.xml");
-    if (file.open(QIODevice::ReadOnly)) {
-        if (config.setContent(&file)) {
-            suites = config.documentElement();
-        }
-        file.close();
-    }
-    QRegExp re("issue-173-[0-9]{1,2}");
-    testSuite_data(suites, re);
-    testSuite(suites);
-    delete testObj;
-}
-
-
-int main(int argc,char* argv[])
-{
-    int status = 0;
-   {
-        TestGateway tg;
-        status |= QTest::qExec(&tg, argc, argv);
-   }
-   {
-        TestStrategyLab tsl;
-        status |= QTest::qExec(&tsl, argc, argv);
-   }
-    return status;
-}
+QTEST_MAIN(Tests)

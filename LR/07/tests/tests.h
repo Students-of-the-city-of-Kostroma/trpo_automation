@@ -11,30 +11,21 @@
 /**
  * @brief Класс тестирования сервиса Gateway
  */
-class TestGateway : public QObject
+class Tests : public QObject
 {
     Q_OBJECT
 
 private:
     Gateway *testObj;
+    StrategyLab *testObjj;
     QDomElement suites;
 
 public:
-    explicit TestGateway(QObject *parent = nullptr);
+    explicit Tests(QObject *parent = nullptr);
 
-};
-
-class TestStrategyLab : public QObject
-{
-    Q_OBJECT
-
-private:
-    StrategyLab *testObj;
-    QDomElement suites;
-
-public:
-    explicit TestStrategyLab(QObject *parent = nullptr);
-
+private slots:
+    void testSuite_data(QDomElement, QRegExp);
+    void testSuite(QDomElement);
 };
 
 #endif // TESTGATEWAY_H
