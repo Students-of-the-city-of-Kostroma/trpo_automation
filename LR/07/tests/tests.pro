@@ -5,14 +5,16 @@ CONFIG += c++11
 
 SOURCES += \
     ../src/utils/gateway.cpp \
-    ../src/utils/internalexception.cpp \ \
+    ../src/components/strategylab.cpp \
+    ../src/utils/internalexception.cpp \
     tests.cpp
 
 
 
 HEADERS += \
     ../src/utils/gateway.h \
-    ../src/utils/internalexception.h \ \
+    ../src/components/strategylab.h \
+    ../src/utils/internalexception.h \
     tests.h
 
 
