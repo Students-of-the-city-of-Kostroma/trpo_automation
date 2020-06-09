@@ -83,3 +83,4 @@ matrix:
       script:
         - sudo qmake tests.pro && make
         - sudo ./tests
+

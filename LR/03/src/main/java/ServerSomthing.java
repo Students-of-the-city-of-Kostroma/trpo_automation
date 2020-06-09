@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.logging.Level;
 
 import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
@@ -33,14 +34,15 @@ public class ServerSomthing {
         jsonObject.put("messageType", "2");//Все ли успешно
         jsonObject.put("grade", grade);
         jsonObject.put("comment", comment);//Если нет, то где ошибки
-        System.out.println(jsonObject.toJSONString());
+        Server. LOGGER.log(Level.INFO,"Формирование JSON ответа");
         return jsonObject.toString();//обьект ДЖСОН в строку и отправляем
+
     }
     public static String ErrorServer(IOException a) {//метод с ошибкой на сервере
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("messageType", "4");
         jsonObject.put("errorMessage", a);
-        System.out.println(jsonObject.toJSONString());
+        Server.LOGGER.log(Level.INFO,"Формирование JSON ответа о ошибке сервера");
         return jsonObject.toString();
     }
     public static String ErrorArg(String nameKey,String rejectCodeName,String comment) {//метод с ошибкой на ДЖСОН
@@ -49,7 +51,7 @@ public class ServerSomthing {
         jsonObject.put("key",nameKey);
         jsonObject.put("text",comment);
         jsonObject.put("rejectCode",rejectCodeName);
-        System.out.println(jsonObject.toJSONString()+"OSHIBKA:");
+        Server. LOGGER.log(Level.INFO,"Формирование JSON ответа о ошибке в ключе");
         return jsonObject.toString();
     }
 
@@ -57,33 +59,29 @@ public class ServerSomthing {
     public ServerSomthing(Socket socket) throws IOException {
 
         this.socket = socket;
+        Server.  LOGGER.log(Level.INFO,"Соединение установлено");
         // если потоку ввода/вывода приведут к генерированию исключения, оно проброситься дальше
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-
-        out.write("New connection!");
-        out.flush();
-
-
         run(); // вызываем run()
     }
     public void run() {
         String word;
         try {
             word = in.readLine();
-
-            System.out.println(word);
-
+            Server. LOGGER.log(Level.INFO,"Ожидание сообщения от клиента");
 
             try {
-                System.out.println(word);
+                Server. LOGGER.log(Level.INFO,"Получение сообщения от клиента");
                 JSONObject Cilka = (JSONObject)JSONValue.parseWithException(word);
+                Server.  LOGGER.log(Level.INFO,"Декодирование сообщения");
                 String proverka=Cilka.toString();
                 conec=false;
 
                 if(conec==false) {
+                    Server.LOGGER.log(Level.INFO,"Проверка ключа messageType");
                     TypeMessage=Cilka.get("messageType").toString();
-//                    System.out.println(TypeMessage);
+
                     String TestTipeMes1="";
                     if(TypeMessage.equals(TestTipeMes1)&&conec==false)
                     {
@@ -115,11 +113,12 @@ public class ServerSomthing {
                             conec=true;
                         }
                     }}
-                System.out.println(TypeMessage);
+
 
                 if(conec==false) {
+                    Server. LOGGER.log(Level.INFO,"Проверка ключа lab");
                     NomberLab=Cilka.get("lab").toString();
-//                    System.out.println(NomberLab);
+
                     String TestNomberLab1="";
                     if(NomberLab.equals(TestNomberLab1)&&conec==false)
                     {
@@ -151,12 +150,13 @@ public class ServerSomthing {
                             conec=true;
                         }
                     } }
-                System.out.println(NomberLab);
+
 
 
                 if(conec==false) {
+                    Server.LOGGER.log(Level.INFO,"Проверка ключа variant");
                     NomberVar=Cilka.get("variant").toString();
-//                    System.out.println(NomberVar);
+
                     String TestNomberVar1="";
                     if(NomberVar.equals(TestNomberVar1)&&conec==false)
                     {
@@ -188,11 +188,12 @@ public class ServerSomthing {
                             conec=true;
                         }
                     }}
-                System.out.println(NomberVar);
+
 
                 if(conec==false) {
+                    Server.LOGGER.log(Level.INFO,"Проверка ключа link");
                     Repos=Cilka.get("link").toString();
-//                  System.out.println(Repos);
+
                     try {
                         String s2="https://github.com/";
                         String s3="";
@@ -225,7 +226,7 @@ public class ServerSomthing {
                         send(ErrorArg(NomberLab,NomberVar,Repos));
                         conec=true;
                     }}
-                System.out.println(Repos);
+
             }
             catch(ParseException e){
                 TypeMessage="3";
@@ -238,27 +239,26 @@ public class ServerSomthing {
 
 
             if(conec==false) {
+                Server.LOGGER.log(Level.INFO,"Запуск модуля Selenium");
                 selenium=new Selenium(Repos,NomberVar);
-
                 selenium.test();
-                send( Otvet(selenium.Get_Ozenka(),selenium.Get_Result())); // отослать принятое сообщение с
+                Server.LOGGER.log(Level.INFO,"Selenium отработал. Формирование ответа");
+                send( Otvet(selenium.Get_Ozenka(),selenium.Get_Result())+"\n"); // отослать принятое сообщение с
                 selenium.driver.quit();
-
             }
 
 
         } catch (IOException e) {
-
+            Server.LOGGER.log(Level.SEVERE,"Ошибка соединения",e);
         }
     }
 
     private void send(String msg) {
         try {
-            System.out.println(msg);
+            Server.LOGGER.log(Level.INFO,"Отправление сообщения клиенту");
             out.write(msg);
-
             out.flush();
-        } catch (IOException ignored) {}
+        } catch (IOException ex) {Server.LOGGER.log(Level.WARNING,"Не удалось отправить результат клиенту",ex); ;}
     }
 }
 

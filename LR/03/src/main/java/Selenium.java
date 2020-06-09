@@ -1,10 +1,10 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.commons.lang3.ObjectUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.w3c.dom.Document;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -19,24 +19,27 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Selenium {
-    private static final String FILENAME = "Repository.xml";
+    private static final String FILENAME = "Labs3_url.xml";
     public WebDriver driver=null;
     private String result ="";
-    public  String Repository;// Ссылка на репозитори
-    public  String variant; // Номер варика который приходит
-    public  String id="-1"; // Номер варика ожидаемого в зависимости от имени REPO
+    private  String Repository;// Ссылка на репозитори
+    private  String variant; // Номер варика который приходит
+    private   String id="-1"; // Номер варика ожидаемого в зависимости от имени REPO
     private String itog_ozenka="0";
     private boolean empty=false;
     private String Var_Repository; // 1 Варик- Лосяш, 2 - Крош и тд
 
+
+
     public Selenium (String Repository,String variant){
+        Server.LOGGER.log(Level.INFO,"Инициализация конструктора класса Selenium");
         this.Repository=Repository;
         this.variant=variant;
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
 
         options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-     //   options.addArguments("--headless");
+        options.addArguments("--headless");
         options.addArguments("start-maximized");
         options.addArguments("enable-automation");
         options.addArguments("--no-sandbox");
@@ -53,10 +56,12 @@ public class Selenium {
         driver.get(Var_Repository);
         Add_Tab();
         Change_Tab(0);
+        Server.LOGGER.log(Level.INFO,"Инициализация конструктора класса Selenium завершена");
     }
 
     private void Get_GoodReposotory(){
         try {
+            Server.LOGGER.log(Level.INFO,"Попытка считать конфиг репозиториев");
             final File xmlFile = new File(System.getProperty("user.dir") + File.separator + FILENAME);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -73,29 +78,28 @@ public class Selenium {
                     Element element = (Element) node;
                     if (element.getAttribute("id").equals(variant)){
                         Var_Repository=element.getElementsByTagName("url").item(0).getTextContent();
+                        Server.LOGGER.log(Level.INFO,"Попытка считать конфиг репозиториев успешна");
                         break;
                     }
                 }
             }
         }
         catch (ParserConfigurationException| SAXException | IOException ex){
-            Logger.getLogger(Selenium.class.getName()).log(Level.SEVERE,null,ex);
+            Server.LOGGER.log(Level.SEVERE,"Попытка считать конфиг репозиториев провалилась",ex);
         }
     }
 
-    public void Check_Var(){
+    private void Check_Var(){
         try {
+            Server.LOGGER.log(Level.INFO,"Запуск метода Check_var");
             final File xmlFile = new File(System.getProperty("user.dir") + File.separator + FILENAME);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(xmlFile);
             String Good=Var_Repository.substring(Repository.indexOf("https://github.com/"),Repository.lastIndexOf("/")+1);
             String Var=Good+Repository.substring(Repository.lastIndexOf("/"));
-
             doc.getDocumentElement().normalize();
-
             NodeList NodeList = doc.getElementsByTagName("variant");
-
             for (int i = 0; i < NodeList.getLength(); i++) {
                 // Вывoдиm инфopmaцию пo kaждomy из нaйдeнных элemeнтoв
                 Node node = NodeList.item(i);
@@ -103,13 +107,15 @@ public class Selenium {
                     Element element = (Element) node;
                     if (element.getElementsByTagName("url").item(0).getTextContent().equals(Var)){
                         id=element.getAttribute("id");
+                        Server.LOGGER.log(Level.INFO,"Работа метода Check_Var успешна");
                         break;
                     }
                 }
             }
         }
         catch (ParserConfigurationException| SAXException | IOException ex){
-            Logger.getLogger(Selenium.class.getName()).log(Level.SEVERE,null,ex);
+
+            Server.LOGGER.log(Level.SEVERE,"Попытка считать конфиг репозиториев провалилась",ex);
         }
     }
 
@@ -121,7 +127,7 @@ public class Selenium {
         return itog_ozenka;
     }
 
-    public String Check_Branches(int Good_branches, int Var_branches) {
+    private  String Check_Branches(int Good_branches, int Var_branches) {
         if (Good_branches==Var_branches){  //Если кол-во веток в репозитория одно и тоже то смотрим их имена
             driver.get(Var_Repository+"/branches");
             String Good_branches_Name=pull_String("//div[2]/ul[1]/li[@class='Box-row position-relative' and 1]/branch-filter-item-controller[@class='d-flex flex-items-center Details' and 1]/div[1]/a[@class='branch-name css-truncate-target v-align-baseline width-fit mr-2 Details-content--shown' and 1]",true);
@@ -230,7 +236,7 @@ public class Selenium {
         else  { return "Неверное кол-во branches\n"; }
     }
 
-    public String Check_Issues(int Good_issues,int Var_issues){
+    private String Check_Issues(int Good_issues,int Var_issues){
         if (Good_issues==Var_issues){
             driver.get(Var_Repository+"/issues");
             String Good_issues_str=pull_String("//a[@class='btn-link selected']",true)+pull_String("//a[@class='btn-link ']",true);
@@ -284,7 +290,7 @@ public class Selenium {
         else  { return "Не совпадает кол-во issues\n"; }
     }
 
-    public String Check_PullRequests(int Good_pull,int Var_pull){
+    private  String Check_PullRequests(int Good_pull,int Var_pull){
         if (Good_pull==Var_pull){
             driver.get(Var_Repository+"/pulls");
             String Good_pull_str=pull_String("//a[@class='btn-link selected']",true)+pull_String("//a[@class='btn-link ']",true);
@@ -328,7 +334,7 @@ public class Selenium {
         else {return "Кол-во pull_request неверно\n";}
     }
 
-    public String Check_Wiki(){
+    private  String Check_Wiki(){
         String str="";
         driver.get(Var_Repository + "/wiki");
         if (driver.findElements(By.xpath("//div[@class='markdown-body']/p[1]")).size() != 0) {
@@ -355,7 +361,7 @@ public class Selenium {
         return str;
     }
 
-    public String Check_Project(int Good_project,int Var_project){
+    private  String Check_Project(int Good_project,int Var_project){
         driver.get(Var_Repository + "/projects/");
         String Var_Name=driver.findElement(By.xpath("//a[@class='link-gray-dark mr-1']")).getAttribute("textContent");
         Change_Tab(1);
@@ -425,7 +431,7 @@ public class Selenium {
         return "Неверное имя project\n";
     }
 
-    public String Check_Labels(){
+    private  String Check_Labels(){
         Change_Tab(0);
         driver.get(Var_Repository+"/labels");
         int Good_Labels=pull_INT("//span[@class='js-labels-count']");
@@ -457,7 +463,7 @@ public class Selenium {
     }
 
 
-    public String Check_Milestone(){
+    private String Check_Milestone(){
         driver.get(Var_Repository+"/milestones");
         String Good_Milestone=pull_String("//a[@class='btn-link selected']",true)+pull_String("//a[@class='btn-link ']",true);
         Change_Tab(1);
@@ -472,8 +478,10 @@ public class Selenium {
             Var_Milestone=pull_String("//h2",true);
             Change_Tab(0);
             if (Good_Milestone.equals(Var_Milestone)){
+                driver.get(Var_Repository+"/milestone/1");
                 Good_Milestone=pull_String("//a[@class='btn-link selected']",true)+pull_String("//a[@class='btn-link ']",true);
                 Change_Tab(1);
+                driver.get(Repository+"/milestone/1");
                 Var_Milestone=pull_String("//a[@class='btn-link selected']",true)+pull_String("//a[@class='btn-link ']",true);
                 Change_Tab(0);
                 if(Good_Milestone.equals(Var_Milestone)){
@@ -486,7 +494,7 @@ public class Selenium {
         else {return "Отсутствует либо закрыт milestone\n"; }
     }
 
-    public String Check_Readme(){
+    private  String Check_Readme(){
         String Readme_Good = pull_String("//article",true);
         Change_Tab(1);
         if (driver.findElements(By.xpath("//article")).size()!=0) {
@@ -506,12 +514,12 @@ public class Selenium {
         return Integer.parseInt(driver.findElement(By.xpath(tmp)).getAttribute("textContent").replaceAll(" ","").replaceAll("\n",""));
     }
 
-    public void Change_Tab(int tab){
+    private void Change_Tab(int tab){
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(tab));
     }
 
-    public void Add_Tab(){
+    private  void Add_Tab(){
         ((JavascriptExecutor)driver).executeScript("window.open()");
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
@@ -521,9 +529,11 @@ public class Selenium {
         }
     }
 
-    public boolean Check_Repo_Name(){
+    private  boolean Check_Repo_Name(){
+        Server.LOGGER.log(Level.INFO,"Запуск метода Check_Repo_Name");
         String Good=Var_Repository.substring(Var_Repository.lastIndexOf("/"));
         String Var=Repository.substring(Repository.lastIndexOf("/"));
+        Server.LOGGER.log(Level.INFO,"Метод Check_Repo_Name отработал");
         if (Good.equals(Var)){
             return true;
         }
@@ -548,16 +558,23 @@ public class Selenium {
                         final int Var_pull_request = pull_INT("//li[3]/a[@class='js-selected-navigation-item reponav-item' and 1]/span[@class='Counter' and 2]");
                         final int Var_projects = pull_INT("//li[5]/a[@class='js-selected-navigation-item reponav-item' and 1]/span[@class='Counter' and 1]");
                         Change_Tab(0);
-
+                        Server.LOGGER.log(Level.INFO,"Запуск метода Check_Readme");
                         result += Check_Readme(); //Done
+                        Server.LOGGER.log(Level.INFO,"Метод Check_Readme отработал успешно\n Запуск метода Check_Labels");
                         result += Check_Labels(); //Done
+                        Server.LOGGER.log(Level.INFO,"Метод Check_Labels отработал успешно\n Запуск метода Check_Milestone");
                         result += Check_Milestone(); //Done
-                        result += Check_Project(Good_projects, Var_projects); //Реализовать проверку проекта In progress
-                        result += Check_PullRequests(Good_pull_request, Var_pull_request); //Done
-                        result += Check_Issues(Good_issues, Var_issues); //Done
-                        result += Check_Branches(Good_branches, Var_branches); //Done
+                        Server.LOGGER.log(Level.INFO,"Метод Check_Milestone отработал успешно\n Запуск метода Check_Project");
+                        result += Check_Project(Good_projects, Var_projects);
+                        Server.LOGGER.log(Level.INFO,"Метод Check_Project отработал успешно\n Запуск метода Check_PullRequests");
+                        result += Check_PullRequests(Good_pull_request, Var_pull_request);
+                        Server.LOGGER.log(Level.INFO,"Метод Check_PullRequests отработал успешно\n Запуск метода Check_Issues");
+                        result += Check_Issues(Good_issues, Var_issues);
+                        Server.LOGGER.log(Level.INFO,"Метод Check_Issues отработал успешно\n Запуск метода Check_Branches");
+                        result += Check_Branches(Good_branches, Var_branches);
+                        Server.LOGGER.log(Level.INFO,"Метод Check_Branches отработал успешно\n Запуск метода Check_Wiki");
                         result += Check_Wiki(); //In progress
-
+                        Server.LOGGER.log(Level.INFO,"Метод Check_Wiki отработал успешно");
                         if ("".equals(result)) {
                             itog_ozenka = "1";
                             result="Работа сдана\n";
@@ -569,7 +586,6 @@ public class Selenium {
 
             }else{result = "Неверный вариант\n"; driver.quit();}
         } else {System.out.println("Не найден вариант в файле\n"); }
-
         driver.quit();
     }
 }

@@ -11,17 +11,17 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class Server {
+    static Logger LOGGER;
+    public static Selenium selenium;
+    public static String otvet;
     public static LinkedList<ServerSomthing> serverList = new LinkedList<>();
     public static int port=0;
     public static Socket clientSocket; //Сокет клиента
@@ -34,30 +34,78 @@ public class Server {
     public static String NomberLab;
     public static String Oshibka;
     public static boolean conec=false;
-    private static final String FILENAME = "Repository.xml";
+    private static final String FILENAME = "labs.xml";
+
+    static {
+        File theDir = new File("log_LR3");
+        if (!theDir.exists()) {
+            boolean result = false;
+
+            try{
+                theDir.mkdir();
+                result = true;
+            }
+            catch(SecurityException se){
+                //handle it
+            }
+            if(result) {
+
+            }
+        }
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(System.getProperty("user.dir")  + File.separator+"log_LR3"+File.separator+"loger.config"), "utf-8"))) {
+            writer.write("handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler\n" +
+                    "\n" +
+                    "java.util.logging.FileHandler.level     = INFO\n" +
+                    "java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter\n" +
+                    "java.util.logging.FileHandler.append    = true\n" +
+                    "java.util.logging.FileHandler.pattern   = log_LR3/logLR3.%u.%g.txt\n" +
+                    "\n" +
+                    "java.util.logging.ConsoleHandler.level     = INFO\n" +
+                    "java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try(FileInputStream ins = new FileInputStream(System.getProperty("user.dir")  + File.separator+"log_LR3"+ File.separator+"loger.config")){
+            LogManager.getLogManager().readConfiguration(ins);
+            LOGGER = Logger.getLogger(Server.class.getName());
+        }catch (Exception ignore){
+            ignore.printStackTrace();}
+
+    }
 
     private static void SetPort(){
         try {
-            final File xmlFile = new File(System.getProperty("user.dir") + File.separator + FILENAME);
+            LOGGER.log(Level.INFO,"Попытка считать конфиг портов");
+            final File xmlFile = new File(System.getProperty("user.dir") +File.separator +".." + File.separator+ File.separator +".." + File.separator + FILENAME);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(xmlFile);
-
             doc.getDocumentElement().normalize();
 
-            NodeList NodeList = doc.getElementsByTagName("port");
+            NodeList NodeList = doc.getElementsByTagName("lab");
 
             for (int i = 0; i < NodeList.getLength(); i++) {
                 // Вывoдиm инфopmaцию пo kaждomy из нaйдeнных элemeнтoв
                 Node node = NodeList.item(i);
                 if (Node.ELEMENT_NODE == node.getNodeType()) {
                     Element element = (Element) node;
-                    port= Integer.parseInt(element.getElementsByTagName("portnumber").item(0).getTextContent());
+                    if (element.getAttribute("number").equals("3")){
+                        port=Integer.parseInt(element.getAttribute("port"));
+                        LOGGER.log(Level.INFO,"Попытка считать конфиг портов успешна");
+                        break;
+
+                    }
                 }
             }
         }
         catch (ParserConfigurationException | SAXException | IOException ex){
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE,null,ex);
+            LOGGER.log(Level.SEVERE,"Попытка считать конфиг портов провалилась",ex);
         }
     }
 
@@ -67,14 +115,14 @@ public class Server {
         jsonObject.put("messageType", "2");//Все ли успешно
         jsonObject.put("grade", grade);
         jsonObject.put("comment", comment);//Если нет, то где ошибки
-        System.out.println(jsonObject.toJSONString());
+
         return jsonObject.toString();//обьект ДЖСОН в строку и отправляем
     }
     public static String ErrorServer(IOException a) {//метод с ошибкой на сервере
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("messageType", "4");
         jsonObject.put("errorMessage", a);
-        System.out.println(jsonObject.toJSONString());
+
         return jsonObject.toString();
     }
     public static String ErrorArg(String nameKey,String rejectCodeName,String comment) {//метод с ошибкой на ДЖСОН
@@ -83,20 +131,20 @@ public class Server {
         jsonObject.put("key",nameKey);
         jsonObject.put("text",comment);
         jsonObject.put("rejectCode",rejectCodeName);
-        System.out.println(jsonObject.toJSONString()+"OSHIBKA:");
+
         return jsonObject.toString();
     }
-    public static void OsnovaDecoda(String word) throws ParseException, IOException
+    public static void OsnovaDecoda(String word,boolean flag) throws ParseException, IOException
     {
         try {
-            System.out.println(word);
+
             JSONObject Cilka = (JSONObject)JSONValue.parseWithException(word);
             String proverka=Cilka.toString();
             conec=false;
 
             if(conec==false) {
                 TypeMessage=Cilka.get("messageType").toString();
-//                     System.out.println(TypeMessage);
+
                 String TestTipeMes1="";
                 if(TypeMessage.equals(TestTipeMes1)&&conec==false)
                 {
@@ -128,11 +176,11 @@ public class Server {
                         conec=true;
                     }
                 }}
-            System.out.println(TypeMessage);
+
 
             if(conec==false) {
                 NomberLab=Cilka.get("lab").toString();
-//                     System.out.println(NomberLab);
+
                 String TestNomberLab1="";
                 if(NomberLab.equals(TestNomberLab1)&&conec==false)
                 {
@@ -164,12 +212,12 @@ public class Server {
                         conec=true;
                     }
                 } }
-            System.out.println(NomberLab);
+
 
 
             if(conec==false) {
                 NomberVar=Cilka.get("variant").toString();
-//                     System.out.println(NomberVar);
+
                 String TestNomberVar1="";
                 if(NomberVar.equals(TestNomberVar1)&&conec==false)
                 {
@@ -201,11 +249,11 @@ public class Server {
                         conec=true;
                     }
                 }}
-            System.out.println(NomberVar);
+
 
             if(conec==false) {
                 Repos=Cilka.get("link").toString();
-//                   System.out.println(Repos);
+
                 try {
                     String s2="https://github.com/";
                     String s3="";
@@ -238,7 +286,7 @@ public class Server {
                     ErrorArg(NomberLab,NomberVar,Repos);
                     conec=true;
                 }}
-            System.out.println(Repos);
+
         }
         catch(ParseException e){
             TypeMessage="3";
@@ -247,26 +295,31 @@ public class Server {
             Repos="Неверная JSON строка";
             ErrorArg(NomberLab,NomberVar,Repos);
         }
+        if(conec==false&&flag) {
+            Server.LOGGER.log(Level.INFO,"Запуск модуля Selenium");
+            selenium=new Selenium(Repos,NomberVar);
+            selenium.test();
+            Server.LOGGER.log(Level.INFO,"Selenium отработал. Формирование ответа");
+            otvet=Otvet(selenium.Get_Ozenka(),selenium.Get_Result());
+            selenium.driver.quit();
+        }
     }
 
     public static void Priem() throws IOException
     {
         SetPort();
-
-        if (port!=0)
         server = new ServerSocket(port);
-        System.out.println("Sosdano");
-
         try {
+            LOGGER.log(Level.INFO,"Сервер запущен");
             while (true) {
                 // Блокируется до возникновения нового соединения:
                 Socket clientSocket = server.accept();
-                System.out.println("Sosdano");
                 try {
+                    LOGGER.log(Level.INFO,"Создано соединение");
                     serverList.add(new ServerSomthing(clientSocket));
                     // добавить новое соединенние в список
-
                 } catch (IOException e) {
+                    LOGGER.log(Level.WARNING,"Не удалось создать соединение");
                     // Если завершится неудачей, закрывается сокет,
                     // в противном случае, нить закроет его при завершении работы:
                     clientSocket.close();
@@ -274,7 +327,7 @@ public class Server {
             }
         } finally {
             server.close();
-            System.out.println("Server1 zakrit");
+            LOGGER.log(Level.INFO,"Сервер закрыт");
         }
     }
 
