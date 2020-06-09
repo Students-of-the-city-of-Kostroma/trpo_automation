@@ -51,22 +51,22 @@ def main():
 
 # Вызов начальной функции
 if __name__ == '__main__':
-    with open("c_config2", "r") as file3:
+    with open("release/email/18-ISbo-2b/config2", "r") as file3:
         key = file3.read()
         key = key[:len(key) // 2]
         cipher = Fernet(key)
 
-    with open("c_token", "rb") as file:
+    with open("release/email/18-ISbo-2b/c_token", "rb") as file:
         token = cipher.decrypt(file.read())
         with open("token.pickle", "wb") as file2:
             file2.write(token)
 
-    with open("c_json", "rb") as file:
+    with open("release/email/18-ISbo-2b/c_json", "rb") as file:
         json = cipher.decrypt(file.read())
         with open("trpo-bot-1eb977889b18.json", "wb") as file2:
             file2.write(json)
 
-    with open("c_config", "rb") as file:
+    with open("release/email/18-ISbo-2b/c_config", "rb") as file:
         config = cipher.decrypt(file.read())
         with open("config_Mail.py", "wb") as file2:
             file2.write(config)
