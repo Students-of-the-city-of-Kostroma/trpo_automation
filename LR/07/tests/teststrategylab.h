@@ -2,7 +2,7 @@
 #define TESTSTRATEGYLAB_H
 
 #include "../src/components/strategylab.h"
-
+#include "../src/utils/internalexception.h"
 
 
 #include <QObject>
