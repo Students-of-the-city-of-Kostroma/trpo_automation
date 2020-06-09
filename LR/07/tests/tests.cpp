@@ -75,6 +75,7 @@ TestGateway::TestGateway(QObject *parent)
     QRegExp re("issue-393-[0-9]{1,3}");
     testSuite_data(suites, re);
     testSuite(suites);
+    delete testObj;
 }
 
 TestStrategyLab::TestStrategyLab(QObject *parent)
@@ -92,6 +93,7 @@ TestStrategyLab::TestStrategyLab(QObject *parent)
     QRegExp re("issue-173-[0-9]{1,2}");
     testSuite_data(suites, re);
     testSuite(suites);
+    delete testObj;
 }
 
 
