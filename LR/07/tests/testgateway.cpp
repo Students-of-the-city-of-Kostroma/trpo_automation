@@ -95,5 +95,3 @@ void TestGateway::cleanupTestCase()
 {
     delete testObj;
 }
-
-QTEST_MAIN(TestGateway)
