@@ -42,4 +42,5 @@ deploy:
   on:
     branch: issue-251
     condition: $TRAVIS_COMMIT_MESSAGE == *"release"*
-
+  # ⋮
+  edge: true
