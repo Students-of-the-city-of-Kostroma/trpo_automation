@@ -30,6 +30,7 @@ before_deploy:
     - export TRAVIS_TAG=v.0.0.0.14
     - git tag $TRAVIS_TAG
 deploy:
+  edge: true
   github-token: $GITHUB_TOKEN
   skip_cleanup: true
   provider: releases
@@ -42,5 +43,4 @@ deploy:
   on:
     branch: issue-251
     condition: $TRAVIS_COMMIT_MESSAGE == *"release"*
-  # ⋮
-  edge: true
+  
