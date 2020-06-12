@@ -7,6 +7,8 @@
 TcpServer::TcpServer(int labNumber, QObject *parent)
         : QObject(parent)
 {
+    logfile::logInfo("TcpServer Constructor");
+
     mTcpServer = new QTcpServer(this);
     gateWay = new Gateway();
     github = new Functional();
@@ -15,9 +17,9 @@ TcpServer::TcpServer(int labNumber, QObject *parent)
     connect(mTcpServer, &QTcpServer::newConnection, this, &TcpServer::slotNewConnection);
 
     if (!mTcpServer->listen(QHostAddress::LocalHost, static_cast<quint16>(getPortForLab(labNumber)))) {
-        qDebug() << "Server is not started";
+        logfile::logCritical("Server is not started");
     } else {
-        qDebug() << "Server is started";
+        logfile::logInfo("Server is started");
     }
 }
 
@@ -28,6 +30,8 @@ TcpServer::TcpServer(int labNumber, QObject *parent)
  */
 int TcpServer::getPortForLab(int labNumber)
 {
+    logfile::logInfo("Get port for lab");
+
     QDomDocument config;
     QDomElement root;
 
@@ -38,7 +42,7 @@ int TcpServer::getPortForLab(int labNumber)
         }
         file.close();
     } else {
-        qDebug() << file.errorString();
+        logfile::logCritical(file.errorString());
     }
 
     if (!root.isNull()) {
@@ -51,8 +55,8 @@ int TcpServer::getPortForLab(int labNumber)
         }
     }
 
-    qDebug() << "Couldn't read config for a lab's port";
-    return 0;
+    logfile::logFatal("Couldn't read config for a lab's port");
+    qApp->quit();
 }
 
 /**
@@ -61,6 +65,8 @@ int TcpServer::getPortForLab(int labNumber)
  */
 void TcpServer::slotNewConnection()
 {
+    logfile::logInfo("New connection");
+
     mTcpSocket = mTcpServer->nextPendingConnection();
 
     connect(mTcpSocket, SIGNAL(readyRead()), this, SLOT(slotReadingDataJson()));
@@ -73,6 +79,8 @@ void TcpServer::slotNewConnection()
  */
 void TcpServer::slotClientDisconnected()
 {
+    logfile::logInfo("Client disconnected");
+
     mTcpSocket->close();
 }
 
@@ -83,6 +91,8 @@ void TcpServer::slotClientDisconnected()
  */
 void TcpServer::slotSendToClient(QJsonObject answerJson)
 {
+    logfile::logInfo("Send data to client");
+
     QJsonDocument jsonDoc(answerJson);
     QString jsonString = QString::fromLatin1(jsonDoc.toJson());
 
@@ -96,6 +106,8 @@ void TcpServer::slotSendToClient(QJsonObject answerJson)
  */
 void TcpServer::slotReadingDataJson()
 {
+    logfile::logInfo("Reading data json");
+
     QByteArray data;
     QString labLink;
     QList<QString> pureCode;
@@ -125,6 +137,8 @@ void TcpServer::slotReadingDataJson()
  */
 void TcpServer::parsingJson(QJsonDocument docJson, QString *labLink, int *labNumber, QList<QString> *pureData)
 {
+    logfile::logInfo("parsing json");
+
     QJsonValue link;
     QJsonObject jsonObj;
 
@@ -153,6 +167,8 @@ void TcpServer::parsingJson(QJsonDocument docJson, QString *labLink, int *labNum
  */
 void TcpServer::processData(QString link, QList<QString> *code, int variant)
 {
+    logfile::logInfo("Proccess data");
+
     try {
         if (code->isEmpty()) {
             QUrl urlForRequest = github->linkChange(link);
@@ -190,6 +206,8 @@ void TcpServer::processData(QString link, QList<QString> *code, int variant)
  */
 TcpServer::~TcpServer()
 {
+    logfile::logInfo("TcpServer Destructor");
+
     delete mTcpServer;
     delete gateWay;
     delete lab;

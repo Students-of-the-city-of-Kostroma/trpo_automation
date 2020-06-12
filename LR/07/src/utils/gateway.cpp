@@ -1,4 +1,5 @@
 #include "gateway.h"
+#include "logfile.h"
 
 /**
  * @brief Читаем конфиги, соединеям сигналы со слотами
@@ -7,6 +8,8 @@
 Gateway::Gateway(QObject *parent)
     : QObject(parent)
 {
+    logfile::logInfo("Gateway constructor");
+
     // Чтение конфига для валидации запросов клиента
     QDomDocument config;
     QFile file(":/config/jsonSpecificationForClientRequest.xml");
@@ -26,6 +29,8 @@ Gateway::Gateway(QObject *parent)
  */
 QJsonDocument Gateway::validateData(QByteArray data)
 {
+    logfile::logInfo("validate data");
+
     QJsonParseError docJsonError;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(data, &docJsonError);
 
@@ -50,6 +55,8 @@ QJsonDocument Gateway::validateData(QByteArray data)
  */
 void Gateway::checkMessageType()
 {
+    logfile::logInfo("Check message type");
+
     QDomElement elem = rootConfigForClientRequest.firstChildElement();
     QJsonValue messageType = jsonObj.take(elem.tagName());
     const int expectedType = 2;
@@ -72,6 +79,8 @@ void Gateway::checkMessageType()
  */
 void Gateway::checkKeyExistance()
 {
+    logfile::logInfo("Check key existance");
+
     QJsonValue value;
     QMap<QString, QString> dependKeys = {};
 
@@ -110,6 +119,8 @@ void Gateway::checkKeyExistance()
  */
 void Gateway::checkKeyTypeAndValue()
 {
+    logfile::logInfo("Check key type and value");
+
     const QList<QString> dataTypes({"Null", "Bool", "Double", "String", "Array", "Object"});
     QJsonValue value;
 
@@ -175,6 +186,8 @@ void Gateway::checkKeyTypeAndValue()
  */
 void Gateway::checkKeyNonExistance()
 {
+    logfile::logInfo("Check key no existance");
+
     if (!jsonObj.isEmpty()) {
         throw WrongRequestException(jsonObj.keys().at(0), "Unexpected key", rejectCodes::UNEXPECTED_KEY);
     }
@@ -187,6 +200,8 @@ void Gateway::checkKeyNonExistance()
  */
 void Gateway::wrongRequestFormat(QString jsonKey, int rejectCode, QString text)
 {
+    logfile::logInfo("Wrong request format");
+
     QJsonObject jsonObj;
 
     jsonObj["messageType"] = messageType::WRONG_REQUEST;
@@ -203,6 +218,8 @@ void Gateway::wrongRequestFormat(QString jsonKey, int rejectCode, QString text)
  */
 void Gateway::processSystemError(QString errorMsg)
 {
+    logfile::logInfo("Proccess system error");
+
     QJsonObject jsonObj;
 
     jsonObj["messageType"] = messageType::SYSTEM_ERROR;
@@ -218,6 +235,8 @@ void Gateway::processSystemError(QString errorMsg)
  */
 void Gateway::prepareDataToSend(bool grade, QString comments)
 {
+    logfile::logInfo("Prepare data to send");
+
     QJsonObject jsonObj;
 
     jsonObj["messageType"] = messageType::DEFAULT_ANSWER;

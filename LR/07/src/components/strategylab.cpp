@@ -159,7 +159,7 @@ void StrategyLab::checkParentChildrenRelations()
  */
 void StrategyLab::checkChildren()
 {
-    log.logInfo("Chek children");
+    log.logInfo("Check children");
     QSet<QString> childMethodBodies;
 
     foreach (QString child, children) {
