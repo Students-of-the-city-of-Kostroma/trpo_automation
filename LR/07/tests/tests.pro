@@ -7,7 +7,8 @@ SOURCES += \
     ../src/utils/gateway.cpp \
     ../src/components/strategylab.cpp \
     ../src/utils/internalexception.cpp \
-    tests.cpp
+    ITestModule.cpp \
+    main.cpp
 
 
 
@@ -15,7 +16,8 @@ HEADERS += \
     ../src/utils/gateway.h \
     ../src/components/strategylab.h \
     ../src/utils/internalexception.h \
-    tests.h
+    ITestModule.h \
+    TestGateway.h
 
 
 RESOURCES += \

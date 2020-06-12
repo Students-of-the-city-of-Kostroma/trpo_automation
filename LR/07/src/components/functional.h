@@ -29,7 +29,6 @@ class Functional : public QObject
 
 private:
     QNetworkAccessManager *manager;
-    QList<QString>* ListOfClasses;
     QString code;
 
 public:

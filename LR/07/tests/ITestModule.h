@@ -11,21 +11,18 @@
 /**
  * @brief Класс тестирования сервиса Gateway
  */
-class Tests : public QObject
+class ITestModule
 {
-    Q_OBJECT
-
-private:
-    Gateway *testObj;
-    StrategyLab *testObjj;
+protected:
     QDomElement suites;
+    QRegExp regexCaseId;
 
-public:
-    explicit Tests(QObject *parent = nullptr);
+protected:
+    ITestModule(QRegExp);
 
-private slots:
-    void testSuite_data(QDomElement, QRegExp);
-    void testSuite(QDomElement, int);
+protected slots:
+    void testSuite_data();
+    void testSuite();
 };
 
 #endif // TESTGATEWAY_H
