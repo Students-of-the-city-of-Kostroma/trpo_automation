@@ -11,11 +11,11 @@ private:
     Gateway *testObject;
 
 public:
-    TestGateway(): ITestModule(QRegExp("issue-393-[0-9]{1,3}"),  [this](QByteArray testData) -> QString {
+    TestGateway(): ITestModule(QRegExp("issue-393-[0-9]{1,3}"),  [this](QString testData) -> QString {
         testObject = new Gateway();
 
         // Возвращаем на случай, когда метод отработает без исключений
-        return QString(testObject->validateData(testData).toJson(QJsonDocument::Compact));
+        return QString(testObject->validateData(QByteArray(testData.toStdString().c_str())).toJson(QJsonDocument::Compact));
     }) {}
 
     ~TestGateway() {

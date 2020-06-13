@@ -11,11 +11,14 @@ private:
     StrategyLab *testObject;
 
 public:
-    TestStrategyLabCheckChikdren(): ITestModule(QRegExp("issue-173-[0-9]{1,3}"),  [this](QByteArray testData) -> QString {
-//        testObject = new Gateway();
+    TestStrategyLabCheckChikdren(): ITestModule(QRegExp("issue-173-[0-9]{1,3}"),  [this](QString testData) -> QString {
+        testObject = new StrategyLab();
 
-//        // Возвращаем на случай, когда метод отработает без исключений
-//        return QString(testObject->validateData(testData).toJson(QJsonDocument::Compact));
+        // TODO номер варината должен браться из тестовых данных - переделать!
+        testObject->setVariablesFromConfig(1);
+        testObject->divideIntoClasses(testData.split("|||"));
+        testObject->checkChildren();
+        return QString();
     }) {}
 
     ~TestStrategyLabCheckChikdren() {

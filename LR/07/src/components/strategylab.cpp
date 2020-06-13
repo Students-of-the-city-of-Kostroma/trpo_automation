@@ -57,21 +57,13 @@ void StrategyLab::divideIntoClasses(QList<QString> code)
         }
     }
 }
+
 /**
- * @brief Здесь параллельно реализуется функицонал проверки кода по конфигу
- *        а также разделение кода на классы (divideIntoClasses)
- * @param variant - вариант лабораторной работы
- * @param code - присланное решение
- * @return
+ * @brief Извлекаем часть конфига answerStructure.xml, подходящую для варианта лабораторной и
+ *  Достаем значения из конфига
+ * @param variant - номер варианта лаборатоной
  */
-void StrategyLab::checkByConfig(int variant, QList<QString> code)
-{
-    logfile::logInfo("Сheсk code by XML Config");
-
-    //Делим присланный код на классы для удобства работы с ними
-    divideIntoClasses(code);
-
-    /* Извлекаем часть конфига answerStructure.xml, подходящую для варианта лабораторной */
+void StrategyLab::setVariablesFromConfig(int variant) {
     QDomElement elem;
     QDomNodeList labsConfig = rootAnswerStructure.elementsByTagName("lab");
     for (QDomNode node = labsConfig.at(0); !node.isNull(); node = node.nextSibling()) {
@@ -79,7 +71,6 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
         if (elem.attribute("number").toInt() == variant) break;
     }
 
-    /* Достаем значения из конфига */
     for (int i = 0; i < elem.elementsByTagName("class").size(); i++) {
         className.append(elem.elementsByTagName("class").at(i).toElement().attribute("name"));
     }
@@ -90,6 +81,18 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
     abstractClassName = abstract.attribute("name");
     abstractMethodName = abstract.elementsByTagName("method").at(0).toElement().attribute("name");
     heirsAmount = heirs.attribute("amount").toInt();
+}
+
+/**
+ * @brief Здесь параллельно реализуется функицонал проверки кода по конфигу
+ *        а также разделение кода на классы (divideIntoClasses)
+ * @param variant - вариант лабораторной работы
+ * @param code - присланное решение
+ * @return
+ */
+void StrategyLab::checkByConfig()
+{
+    logfile::logInfo("Сheсk code by XML Config");
 
     QString parentClass;
     parentClass = classes.value("parent");
@@ -217,7 +220,7 @@ void StrategyLab::checkAbstractMethodModifier(QString className, QString classBo
 {
     logfile::logInfo("Check Abstract Method modifier");
     QString fromStartToAbstractMethod = classBody.left(classBody.indexOf(abstractMethodName));
-    QString modifierForAbstractMethod = classBody.left(fromStartToAbstractMethod.lastIndexOf(":")).simplified();
+    QString modifierForAbstractMethod = fromStartToAbstractMethod.left(fromStartToAbstractMethod.lastIndexOf(":")).simplified();
     if (!modifierForAbstractMethod.split(" ", QString::SkipEmptyParts).endsWith(modifier)) {
         throw UnexpectedResultException("Method '" + abstractMethodName + "' inside class '" + \
                                         className + "' should be '" + modifier + "'");

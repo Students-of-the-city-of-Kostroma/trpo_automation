@@ -18,10 +18,10 @@ class ITestModule : public QObject
 protected:
     QDomElement suites;
     QRegExp regexCaseId;
-    const std::function<QString(QByteArray)> callBack;
+    const std::function<QString(QString)> callBack;
 
 protected:
-    ITestModule(QRegExp, const std::function<QString(QByteArray)> &);
+    ITestModule(QRegExp, const std::function<QString(QString)> &);
 
 protected slots:
     void testSuite_data();

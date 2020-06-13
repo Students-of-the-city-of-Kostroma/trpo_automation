@@ -30,7 +30,8 @@ public:
     ~StrategyLab();
     bool findChildrenClasses(QString);
     void divideIntoClasses(QList<QString>);
-    void checkByConfig(int, QList<QString>);
+    void setVariablesFromConfig(int);
+    void checkByConfig();
     void checkParentChildrenRelations();
     void checkContext();
     void checkMainFunction();

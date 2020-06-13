@@ -172,7 +172,9 @@ void TcpServer::processData(QString link, QList<QString> *code, int variant)
         }
 
         lab = new StrategyLab();
-        lab->checkByConfig(variant, *code);
+        lab->setVariablesFromConfig(variant);
+        lab->divideIntoClasses(*code);
+        lab->checkByConfig();
         lab->checkParentChildrenRelations();
         lab->checkChildren();
         lab->checkContext();

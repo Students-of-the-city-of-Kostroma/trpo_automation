@@ -4,7 +4,7 @@
  * инициализируется объект тестируемого класса Gateway
  * @param parent
  */
-ITestModule::ITestModule(QRegExp re, const std::function<QString(QByteArray)> &callback)
+ITestModule::ITestModule(QRegExp re, const std::function<QString(QString)> &callback)
     : regexCaseId(re),
       callBack(callback)
 {
@@ -24,7 +24,7 @@ ITestModule::ITestModule(QRegExp re, const std::function<QString(QByteArray)> &c
  */
 void ITestModule::testSuite_data()
 {
-    QTest::addColumn<QByteArray>("testData");
+    QTest::addColumn<QString>("testData");
     QTest::addColumn<QString>("description");
     QTest::addColumn<QString>("expected");
 
@@ -38,7 +38,7 @@ void ITestModule::testSuite_data()
                 QString description = key.elementsByTagName("description").at(0).toElement().attribute("text");
                 QString expected = key.elementsByTagName("expected").at(0).toElement().attribute("text");
 
-                QTest::newRow(caseId.toLatin1().constData()) << QByteArray(inputData.toStdString().c_str()) << description << expected;
+                QTest::newRow(caseId.toLatin1().constData()) << inputData << description << expected;
             }
         }
     } else {
@@ -53,7 +53,7 @@ void ITestModule::testSuite_data()
 void ITestModule::testSuite()
 {
     if (!suites.isNull()) {
-        QFETCH(QByteArray, testData);
+        QFETCH(QString, testData);
         QFETCH(QString, description);
         QFETCH(QString, expected);
 
