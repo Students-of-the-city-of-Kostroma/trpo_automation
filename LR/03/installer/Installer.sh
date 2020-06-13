@@ -1,6 +1,8 @@
 #!/bin/bash
 apt-get install unrar
 apt-get install rar
+apt-get install curl
+apt-get install wget
 apt-get install default-jre
 apt-get install default-jdk
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
