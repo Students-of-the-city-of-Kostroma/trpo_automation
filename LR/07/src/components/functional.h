@@ -31,6 +31,7 @@ private:
     QNetworkAccessManager *manager;
     QList<QString>* ListOfClasses;
     QString code;
+    logfile log;
 
 public:
     explicit Functional(QObject *parent = nullptr);
