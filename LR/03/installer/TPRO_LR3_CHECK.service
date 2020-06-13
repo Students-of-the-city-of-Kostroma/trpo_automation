@@ -1,0 +1,11 @@
+[Unit]
+Description=TRPO_LR3_CHECK
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /bin/TRPO_LR3_CHECK.sh
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

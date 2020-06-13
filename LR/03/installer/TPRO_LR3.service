@@ -1,0 +1,11 @@
+[Unit]
+Description=TRPO_LR3
+
+[Service]
+Type=simple
+ExecStart=java -jar /bin/18-VTbo-1b/LR/03/Selen-0.1-jar-with-dependencies.jar
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
