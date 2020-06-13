@@ -88,17 +88,17 @@ matrix:
         - cd /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/target
         - mv Selen-0.1-jar-with-dependencies.jar /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/
         - cd ../
-        - mv Repository.xml /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/
+        - mv Labs3_url.xml /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/
         - cd ../../
-        - mv VERSION.txt /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/
+        - mv labs.xml /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/
         - cd /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b
         - mkdir LR
         - mv Selen-0.1-jar-with-dependencies.jar /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/LR
-        - mv Repository.xml /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/LR
+        - mv Labs3_url.xml /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/LR
         - cd /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/LR/
         - mkdir 03
         - mv Selen-0.1-jar-with-dependencies.jar /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/LR/03
-        - mv Repository.xml /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/LR/03
+        - mv Labs3_url.xml /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b/LR/03
         - cd /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/
         - rar a 18-VTbo-1b.rar 18-VTbo-1b
       deploy:
