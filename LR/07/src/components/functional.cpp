@@ -12,8 +12,6 @@ Functional::Functional(QObject *parent)
     if (manager->networkAccessible()
           == QNetworkAccessManager::UnknownAccessibility) {
         manager->setNetworkAccessible(QNetworkAccessManager::Accessible);
-    } else {
-        log.logCritical("Failed to create manager");
     }
 }
 
@@ -25,7 +23,7 @@ Functional::Functional(QObject *parent)
  */
 void Functional::getRequest(QUrl path, const std::function<void(QJsonDocument)> &callback)
 {
-    log.logDebug("GET request generation, getRequest(QUrl path, const std::function<void(QJsonDocument)> &callback)");
+    log.logDebug("GET request generation, path = [" + path.toString() + "], Functional::getRequest(QUrl path, const std::function<void(QJsonDocument)> &callback)");
     QEventLoop wait;
 
     // формируем запрос
@@ -84,13 +82,13 @@ QJsonDocument Functional::handleReply(QNetworkReply *reply)
  */
 void Functional::getFileInside(QJsonArray jsonArray, QString& fileName)
 {
-    log.logDebug("Get the name of the .cpp file, getFileInside(QJsonArray jsonArray, QString& fileName)");
     foreach (QJsonValue value, jsonArray) {
         QFileInfo file = value.toObject()["name"].toString();
         if (file.suffix() == FILE_EXTENSION) {
             fileName = file.fileName();
         }
     }
+    log.logDebug("Get the name of the .cpp file, file = [" + fileName + "], Functional::getFileInside(QJsonArray jsonArray, QString& fileName)");
 }
 
 /**
@@ -103,6 +101,7 @@ QUrl Functional::linkChange(QString &link)
     QString repoName = link.mid(link.lastIndexOf("/"));
     link = link.remove(repoName);
     QString repoOwner = link.mid(link.lastIndexOf("/"));
+    log.logDebug("Bring the link to the desired form, link = [repos" + repoOwner + repoName + "/contents], Functional::linkChange(QString &link)");
     return QUrl("repos" + repoOwner + repoName + "/contents");
 }
 
@@ -131,7 +130,7 @@ QString Functional::getCode(QJsonDocument reply)
  */
 void Functional::parseIntoClasses(QString contentCode, QList<QString>* ListOfClasses)
 {
-    log.logDebug("Put the code in an array, parseIntoClasses(QString contentCode, QList<QString>* ListOfClasses)");
+    log.logDebug("Put the code in an array, Functional::parseIntoClasses(QString contentCode, QList<QString>* ListOfClasses)");
     code = contentCode;
     QString addToList;
     int firstIndex = 0, secondIndex = 0, addToListIndex = 0;
@@ -166,7 +165,6 @@ void Functional::parseIntoClasses(QString contentCode, QList<QString>* ListOfCla
 
 QString Functional::findNameOfClass(int firstIndex)
 {
-    log.logDebug("Looking a class name, findNameOfClass(int firstIndex)");
     QString className;
     int i = 0;
     while (code[firstIndex] == ' ') {
@@ -182,6 +180,7 @@ QString Functional::findNameOfClass(int firstIndex)
         i++;
         }
     }
+    log.logDebug("Looking a class name, class = [" + className + "], Functional::findNameOfClass(int firstIndex)");
     return className;
 }
 /**
@@ -192,7 +191,6 @@ QString Functional::findNameOfClass(int firstIndex)
  */
 QString Functional::findClassMethods(QString className, int startIndex)
 {
-    log.logDebug("Looking for methods, findClassMethods(QString className, int startIndex)");
     int sIndexForMethod = 0, i = 0, firstIndex = 0;
     QString classMethods;
         while ((code.indexOf(className, startIndex)) >= 0) {
@@ -233,6 +231,7 @@ QString Functional::findClassMethods(QString className, int startIndex)
                 startIndex = firstIndex+className.size();
             }
     }
+    log.logDebug("Looking for methods, Functional::findClassMethods(QString className, int startIndex)");
     return classMethods;
 }
 /**
@@ -241,7 +240,7 @@ QString Functional::findClassMethods(QString className, int startIndex)
  */
 QString Functional::findMainFunc()
 {
-    log.logDebug("Looking for Main function, findMainFunc()");
+    log.logDebug("Looking for Main function, Functional::findMainFunc()");
     QString mainFunction;
 
     int openBracketNumber = 1, closeBracketNumber = 0, i = 0;
