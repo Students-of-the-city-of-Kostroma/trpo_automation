@@ -8,7 +8,7 @@ echo "this" $CURRENT_TAG
 echo "is" $TAG
 while [ "$CURRENT_TAG" = "$TAG" ]
 do
-sleep 10
+sleep 1000000
 TMP=$(curl https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/releases/latest/)
 TAG="$(echo $TMP| tr "qwertyuiop[]asdfghjkl;'zxcvbnm,./<>QWERTYUIOP{}ASDFGHJKL:ZXCVBNM=" "\n")"
 echo "and" $TAG
