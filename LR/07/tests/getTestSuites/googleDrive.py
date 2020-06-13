@@ -37,7 +37,7 @@ def main():
 
     SAMPLE_SPREADSHEET_ID = '1d4DwpPxyc5DkmKFavszVM5prBqGhY7CCWIz_CnZOHEs'
     sheet = service.spreadsheets()
-    SAMPLE_RANGE_NAME = 'test_suites!A3:J1000'
+    SAMPLE_RANGE_NAME = 'test_suites!A4:J1000'
     result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME).execute()
     allCases = result.get('values', [])
 

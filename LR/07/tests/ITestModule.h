@@ -1,5 +1,5 @@
-#ifndef TESTGATEWAY_H
-#define TESTGATEWAY_H
+#ifndef ITESTMODULE_H
+#define ITESTMODULE_H
 
 #include "../src/utils/gateway.h"
 #include "../src/components/strategylab.h"
@@ -11,18 +11,21 @@
 /**
  * @brief Класс тестирования сервиса Gateway
  */
-class ITestModule
+class ITestModule : public QObject
 {
+    Q_OBJECT
+
 protected:
     QDomElement suites;
     QRegExp regexCaseId;
+    const std::function<QString(QByteArray)> callBack;
 
 protected:
-    ITestModule(QRegExp);
+    ITestModule(QRegExp, const std::function<QString(QByteArray)> &);
 
 protected slots:
     void testSuite_data();
     void testSuite();
 };
 
-#endif // TESTGATEWAY_H
+#endif // ITESTMODULE_H

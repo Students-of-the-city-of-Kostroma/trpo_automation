@@ -4,8 +4,9 @@
  * инициализируется объект тестируемого класса Gateway
  * @param parent
  */
-ITestModule::ITestModule(QRegExp re)
-    : regexCaseId(re)
+ITestModule::ITestModule(QRegExp re, const std::function<QString(QByteArray)> &callback)
+    : regexCaseId(re),
+      callBack(callback)
 {
     QDomDocument config;
     QFile file(QDir::currentPath() + "/../../07/tests/getTestSuites/testSuites.xml");
@@ -15,14 +16,6 @@ ITestModule::ITestModule(QRegExp re)
         }
         file.close();
     }
-//    QRegExp gatewayCases ("issue-393-[0-9]{1,3}");
-//    testSuite_data(suites, gatewayCases);
-//    testSuite(suites, 1);   // 1 - переменная типа int, указывает на то что прогоняются кейсы GW
-//    delete testObj;
-//    QRegExp checkChildrenCases ("issue-173-[0-9]{1,2}");
-//    testSuite_data(suites, checkChildrenCases);
-//    testSuite(suites, 2);    // аналогично, только теперь кейсы StrategyLab
-//    delete testObjj;
 }
 
 /**
@@ -65,16 +58,17 @@ void ITestModule::testSuite()
         QFETCH(QString, expected);
 
         try {
-    //     testObj->validateData(testData);
-    //            testObjj->checkParentChildrenRelations();
-    //            testObjj->checkChildren();
-          QFAIL("We will work around this problem");
+            QCOMPARE(callBack(testData), expected);
         } catch (WrongRequestException error) {
-    //        TODO: заменить после задачи https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/issues/51
-    //        Добавить reject коды
-            QString gatewayResult = "{\"messageType\": " + QString::number(3) + ", \"key\": \""
-                    + error.jsonKey() + "\", \"text\": \"" + error.text() + "\"}";
-            QCOMPARE(gatewayResult, expected);
+            QString result = "{\"messageType\": " + QString::number(3)
+                    + ", \"key\": \"" + error.jsonKey()
+                    + "\", \"rejectCode\": " + QString::number(error.getRejectCode())
+                    + ", \"text\": \"" + error.text() + "\"}";
+            QCOMPARE(result, expected);
+        } catch (UnexpectedResultException error) {
+            QCOMPARE(error.text(), expected);
+        } catch (SystemException error) {
+            QCOMPARE(error.text(), expected);
         }
 
     } else {

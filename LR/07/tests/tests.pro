@@ -17,7 +17,8 @@ HEADERS += \
     ../src/components/strategylab.h \
     ../src/utils/internalexception.h \
     ITestModule.h \
-    TestGateway.h
+    TestGateway.h \
+    TestStartegyLabCheckChikdren.h
 
 
 RESOURCES += \
