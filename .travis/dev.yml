@@ -109,6 +109,7 @@ matrix:
         provider: releases
         file:
           - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b.rar
+          - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/03/installer/Installer.sh
         prerelease: true
         name: 18-VTbo-1a/b
     - stage: deploy2
