@@ -110,7 +110,7 @@ matrix:
         file:
           - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/18-VTbo-1b.rar
         prerelease: true
-        name: TPRO
+        name: 18-VTbo-1a/b
     - stage: deploy2
       language: cpp
       os: linux
@@ -151,4 +151,4 @@ matrix:
 #        file:
 #          - /home/travis/build/Students-of-the-city-of-Kostroma/trpo_automation/LR/07/file
         prerelease: true
-        name: TPRO
+        name: 18-VTbo-1a/b
