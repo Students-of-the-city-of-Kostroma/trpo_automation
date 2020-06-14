@@ -53,7 +53,7 @@ def get_service():
 
 
 @log_method_info
-def add_str_in_table(table: str, cell: str, line: str, id_table: str = CREDENTIALS_FILE):
+def add_str_in_table(table: str, cell: str, line: str, id_table: str = SPREAD_SHEET_ID):
     """
     Добавление символа\предложения в таблице.
 
@@ -80,7 +80,7 @@ def add_str_in_table(table: str, cell: str, line: str, id_table: str = CREDENTIA
             "valueInputOption": "USER_ENTERED",
             "data": [
                 {
-                    "range": f"{table}!{cell}",
+                    "range": f"(ТРПО) {table}!{cell}",
                     "majorDimension": "ROWS",
                     "values": [[line]]
                 }

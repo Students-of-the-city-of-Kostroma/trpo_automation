@@ -1,4 +1,6 @@
 from utils.crypto import crypt_file, decrypt_file
+import time
+import random
 
 decrypt_file('configs/credentials.json.bin')
 decrypt_file('configs/Example.json.bin')
@@ -8,6 +10,7 @@ decrypt_file('configs/config.py.bin')
 from APIgoogle import *
 from Validation import validation
 from utils.log_method import *
+from client import check_lab
 
 # Id почты
 USER_ID = 'me'
@@ -25,9 +28,11 @@ try:
         # Проверка на существование активных писем в электронном ящике
         if message_info:
             email_id = message_info['email_id']
+            print(f"main: email_id: {email_id}")
             email_name = cleaning_email(email_id)
             email_name_surname = name_surname(email_id)
             email = search_email(email_id)
+            print(f"main: Search email: {email}")
 
             # Проверка на существование в таблице
             if not email:
@@ -41,10 +46,11 @@ try:
                 group_name_surname = result[1]
                 # Выставление его в журнал, если отсутствует
                 result_add_table = add_table(group_user, group_name_surname)[0]
+                print(f"main: Result search add in table: {result_add_table}")
 
                 if result_add_table == 'available' or result_add_table == 'accepted':
                     # Проверка валидации письма
-                    valid_dict = validation(message_info['head_of_msg'], message_info['body_of_msg'])
+                    valid_dict = validation(message_info['head_of_msg'], message_info['body_of_msg'], group_name_surname)
                     if len(valid_dict["errorDescription"]) > 0:
                         send_message(service, USER_ID, email_name, email_name_surname, 2, valid_dict,
                                      valid_dict, message_info)
@@ -52,7 +58,7 @@ try:
                         print(f"main: Message failed validation. Email_id :{email_id}")
                     else:
                         # Получение результата из модуля проверки
-                        answer = 1 # check_lab(valid_dict['URL'], valid_dict['Number'])['grade']
+                        answer = random.randint(0, 1) #check_lab(valid_dict['URL'][0], valid_dict['Number'])['grade']
                         logger.info(
                             r"main: Receiving a response from the verification module. Mark in table :%s" % answer)
                         print(f"main: Receiving a response from the verification module. Mark in table :{answer}")
