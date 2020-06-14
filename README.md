@@ -1,12 +1,17 @@
 # trpo_automation
-MAIL
 
-Модуль приёма писем
+####Модуль проверки лабораторных
+
+Версия подгруппы 18-ВТбо-1а
+
+Версия подгруппы 18-ВТбо-1б
+
+####Модуль проверки писем
+
+Версия подгруппы 18-ИСбо-2а
+https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/tree/dev/email/18-ISbo-2a
 
 Версия подгруппы 18-ИСбо-2б
-
-Актуальная версия модуля:
-
 https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/tree/dev/email/18-ISbo-2b
 
 Функционал модуля:
@@ -18,6 +23,10 @@ https://github.com/Students-of-the-city-of-Kostroma/trpo_automation/tree/dev/ema
 - интерпретация результатов - выставление оценок
 - информирование преподавателя и студентов о результатах обработки 
 
-Технические нюансы:
+Технические нюансы(18-ИСбо-2а):
+- требуется python3.7 и выше.
+- требуется пакеты для python (описаны в requirements.txt)
+
+Технические нюансы(18-ИСбо-2б):
 - требуется ОС Linux
 - требуется python версии не ниже чем python 3.4, pip3
