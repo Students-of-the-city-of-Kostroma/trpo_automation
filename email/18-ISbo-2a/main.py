@@ -1,5 +1,6 @@
 from utils.crypto import crypt_file, decrypt_file
 import time
+import random
 
 decrypt_file('configs/credentials.json.bin')
 decrypt_file('configs/Example.json.bin')
@@ -9,6 +10,7 @@ decrypt_file('configs/config.py.bin')
 from APIgoogle import *
 from Validation import validation
 from utils.log_method import *
+from client import check_lab
 
 # Id почты
 USER_ID = 'me'
@@ -18,7 +20,6 @@ service = get_service()
 
 try:
     while True:
-        break
         # Получение информации о последнем письме
         message_info = get_message(service, USER_ID)
         logger.info(r"main: Get message from email")
@@ -57,7 +58,7 @@ try:
                         print(f"main: Message failed validation. Email_id :{email_id}")
                     else:
                         # Получение результата из модуля проверки
-                        answer = 1 # check_lab(valid_dict['URL'], valid_dict['Number'])['grade']
+                        answer = random.randint(0, 1) #check_lab(valid_dict['URL'][0], valid_dict['Number'])['grade']
                         logger.info(
                             r"main: Receiving a response from the verification module. Mark in table :%s" % answer)
                         print(f"main: Receiving a response from the verification module. Mark in table :{answer}")

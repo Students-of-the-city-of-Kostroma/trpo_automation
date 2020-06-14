@@ -12,6 +12,7 @@ LOCALHOST_ADDRESS = '127.0.0.1'
 connections = {}
 
 
+
 class MessageType(Enum):
     """ Перечисляемый тип для ключа messageType, использующегося в спецификации общения клиента с сервером """
     REQUEST = 1
@@ -32,12 +33,8 @@ def create_connection(lab_number: int) -> None:
         logger.debug("Create connection to server for lab {lab_number}...".format(lab_number=lab_number))
         local_sock: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         local_sock.connect((LOCALHOST_ADDRESS, get_port(lab_number)))
-        if local_sock.recv(1024).decode() == "New connection!":
-            logger.debug("Connection successful!")
-            connections[lab_number] = local_sock
-        else:
-            raise ConnectionRefusedError("Connection to server for lab {lab_number} refused"
-                                         .format(lab_number=lab_number))
+        logger.debug("Connection successful!")
+        connections[lab_number] = local_sock
     except socket.error as err:
         raise SystemError("Error creating socket: {error} \n with traceback {tb}"
                           .format(error=err, tb=traceback.format_exc()))
@@ -137,7 +134,7 @@ def handle_reply(current_socket: socket, request: str) -> dict:
     logger.debug("The request is: {request}".format(request=request))
     current_socket.send(request.encode())
     try:
-        reply_data: dict = json.loads(current_socket.recv(1024).decode())
+        reply_data: dict = json.loads(current_socket.recv(1024).decode("utf-8"))
         logger.info("Got a reply from server!")
         message_type: int = reply_data.pop('messageType')
         if message_type == MessageType.WRONG_REQUEST.value:
