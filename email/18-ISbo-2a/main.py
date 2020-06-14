@@ -1,4 +1,5 @@
 from utils.crypto import crypt_file, decrypt_file
+import time
 
 decrypt_file('configs/credentials.json.bin')
 decrypt_file('configs/Example.json.bin')
@@ -17,6 +18,7 @@ service = get_service()
 
 try:
     while True:
+        break
         # Получение информации о последнем письме
         message_info = get_message(service, USER_ID)
         logger.info(r"main: Get message from email")
@@ -25,9 +27,11 @@ try:
         # Проверка на существование активных писем в электронном ящике
         if message_info:
             email_id = message_info['email_id']
+            print(f"main: email_id: {email_id}")
             email_name = cleaning_email(email_id)
             email_name_surname = name_surname(email_id)
             email = search_email(email_id)
+            print(f"main: Search email: {email}")
 
             # Проверка на существование в таблице
             if not email:
@@ -41,10 +45,11 @@ try:
                 group_name_surname = result[1]
                 # Выставление его в журнал, если отсутствует
                 result_add_table = add_table(group_user, group_name_surname)[0]
+                print(f"main: Result search add in table: {result_add_table}")
 
                 if result_add_table == 'available' or result_add_table == 'accepted':
                     # Проверка валидации письма
-                    valid_dict = validation(message_info['head_of_msg'], message_info['body_of_msg'])
+                    valid_dict = validation(message_info['head_of_msg'], message_info['body_of_msg'], group_name_surname)
                     if len(valid_dict["errorDescription"]) > 0:
                         send_message(service, USER_ID, email_name, email_name_surname, 2, valid_dict,
                                      valid_dict, message_info)
