@@ -1,13 +1,16 @@
 branches:
   only:
-  - master
-  - dev
-  - 18-VTbo-1b
-  - 18-VTbo-1a
+    - master
+    - dev
+    - 18-VTbo-1b
+    - 18-VTbo-1a
+    - 18-ISbo-2a
 import:
-- source: .travis/18-VTbo-1a.yml
-  if: (((branch = issue-*)&&(head_branch = 18-VTbo-1a) ||  (branch = 18-VTbo-1a)))
-- source: .travis/18-VTbo-1b.yml
-  if: (((branch = issue-*)&&(head_branch = 18-VTbo-1b) ||  (branch = 18-VTbo-1b)))
-- source: .travis/dev.yml
-  if: ((branch = dev) || (head_branch = dev))
+  - source: .travis/18-VTbo-1a.yml
+    if: (((branch = issue-*)&&(head_branch = 18-VTbo-1a) ||  (branch = 18-VTbo-1a)))
+  - source: .travis/18-VTbo-1b.yml
+    if: (((branch = issue-*)&&(head_branch = 18-VTbo-1b) ||  (branch = 18-VTbo-1b)))
+  - source: .travis/18-ISbo-2a.yml
+    if: (((branch = issue-*)&&(head_branch = 18-ISbo-2a) ||  (branch = 18-ISbo-2a)))
+  - source: .travis/dev.yml
+    if: ((branch = dev) || (head_branch = dev))
