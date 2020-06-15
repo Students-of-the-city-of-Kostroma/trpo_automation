@@ -1,7 +1,6 @@
 #ifndef FUNCTIONAL_H
 #define FUNCTIONAL_H
 
-#include "../utils/gateway.h"
 #include "../utils/internalexception.h"
 #include "../utils/logfile.h"
 

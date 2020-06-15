@@ -1,6 +1,7 @@
 #ifndef TCPSERVER_H
 #define TCPSERVER_H
 
+#include "../utils/gateway.h"
 #include "strategylab.h"
 #include "functional.h"
 
