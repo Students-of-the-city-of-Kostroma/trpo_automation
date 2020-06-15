@@ -154,8 +154,6 @@ void StrategyLab::checkParentChildrenRelations()
                                         "You should use '= 0' at the end of declaration");
     }
 
-    /***** Проверки на наследников абстрактного класса *****/
-
 }
 
 /**
@@ -303,6 +301,9 @@ void StrategyLab::checkMainFunction()
 {
     logfile::logInfo("Check Main Function");
     QString mainFunction = classes.value("main"), methodName;
+    if (mainFunction == "") {
+        throw UnexpectedResultException("Main function not found");
+    }
     //Проверка на создание объекта класса context
     if (!mainFunction.contains("new " + nameClassContext)) {
        throw UnexpectedResultException("Object of class '" + nameClassContext + "' is not created");
