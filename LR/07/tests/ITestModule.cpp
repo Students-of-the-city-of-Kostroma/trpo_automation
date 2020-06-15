@@ -56,7 +56,6 @@ void ITestModule::testSuite()
         QFETCH(QString, testData);
         QFETCH(QString, description);
         QFETCH(QString, expected);
-
         try {
             QCOMPARE(callBack(testData), expected);
         } catch (WrongRequestException error) {
