@@ -83,3 +83,18 @@ matrix:
       script:
         - sudo qmake tests.pro && make
         - sudo ./tests
+      before_deploy:
+          - git config --local user.name "YOUR GIT USER NAME"
+          - git config --local user.email "YOUR GIT USER EMAIL"
+          - export TRAVIS_TAG=v.0.0.0.13
+          - git tag $TRAVIS_TAG
+      deploy:
+        api_key:
+          secure: dep_key
+        skip_cleanup: true
+        provider: releases
+        prerelease: true	
+        name: 18-VTbo-1a
+        on:
+          branch: dev
+          condition: $TRAVIS_COMMIT_MESSAGE == *"release"*

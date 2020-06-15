@@ -181,7 +181,7 @@ QString Functional::findNameOfClass(int firstIndex)
  */
 QString Functional::findClassMethods(QString className, int startIndex)
 {
-    int sIndexForMethod=0, i=0, firstIndex=0;
+    int sIndexForMethod = 0, i = 0, firstIndex = 0;
     QString classMethods;
         while ((code.indexOf(className, startIndex)) >= 0) {
             firstIndex = code.indexOf(className, startIndex);
