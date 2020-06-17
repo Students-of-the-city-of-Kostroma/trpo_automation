@@ -8,7 +8,7 @@
 StrategyLab::StrategyLab(QObject* parent)
     : QObject(parent)
 {
-    log.logInfo("Include XML config");
+    log.logDebug("Include XML config, StrategyLab::StrategyLab(QObject* parent)");
     /* Подключаем answerStructure.xml для проверки лабораторной работы
        Храниться в rootAnswerStructure */
     QDomDocument config;
@@ -18,6 +18,8 @@ StrategyLab::StrategyLab(QObject* parent)
             rootAnswerStructure = config.documentElement();
         }
         file.close();
+    } else {
+        log.logCritical("Could not connect XML config");
     }
 }
 /**
@@ -27,7 +29,7 @@ StrategyLab::StrategyLab(QObject* parent)
  */
 bool StrategyLab::findChildrenClasses(QString strOfCode)
 {
-    log.logInfo("Check string for inheritance");
+    log.logDebug("Checking string for inheritance, StrategyLab::findChildrenClasses(QString strOfCode)");
     if (strOfCode.indexOf("class") != -1) {
         if (strOfCode.indexOf(':', strOfCode.indexOf("class")) < strOfCode.indexOf('{', strOfCode.indexOf("class"))
                 && strOfCode.indexOf(':', strOfCode.indexOf("class")) != -1)
@@ -66,7 +68,7 @@ void StrategyLab::divideIntoClasses(QList<QString> code)
  */
 void StrategyLab::checkByConfig(int variant, QList<QString> code)
 {
-    log.logInfo("Сheсk code by XML Config");
+    log.logDebug("Сheсking code by XML Config, StrategyLab::checkByConfig(int variant, QList<QString> code)");
 
     //Делим присланный код на классы для удобства работы с ними
     divideIntoClasses(code);
@@ -95,16 +97,19 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
     parentClass = classes.value("parent");
 
     /* Проверяем имя абстрактного класса */
+    log.logDebug("Checking the name of an abstract class, class = [" + abstractClassName + "], StrategyLab::checkByConfig(int variant, QList<QString> code)");
     if (!parentClass.contains(abstractClassName)) {
-        throw UnexpectedResultException("Invalid parent class name");
+       throw UnexpectedResultException("Invalid parent class name");
     }
 
     /* Проверяем имя метода абстрактного метода */
+    log.logDebug("Checking the name of an abstract class method, method = [" + abstractMethodName + "], class = [" + abstractClassName + "], StrategyLab::checkByConfig(int variant, QList<QString> code)");
     if (!parentClass.contains(abstractMethodName)) {
         throw UnexpectedResultException("Invalid abstract method name");
     }
 
     /* Проверка количества наследников */
+    log.logDebug("Checking the number of heirs, namber of heirs = [" + QString::number(heirsAmount) + "], StrategyLab::checkByConfig(int variant, QList<QString> code)");
     if (heirsAmount != children.size()) {
        throw UnexpectedResultException("Incorrect number of classes for strategies' implementations");
     }
@@ -118,6 +123,7 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
                 childNameFound = true;
             }
         }
+        log.logDebug("Checking the names of the heirs,  child = [" + childName + "], StrategyLab::checkByConfig(int variant, QList<QString> code)");
         if (!childNameFound) {
             throw UnexpectedResultException("Class name '" + childName + "' for stratregy implementation not found");
         }
@@ -130,12 +136,13 @@ void StrategyLab::checkByConfig(int variant, QList<QString> code)
  */
 void StrategyLab::checkParentChildrenRelations()
 {
-    log.logInfo("Testing for an abstract class");
+    log.logDebug("Checking the abstract class, class = [" + abstractClassName + "], StrategyLab::checkParentChildrenRelations()");
     /***** Проверки на абстрактный класс *****/
 
     QString parent = classes.value("parent");
 
     // Проверка: абстрактный класс обладает абстрактным методом
+    log.logDebug("Checking the abstract method, method = [" + abstractMethodName + "], class = [" + abstractClassName + "], StrategyLab::checkParentChildrenRelations()");
     if (!parent.contains("virtual")) {
         throw UnexpectedResultException("No abstract methods inside your abstract class '" + \
                                         abstractClassName + "'. You should have at least one.");
@@ -159,13 +166,15 @@ void StrategyLab::checkParentChildrenRelations()
  */
 void StrategyLab::checkChildren()
 {
-    log.logInfo("Chek children");
+    log.logDebug("Cheking children, StrategyLab::checkChildren()");
     QSet<QString> childMethodBodies;
 
     foreach (QString child, children) {
 
         // Проверка: класс ребенок наследуется от родителя
         QString childClassName = child.left(child.indexOf("{")).split(" ", QString::SkipEmptyParts).at(1);
+        log.logDebug("Inheritance Check, child = [" + childClassName  + "], parent = [" + abstractClassName +"], StrategyLab::checkChildren()");
+
         if (!child.contains(abstractClassName)) {
             throw UnexpectedResultException("Class '" + childClassName + \
                                             "' is not an instance of abstract class '" + abstractClassName + "'");
@@ -180,6 +189,7 @@ void StrategyLab::checkChildren()
         }
 
         // Проверка: класс ребенок переопределяет абстрактный метод родителя
+        log.logDebug("Override Check, child = [" + childClassName + "], method = [" + abstractMethodName + "], StrategyLab::checkChildren()");
         if (!child.contains(abstractMethodName) || !child.contains("override")) {
             throw UnexpectedResultException("Your class '" + childClassName + "' does not override abstract method '" + \
                                             abstractMethodName + "' that you \n described inside abstract class '" + \
@@ -213,7 +223,7 @@ void StrategyLab::checkChildren()
  */
 void StrategyLab::checkAbstractMethodModifier(QString className, QString classBody, QString modifier)
 {
-    log.logInfo("Check Abstract Method modifier");
+    log.logDebug("Checking Abstract Method modifier, modifier = [" + modifier + "], class = [" + className + "], StrategyLab::checkAbstractMethodModifier(QString className, QString classBody, QString modifier)");
     QString fromStartToAbstractMethod = classBody.left(classBody.indexOf(abstractMethodName));
     QString modifierForAbstractMethod = classBody.left(fromStartToAbstractMethod.lastIndexOf(":")).simplified();
     if (!modifierForAbstractMethod.split(" ", QString::SkipEmptyParts).endsWith(modifier)) {
@@ -228,7 +238,7 @@ void StrategyLab::checkAbstractMethodModifier(QString className, QString classBo
  */
 void StrategyLab::checkContext()
 {
-    log.logInfo("Check Context");
+    log.logDebug("Checking Context, StrategyLab::checkContext()");
 
     /* Убираем лишние элементы в строке */
     QString context = classes.value("context");
@@ -249,6 +259,7 @@ void StrategyLab::checkContext()
     nameClassContext.remove(QChar('{'), Qt::CaseInsensitive);
 
     /* Проверка приватного поля */
+    log.logDebug("Checking class fields, class = [" + abstractClassName + "], StrategyLab::checkContext()");
     if (!context.contains("private:" + abstractClassName + "*")) {
         throw UnexpectedResultException(nameClassContext + " must contain a private field such as an abstract class");
     }
@@ -279,6 +290,7 @@ void StrategyLab::checkContext()
     context.remove(" ");
 
     /* Проверка необходимых вызовов в методах */
+    log.logDebug("Check calls in methods, class = [" + nameClassContext + "], StrategyLab::checkContext()");
     if (!context.contains("this->" + nameClassField + "->")) {
         throw UnexpectedResultException("Class " + nameClassContext + " should call a strategy method");
     }
@@ -296,7 +308,7 @@ void StrategyLab::checkContext()
  */
 void StrategyLab::checkMainFunction()
 {
-    log.logInfo("Check Main Function");
+    log.logInfo("Checking Main Function");
     QString mainFunction = classes.value("main"), methodName;
     if (mainFunction == "") {
         throw UnexpectedResultException("Main function not found");
