@@ -23,6 +23,7 @@ Functional::Functional(QObject *parent)
  */
 void Functional::getRequest(QUrl path, const std::function<void(QJsonDocument)> &callback)
 {
+    log.logDebug("GET request generation, path = [" + path.toString() + "], Functional::getRequest(QUrl path, const std::function<void(QJsonDocument)> &callback)");
     QEventLoop wait;
 
     // формируем запрос
@@ -32,6 +33,7 @@ void Functional::getRequest(QUrl path, const std::function<void(QJsonDocument)> 
     QNetworkReply *reply = manager->get(request);
 
     // ждем ответа
+    log.logInfo("Connect to Github");
     connect(reply, SIGNAL(finished()), &wait, SLOT(quit()));
     wait.exec();
 
@@ -47,6 +49,7 @@ void Functional::getRequest(QUrl path, const std::function<void(QJsonDocument)> 
  */
 QJsonDocument Functional::handleReply(QNetworkReply *reply)
 {
+    log.logInfo("Processing data from github");
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (statusCode == 200) {
         QByteArray data = reply->readAll();
@@ -58,11 +61,13 @@ QJsonDocument Functional::handleReply(QNetworkReply *reply)
         QJsonDocument replyData = QJsonDocument::fromJson(data, &parseError);
 
         if (parseError.error != QJsonParseError::NoError) {
+            log.logWarning(parseError.errorString());
             throw SystemException("parse error for Github reply on get reuest", parseError.errorString());
         }
 
         return replyData;
     }
+    log.logWarning(reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString());
 
     QString reason = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
     throw SystemException("Not successful request on Github. Status code: " + QString::number(statusCode), reason);
@@ -83,6 +88,7 @@ void Functional::getFileInside(QJsonArray jsonArray, QString& fileName)
             fileName = file.fileName();
         }
     }
+    log.logDebug("Get the name of the .cpp file, file = [" + fileName + "], Functional::getFileInside(QJsonArray jsonArray, QString& fileName)");
 }
 
 /**
@@ -91,10 +97,11 @@ void Functional::getFileInside(QJsonArray jsonArray, QString& fileName)
  */
 QUrl Functional::linkChange(QString &link)
 {
-
+    log.logInfo("Bring the link to the desired form");
     QString repoName = link.mid(link.lastIndexOf("/"));
     link = link.remove(repoName);
     QString repoOwner = link.mid(link.lastIndexOf("/"));
+    log.logDebug("Bring the link to the desired form, link = [repos" + repoOwner + repoName + "/contents], Functional::linkChange(QString &link)");
     return QUrl("repos" + repoOwner + repoName + "/contents");
 }
 
@@ -105,6 +112,7 @@ QUrl Functional::linkChange(QString &link)
  */
 QString Functional::getCode(QJsonDocument reply)
 {
+    log.logInfo("Get the code");
     QJsonObject object = reply.object();
     QString tempString = object.take("content").toString();
 
@@ -122,6 +130,7 @@ QString Functional::getCode(QJsonDocument reply)
  */
 void Functional::parseIntoClasses(QString contentCode, QList<QString>* ListOfClasses)
 {
+    log.logDebug("Put the code in an array, Functional::parseIntoClasses(QString contentCode, QList<QString>* ListOfClasses)");
     code = contentCode;
     QString addToList;
     int firstIndex = 0, secondIndex = 0, addToListIndex = 0;
@@ -171,6 +180,7 @@ QString Functional::findNameOfClass(int firstIndex)
         i++;
         }
     }
+    log.logDebug("Looking a class name, class = [" + className + "], Functional::findNameOfClass(int firstIndex)");
     return className;
 }
 /**
@@ -221,6 +231,7 @@ QString Functional::findClassMethods(QString className, int startIndex)
                 startIndex = firstIndex+className.size();
             }
     }
+    log.logDebug("Looking for methods, Functional::findClassMethods(QString className, int startIndex)");
     return classMethods;
 }
 /**
@@ -229,6 +240,7 @@ QString Functional::findClassMethods(QString className, int startIndex)
  */
 QString Functional::findMainFunc()
 {
+    log.logDebug("Looking for Main function, Functional::findMainFunc()");
     QString mainFunction;
 
     int openBracketNumber = 1, closeBracketNumber = 0, i = 0;
