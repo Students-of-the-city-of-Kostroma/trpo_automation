@@ -29,6 +29,7 @@ class Functional : public QObject
 private:
     QNetworkAccessManager *manager;
     QString code;
+    logfile log;
 
 public:
     explicit Functional(QObject *parent = nullptr);

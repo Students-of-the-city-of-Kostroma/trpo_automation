@@ -7,8 +7,13 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    logfile::logInfo("Programm start work");
+    logfile log;
 
+    log.logInfo("<==================================================================================================="
+                "============================================>");
+    log.logInfo("<==================================================================================================="
+                "============================================>");
+    log.logInfo("Programm start work");
     TcpServer* server = new TcpServer(LAB_NUMBER);
 
     return a.exec();
