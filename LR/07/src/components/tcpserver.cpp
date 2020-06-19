@@ -7,7 +7,7 @@
 TcpServer::TcpServer(int labNumber, QObject *parent)
         : QObject(parent)
 {
-    logfile::logInfo("TcpServer Constructor");
+    logfile::logDebug("TcpServer Constructor");
 
     mTcpServer = new QTcpServer(this);
     gateWay = new Gateway();
@@ -30,7 +30,7 @@ TcpServer::TcpServer(int labNumber, QObject *parent)
  */
 int TcpServer::getPortForLab(int labNumber)
 {
-    logfile::logInfo("Get port for lab");
+    logfile::logDebug("Get port for lab");
 
     QDomDocument config;
     QDomElement root;
@@ -65,7 +65,7 @@ int TcpServer::getPortForLab(int labNumber)
  */
 void TcpServer::slotNewConnection()
 {
-    logfile::logInfo("New connection");
+    logfile::logDebug("New connection");
 
     mTcpSocket = mTcpServer->nextPendingConnection();
 
@@ -79,7 +79,7 @@ void TcpServer::slotNewConnection()
  */
 void TcpServer::slotClientDisconnected()
 {
-    logfile::logInfo("Client disconnected");
+    logfile::logDebug("Client disconnected");
 
     mTcpSocket->close();
 }
@@ -91,7 +91,7 @@ void TcpServer::slotClientDisconnected()
  */
 void TcpServer::slotSendToClient(QJsonObject answerJson)
 {
-    logfile::logInfo("Send data to client");
+    logfile::logDebug("Send data to client");
 
     QJsonDocument jsonDoc(answerJson);
     QString jsonString = QString::fromLatin1(jsonDoc.toJson());
@@ -106,7 +106,7 @@ void TcpServer::slotSendToClient(QJsonObject answerJson)
  */
 void TcpServer::slotReadingDataJson()
 {
-    logfile::logInfo("Reading data json");
+    logfile::logDebug("Reading data json");
 
     QByteArray data;
     QString labLink;
@@ -137,7 +137,7 @@ void TcpServer::slotReadingDataJson()
  */
 void TcpServer::parsingJson(QJsonDocument docJson, QString *labLink, int *labNumber, QList<QString> *pureData)
 {
-    logfile::logInfo("parsing json");
+    logfile::logDebug("parsing json");
 
     QJsonValue link;
     QJsonObject jsonObj;
@@ -167,7 +167,7 @@ void TcpServer::parsingJson(QJsonDocument docJson, QString *labLink, int *labNum
  */
 void TcpServer::processData(QString link, QList<QString> *code, int variant)
 {
-    logfile::logInfo("Proccess data");
+    logfile::logDebug("Proccess data");
 
     try {
         if (code->isEmpty()) {
@@ -206,7 +206,7 @@ void TcpServer::processData(QString link, QList<QString> *code, int variant)
  */
 TcpServer::~TcpServer()
 {
-    logfile::logInfo("TcpServer Destructor");
+    logfile::logDebug("TcpServer Destructor");
 
     delete mTcpServer;
     delete gateWay;
