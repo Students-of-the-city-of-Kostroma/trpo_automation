@@ -1,0 +1,105 @@
+#!/bin/bash
+
+while true
+do
+
+python3  -c """
+
+from github import Github
+import requests
+import zipfile
+import os
+import shutil
+import signal
+
+def download_url(url, save_path, chunk_size=128):
+    r = requests.get(url, stream=True)
+    with open(save_path, 'wb') as fd:
+        for chunk in r.iter_content(chunk_size=chunk_size):
+            fd.write(chunk)
+
+
+with open('version', 'r') as file:
+    version = file.read()
+
+github = Github('urec-programmec', 'Fyf,tkM33126')
+pre_org = 'Students-of-the-city-of-Kostroma'
+pre_repo = 'trpo_automation'
+
+org = github.get_organization(pre_org)
+repo = org.get_repo(pre_repo)
+new_version = '-'
+release = None
+for i in repo.get_releases():
+    # if (i.prerelease):
+    if not (i.prerelease):
+        new_version = i.tag_name
+        release = i
+        print(i.tag_name)
+        break
+
+if new_version != '-' and new_version != version:
+    zip_release_name = 'new_release.zip'
+    pre_release_name = 'release_tmp'
+    release_name = 'release'
+
+    with open('version', 'w') as file:
+        file.write(new_version)
+
+    link = release.zipball_url
+
+    print(link)
+
+    if os.path.exists(pre_release_name):
+        shutil.rmtree(pre_release_name)
+    if os.path.exists(release_name):
+        shutil.rmtree(release_name)
+
+    download_url(link, zip_release_name)
+
+    project_zip = zipfile.ZipFile(zip_release_name)
+    project_zip.extractall(pre_release_name)
+    project_zip.close()
+
+    os.remove(zip_release_name)
+
+    delete = False
+    with open('pid') as file:
+        pid = file.read()
+        if pid != '':
+            os.kill(int(pid), signal.SIGTERM)
+            delete = True
+
+    if delete:
+        with open('pid', 'w') as file:
+            pass
+
+    os.mkdir(release_name)
+
+    student_name = ''
+    for filename in os.listdir(pre_release_name):
+        student_name = filename
+        break
+
+    shutil.copytree(pre_release_name + '/' + student_name + '/email', release_name + '/email')
+    shutil.copyfile(pre_release_name + '/' + student_name + '/labs.xml', release_name + '/labs.xml')
+
+    for dir in os.listdir(pre_release_name + '/' + student_name + '/LR'):
+        shutil.copytree(pre_release_name + '/' + student_name + '/LR/' + dir, release_name + '/LR' + dir)
+
+    shutil.rmtree(pre_release_name)
+
+"""
+
+pip3 install -r 'release/email/18-ISbo-2b/requirements.txt'
+
+ppid=$(cat pid)
+
+if [ -z "$ppid" ]
+then
+  python3 release/email/18-ISbo-2b/main.py &
+  echo $! >> pid
+fi
+
+sleep 300
+done

@@ -1,0 +1,14 @@
+branches:
+  only:
+  - master
+  - 18-ISbo-2a
+  - dev
+language: python
+dist: trusty
+os: linux
+cache: pip
+before_install: cd email/18-ISbo-2a
+install:
+  - pip install -r requirements.txt
+script:
+  - python -m unittest discover -v

@@ -1,36 +1,16 @@
-language: java
 branches:
   only:
-  - master
-  - 18-VTbo-1b
-jdk:
-- oraclejdk11
-sudo: required
-dist: trusty
-before_install: cd LR/03
-addons:
-  chrome: stable
-before_script:
-- export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
-- sleep 3
-
-install:
-- wget -N http://chromedriver.storage.googleapis.com/2.24/chromedriver_linux64.zip
-  -P ~/
-- unzip ~/chromedriver_linux64.zip -d ~/
-- rm ~/chromedriver_linux64.zip
-- sudo mv -f ~/chromedriver /usr/local/share/
-- sudo chmod +x /usr/local/share/chromedriver
-cache:
-  directories:
-  - "$HOME/.m2"
-after_success:
-- bash <(curl -s https://codecov.io/bash)
-
-
-
-   
-
-
-
+    - master
+    - dev
+    - 18-VTbo-1b
+    - 18-VTbo-1a
+    - 18-ISbo-2a
+import:
+  - source: .travis/18-VTbo-1a.yml
+    if: (((branch = issue-*)&&(head_branch = 18-VTbo-1a) ||  (branch = 18-VTbo-1a)))
+  - source: .travis/18-VTbo-1b.yml
+    if: (((branch = issue-*)&&(head_branch = 18-VTbo-1b) ||  (branch = 18-VTbo-1b)))
+  - source: .travis/18-ISbo-2a.yml
+    if: (((branch = issue-*)&&(head_branch = 18-ISbo-2a) ||  (branch = 18-ISbo-2a)))
+  - source: .travis/dev.yml
+    if: ((branch = dev) || (head_branch = dev))
